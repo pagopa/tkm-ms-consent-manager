@@ -1,0 +1,177 @@
+openapi: 3.0.1
+info:
+  title: tkm-ms-consent-manager
+  description: "RESTful APIs provided for consent management"
+  version: '1.0.0'
+servers:
+  - url: http://localhost:2000/tkm-ms-consent-manager
+  - url: http://tkm-sit/tkm-ms-consent-manager
+  - url: http://tkm-uat/tkm-ms-consent-manager
+  - url: http://tkm-prod/tkm-ms-consent-manager
+tags:
+  - name: authenticated
+    description: exposed via APIM
+  - name: restricted
+    description: only for internal use
+paths:
+  /consent:
+    post:
+      tags:
+        - authenticated
+      summary: Create or change consent
+      parameters:
+        - in: header
+          name: Tax-Code
+          schema:
+            type: string
+            minLength: 16
+            maxLength: 16
+          required: true
+        - in: header
+          name: Client-Id
+          schema:
+            type: string
+          required: true
+      operationId: saveConsensus
+      description: Client identification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Consent'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentError'
+        '500':
+          description: Internal Server Error
+    get:
+      tags:
+        - authenticated
+      summary: Get consent
+      operationId: getConsensus
+      parameters:
+        - in: header
+          name: Tax-Code
+          schema:
+            type: string
+            minLength: 16
+            maxLength: 16
+          required: true
+          description: User tax Code
+        - in: query
+          name: hpan
+          schema:
+            type: string
+            minLength: 64
+            maxLength: 64
+          required: false
+          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code 
+        - in: query
+          name: services
+          schema:
+            type: string
+          required: false
+          description: List of the service involved by the modified. If blank the changes is referred to all services
+          example: Service1,Service2,Service3
+        - in: header
+          name: Client-Id
+          schema:
+            type: string
+          required: true
+          description: Client identification
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetConsentResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentError'
+        '404':
+          description: Tax Code or Hpan not found
+        '500':
+          description: Internal Server Error
+
+
+components:
+  schemas:
+    Consent:
+      required:
+        - consent
+      type: object
+      properties:
+        consent:
+          $ref: '#/components/schemas/ConsentEnum'
+        hpan:
+          type: string
+          minLength: 64
+          maxLength: 64
+          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code 
+        services:
+          type: array
+          items:
+            type: string
+          description: List of the service involved by the modified. If blank the changes is referred to all services
+    
+    ConsensentResponse:
+      required:
+        - hpan
+      allOf:
+       - $ref: '#/components/schemas/Consent'
+
+    ConsentError:
+      required:
+        - errorCode
+        - description
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: The code identifies the error
+        description:
+          type: string
+          description: Error description
+          example: [taxCode required, The new consent status is inconsistent with the current one]
+    GetConsentResponse:
+      required: 
+        - consent
+      type: object
+      properties:
+        consent:
+          $ref: '#/components/schemas/ConsentEnum'
+        details:
+          type: array
+          description: Details of hash pan. Blank if consent is ALLOW or DENY
+          items:
+            $ref: '#/components/schemas/ConsensentResponse'
+            
+    ConsentEnum:
+      description: ALLOW and DENY are applied to all hpans. PARTIAL indicates to check in the details
+      type: string
+      enum:
+        - Allow
+        - Deny
+        - Partial
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
