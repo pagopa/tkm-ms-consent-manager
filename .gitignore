@@ -107,4 +107,4 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-consensus-manager.iml
+consent-manager.iml
