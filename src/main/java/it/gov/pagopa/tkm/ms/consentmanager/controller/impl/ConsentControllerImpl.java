@@ -20,7 +20,8 @@ public class ConsentControllerImpl implements ConsentController {
     }
 
     @Override
-    public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {  return null;  }
+    public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
+        return null;  }
 
 
 

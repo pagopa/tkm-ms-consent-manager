@@ -65,4 +65,11 @@ public class ConsentServiceImpl implements ConsentService {
         return card;
     }
 
+   // public GetConsentResponse getConsentResponse(String taxCode, String hpan, String[] services){
+
+
+
+    //}
+
+
 }
