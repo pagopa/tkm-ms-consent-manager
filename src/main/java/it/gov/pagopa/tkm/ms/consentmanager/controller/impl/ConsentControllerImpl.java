@@ -13,4 +13,9 @@ public class ConsentControllerImpl implements ConsentController {
         return null;
     }
 
+    @Override
+    public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {  return null;  }
+
+
+
 }
