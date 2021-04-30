@@ -8,8 +8,10 @@ import it.gov.pagopa.tkm.ms.consentmanager.repository.*;
 import it.gov.pagopa.tkm.ms.consentmanager.service.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 @Service
 public class ConsentServiceImpl implements ConsentService {
@@ -28,40 +30,58 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) {
-        updateOrCreateUser(taxCode, clientId, consent);
-        if (ConsentEnum.PARTIAL.equals(consent.getConsent())) {
-            TkmCard card = cardRepository.findByHpan(consent.getHpan());
-            List<TkmService> services = serviceRepository.findAllByNameIn(consent.getServices());
-            List<TkmCardService> cardServices = cardServiceRepository.findAllByServiceInAndCardIn(services, Collections.singletonList(card));
-            cardServices.forEach(s -> s.setConsentType(consent.getConsent()));
+        TkmUser user = updateOrCreateUser(taxCode, clientId, consent);
+        if (consent.getHpan() != null) {
+            TkmCard card = getOrCreateCard(user, consent.getHpan());
+            List<TkmService> services = CollectionUtils.isEmpty(consent.getServices()) ?
+                    serviceRepository.findAll() :
+                    serviceRepository.findByNameIn(consent.getServices());
+            updateOrCreateCardServices(services, card, consent.getConsent());
         }
         return new ConsentResponse(consent);
     }
 
-    private void updateOrCreateUser(String taxCode, ClientEnum clientId, Consent consent) {
+    private void updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentEnum consent) {
+        List<TkmCardService> cardServices = cardServiceRepository.findByServiceInAndCardIn(services, Collections.singletonList(card));
+        if (CollectionUtils.isEmpty(cardServices)) {
+            cardServices = services.stream().map(
+                    s -> new TkmCardService()
+                        .setCard(card)
+                        .setService(s)
+                        .setConsentType(consent)
+            ).collect(Collectors.toList());
+        } else {
+            cardServices.forEach(s -> s.setConsentType(consent));
+        }
+        cardServiceRepository.saveAll(cardServices);
+    }
+
+    private TkmUser updateOrCreateUser(String taxCode, ClientEnum clientId, Consent consent) {
         TkmUser user = userRepository.findByTaxCode(taxCode);
         if (user == null) {
             user = new TkmUser()
                     .setTaxCode(taxCode)
                     .setConsentDate(new Date())
-                    .setConsentType(consent.getConsent())
+                    .setConsentType(consent.getHpan() != null ? ConsentEnum.PARTIAL : consent.getConsent())
                     .setConsentLastClient(clientId);
         } else {
             user
                     .setConsentUpdateDate(new Date())
-                    .setConsentType(consent.getConsent())
+                    .setConsentType(consent.getHpan() != null ? ConsentEnum.PARTIAL : consent.getConsent())
                     .setConsentLastClient(clientId);
         }
         userRepository.save(user);
+        return user;
     }
 
-    private TkmCard getOrCreateCard(String hpan, TkmUser user, Consent consent) {
+    private TkmCard getOrCreateCard(TkmUser user, String hpan) {
         TkmCard card = cardRepository.findByHpan(hpan);
         if (card == null) {
             card = new TkmCard()
                     .setHpan(hpan)
                     .setUser(user);
         }
+        cardRepository.save(card);
         return card;
     }
 

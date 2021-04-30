@@ -1,5 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.entity;
 
+import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
 import lombok.experimental.*;
 
@@ -16,8 +17,9 @@ public class TkmService {
     @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "NAME", unique = true, nullable = false, length = 20)
-    private String name;
+    private ServiceEnum name;
 
     @Column(name = "DESCRIPTION", length = 50)
     private String description;

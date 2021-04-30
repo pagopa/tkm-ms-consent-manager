@@ -21,6 +21,7 @@ public class TkmUser {
     @Column(name = "TAX_CODE", unique = true, nullable = false, length = 16)
     private String taxCode;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "CONSENT_TYPE", nullable = false)
     private ConsentEnum consentType;
 
@@ -30,6 +31,7 @@ public class TkmUser {
     @Column(name = "CONSENT_UPDATE_DATE")
     private Date consentUpdateDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_LAST_CLIENT")
     private ClientEnum consentLastClient;
 

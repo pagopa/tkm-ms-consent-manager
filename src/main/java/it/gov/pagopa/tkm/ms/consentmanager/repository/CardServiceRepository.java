@@ -7,6 +7,6 @@ import java.util.*;
 
 public interface CardServiceRepository extends JpaRepository<TkmCardService, Long> {
 
-    List<TkmCardService> findAllByServiceInAndCardIn(List<TkmService> services, List<TkmCard> cards);
+    List<TkmCardService> findByServiceInAndCardIn(List<TkmService> services, List<TkmCard> cards);
 
 }

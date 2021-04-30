@@ -16,6 +16,6 @@ public class Consent {
     @Size(min = 64, max = 64)
     private String hpan;
 
-    private List<ServiceEnum> services;
+    private Set<ServiceEnum> services;
 
 }

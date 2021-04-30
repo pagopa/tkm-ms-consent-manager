@@ -21,6 +21,6 @@ public class ConsentResponse {
 
     private String hpan;
 
-    private List<ServiceEnum> services;
+    private Set<ServiceEnum> services;
 
 }
