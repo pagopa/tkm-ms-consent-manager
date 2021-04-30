@@ -4,6 +4,6 @@ spring:
     username: ${dbUsername}
     password: ${dbPassword}
     driver-class-name: org.postgresql.Driver
-  data:
-    rest:
-      base-path: ${basePath}
+
+server:
+    port: ${serverPort}

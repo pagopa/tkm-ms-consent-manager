@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management"
-  version: '1.0.0'
+  version: '1.0.1'
 servers:
   - url: http://localhost:2000/tkm-ms-consent-manager
   - url: http://tkm-sit/tkm-ms-consent-manager
@@ -32,7 +32,7 @@ paths:
           schema:
             type: string
           required: true
-      operationId: saveConsensus
+      operationId: saveConsent
       description: Client identification
       requestBody:
         content:
@@ -54,7 +54,7 @@ paths:
       tags:
         - authenticated
       summary: Get consent
-      operationId: getConsensus
+      operationId: getConsent
       parameters:
         - in: header
           name: Tax-Code
@@ -124,7 +124,7 @@ components:
             type: string
           description: List of the service involved by the modified. If blank the changes is referred to all services
     
-    ConsensentResponse:
+    ConsentResponse:
       required:
         - hpan
       allOf:
@@ -154,7 +154,7 @@ components:
           type: array
           description: Details of hash pan. Blank if consent is ALLOW or DENY
           items:
-            $ref: '#/components/schemas/ConsensentResponse'
+            $ref: '#/components/schemas/ConsentResponse'
             
     ConsentEnum:
       description: ALLOW and DENY are applied to all hpans. PARTIAL indicates to check in the details
