@@ -1,16 +1,18 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.entity;
 
 import lombok.*;
+import lombok.experimental.*;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "TKM_SERVICE")
 @Data
-@AllArgsConstructor
-@Table(name = "SERVICE")
-public class Service {
+@Accessors(chain = true)
+public class TkmService {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 

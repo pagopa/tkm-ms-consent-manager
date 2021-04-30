@@ -8,11 +8,12 @@ import java.util.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Consent {
 
     private ConsentEnum consent;
 
-    @Size(min = 16, max = 16)
+    @Size(min = 64, max = 64)
     private String hpan;
 
     private List<ServiceEnum> services;

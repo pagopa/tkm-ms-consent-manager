@@ -1,10 +1,11 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service;
 
+import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 
-public interface ConsentManagerService {
+public interface ConsentService {
 
-    ConsentResponse postConsent(String taxCode, Consent consent);
+    ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent);
 
 }
