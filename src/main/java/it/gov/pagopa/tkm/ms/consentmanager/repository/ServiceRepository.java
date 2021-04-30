@@ -10,6 +10,6 @@ import java.util.*;
 public interface ServiceRepository extends JpaRepository<TkmService, Long> {
 
     @Cacheable(value = "services", unless = "#result == null")
-    Set<TkmService> findByNameIn(Set<ServiceEnum> names);
+    List<TkmService> findByNameIn(Set<ServiceEnum> names);
 
 }

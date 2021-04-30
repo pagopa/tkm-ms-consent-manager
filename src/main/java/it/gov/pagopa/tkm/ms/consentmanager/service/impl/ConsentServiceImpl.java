@@ -30,17 +30,18 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) {
-        ConsentEnum consentType = consent.getConsent();
         TkmUser user = updateOrCreateUser(taxCode, clientId, consent);
-        if (ConsentEnum.PARTIAL.equals(consentType)) {
-            TkmCard card = getOrCreateCard(user, consent);
-            Set<TkmService> services = serviceRepository.findByNameIn(consent.getServices());
+        if (consent.getHpan() != null) {
+            TkmCard card = getOrCreateCard(user, consent.getHpan());
+            List<TkmService> services = CollectionUtils.isEmpty(consent.getServices()) ?
+                    serviceRepository.findAll() :
+                    serviceRepository.findByNameIn(consent.getServices());
             updateOrCreateCardServices(services, card, consent.getConsent());
         }
         return new ConsentResponse(consent);
     }
 
-    private void updateOrCreateCardServices(Set<TkmService> services, TkmCard card, ConsentEnum consent) {
+    private void updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentEnum consent) {
         List<TkmCardService> cardServices = cardServiceRepository.findByServiceInAndCardIn(services, Collections.singletonList(card));
         if (CollectionUtils.isEmpty(cardServices)) {
             cardServices = services.stream().map(
@@ -61,20 +62,19 @@ public class ConsentServiceImpl implements ConsentService {
             user = new TkmUser()
                     .setTaxCode(taxCode)
                     .setConsentDate(new Date())
-                    .setConsentType(consent.getConsent())
+                    .setConsentType(consent.getHpan() != null ? ConsentEnum.PARTIAL : consent.getConsent())
                     .setConsentLastClient(clientId);
         } else {
             user
                     .setConsentUpdateDate(new Date())
-                    .setConsentType(consent.getConsent())
+                    .setConsentType(consent.getHpan() != null ? ConsentEnum.PARTIAL : consent.getConsent())
                     .setConsentLastClient(clientId);
         }
         userRepository.save(user);
         return user;
     }
 
-    private TkmCard getOrCreateCard(TkmUser user, Consent consent) {
-        String hpan = consent.getHpan();
+    private TkmCard getOrCreateCard(TkmUser user, String hpan) {
         TkmCard card = cardRepository.findByHpan(hpan);
         if (card == null) {
             card = new TkmCard()
