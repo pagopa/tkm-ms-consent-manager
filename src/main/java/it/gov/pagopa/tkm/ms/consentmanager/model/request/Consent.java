@@ -2,13 +2,14 @@ package it.gov.pagopa.tkm.ms.consentmanager.model.request;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
+import lombok.experimental.*;
 
 import javax.validation.constraints.*;
 import java.util.*;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@Accessors(chain = true)
 public class Consent {
 
     private ConsentEnum consent;
@@ -17,5 +18,9 @@ public class Consent {
     private String hpan;
 
     private Set<ServiceEnum> services;
+
+    public boolean isPartial() {
+        return hpan != null;
+    }
 
 }

@@ -1,5 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.response;
 
+import com.fasterxml.jackson.annotation.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import lombok.*;
@@ -19,8 +20,10 @@ public class ConsentResponse {
 
     private ConsentEnum consent;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String hpan;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<ServiceEnum> services;
 
 }

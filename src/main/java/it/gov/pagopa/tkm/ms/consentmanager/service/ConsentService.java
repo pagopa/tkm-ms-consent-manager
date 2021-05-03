@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface ConsentService {
 
-    ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent);
     GetConsentResponse getGetConsentResponse(String taxCode, String hpan, List<String> services);
+    ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException;
 
 }
