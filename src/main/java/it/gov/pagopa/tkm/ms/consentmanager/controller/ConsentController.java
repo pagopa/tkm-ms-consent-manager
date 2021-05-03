@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.*;
 
+import java.util.List;
+
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiEndpoints.BASE_PATH_CONSENT;
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.*;
 
@@ -25,5 +27,5 @@ public interface ConsentController {
     GetConsentResponse getConsent(
             @RequestHeader(TAX_CODE_HEADER) String taxCode,
             @RequestParam(value = HPAN_QUERY_PARAM, required = false)  String hpan,
-            @RequestParam(value = SERVICES_QUERY_PARAM, required = false)  String[] services);
+            @RequestParam(value = SERVICES_QUERY_PARAM, required = false) List<String> services);
 }
