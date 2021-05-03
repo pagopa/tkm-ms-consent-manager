@@ -1,6 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
+import it.gov.pagopa.tkm.ms.consentmanager.exception.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 import org.springframework.transaction.annotation.*;
@@ -19,6 +20,6 @@ public interface ConsentController {
     ConsentResponse postConsent(
             @RequestHeader(TAX_CODE_HEADER) String taxCode,
             @RequestHeader(CLIENT_ID_HEADER) ClientEnum clientId,
-            @RequestBody @Valid Consent consent);
+            @RequestBody @Valid Consent consent) throws ConsentException;
 
 }
