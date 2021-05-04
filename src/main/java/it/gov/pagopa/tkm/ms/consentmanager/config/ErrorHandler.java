@@ -16,6 +16,13 @@ public class ErrorHandler {
         return ResponseEntity.badRequest().body(ce.getErrorCode());
     }
 
+    @ExceptionHandler(ConsentDataNotFoundException.class)
+    public ResponseEntity<ErrorCodeEnum> handleConsentDataNotFoundException(ConsentDataNotFoundException ce) {
+        log.error(ce.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCodeEnum.HPAN_NOT_FOUND);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Void> handleException(Exception e) {
         log.error(e);

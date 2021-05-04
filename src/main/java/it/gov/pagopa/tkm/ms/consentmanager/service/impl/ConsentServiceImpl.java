@@ -10,6 +10,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.service.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.*;
+import lombok.extern.log4j.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -18,6 +19,7 @@ import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEnum.*;
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum.*;
 
 @Service
+@Log4j2
 public class ConsentServiceImpl implements ConsentService {
 
     @Autowired
@@ -103,12 +105,17 @@ public class ConsentServiceImpl implements ConsentService {
         return card;
     }
 
-    public GetConsentResponse getGetConsentResponse(String taxCode, String hpan, List<String> services){
+    public GetConsentResponse getGetConsentResponse(String taxCode, String hpan, List<String> services) {
 
-        Set<ServiceEnum> servicesEnums= Optional.ofNullable(services)
-                .map(Collection::stream)
-                .orElseGet(Stream::empty)
-                .map(s->ServiceEnum.valueOf(s)).collect(Collectors.toSet());
+        Set<ServiceEnum> servicesEnums;
+        try {
+            servicesEnums = Optional.ofNullable(services)
+                    .map(Collection::stream)
+                    .orElseGet(Stream::empty)
+                    .map(ServiceEnum::valueOf).collect(Collectors.toSet());
+        } catch (IllegalArgumentException iae){
+            throw new ConsentException(ILLEGAL_SERVICE_VALUE);
+        }
 
         List<TkmService> tkmServices = CollectionUtils.isEmpty(servicesEnums) ?
                 serviceRepository.findAll() :
@@ -118,9 +125,12 @@ public class ConsentServiceImpl implements ConsentService {
         List<ConsentResponse> details = new ArrayList<>();
 
         TkmUser tkmUser = userRepository.findByTaxCode(taxCode);
+        if (tkmUser==null) throw new ConsentDataNotFoundException(USER_NOT_FOUND);
 
         if (hpan!=null) {
             TkmCard tkmCard = cardRepository.findByHpan(hpan);
+            if (tkmCard==null) throw new ConsentDataNotFoundException(HPAN_NOT_FOUND);
+
             getConsentResponse.setConsent(tkmUser.getConsentType());
             addDetail(tkmCard, tkmServices, details);
         } else {
@@ -149,9 +159,8 @@ public class ConsentServiceImpl implements ConsentService {
 
     }
 
-
     private List<ConsentResponse> addDetail (TkmCard tkmCard, List<TkmService> tkmServices, List<ConsentResponse> details){
-        List<TkmCardService> cardServices = cardServiceRepository.findByServiceInAndCardIn(tkmServices, Collections.singletonList(tkmCard));
+        List<TkmCardService> cardServices = cardServiceRepository.findByServiceInAndCard(tkmServices, tkmCard);
         List<TkmCardService> serviceByConsent;
 
         serviceByConsent = cardServices.stream().filter(b-> b.getConsentType().equals(ConsentEnum.ALLOW))

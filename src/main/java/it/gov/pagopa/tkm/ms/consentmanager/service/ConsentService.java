@@ -1,6 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
+import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 
