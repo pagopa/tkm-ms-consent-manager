@@ -1,1 +1,9 @@
-# tkm-ms-consent-manager
+spring:
+  datasource:
+    url: ${dbUrl}
+    username: ${dbUsername}
+    password: ${dbPassword}
+    driver-class-name: org.postgresql.Driver
+
+server:
+    port: ${serverPort}
