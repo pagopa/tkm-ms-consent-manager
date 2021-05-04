@@ -12,6 +12,7 @@ import java.util.*;
 @Accessors(chain = true)
 public class Consent {
 
+    @NotNull
     private ConsentEnum consent;
 
     @Size(min = 64, max = 64)

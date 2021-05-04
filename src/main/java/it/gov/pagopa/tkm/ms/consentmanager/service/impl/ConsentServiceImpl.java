@@ -34,7 +34,6 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException {
-        checkConsentTypeNotPartial(consent.getConsent());
         TkmUser user = updateOrCreateUser(taxCode, clientId, consent);
         if (consent.isPartial()) {
             TkmCard card = getOrCreateCard(user, consent.getHpan());
@@ -44,12 +43,6 @@ public class ConsentServiceImpl implements ConsentService {
             updateOrCreateCardServices(services, card, consent.getConsent());
         }
         return new ConsentResponse(consent);
-    }
-
-    private void checkConsentTypeNotPartial(ConsentEnum consent) {
-        if (PARTIAL.equals(consent)) {
-            throw new ConsentException(CONSENT_TYPE_NOT_PERMITTED);
-        }
     }
 
     private void updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentEnum consent) {
