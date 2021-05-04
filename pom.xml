@@ -9,10 +9,28 @@
     <parent>
         <groupId>it.gov.pagopa.tkm.ms</groupId>
         <artifactId>starter-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.7</version>
     </parent>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
+    <repositories>
+        <repository>
+            <id>sia-dds</id>
+            <url>https://pkgs.dev.azure.com/sia-dds/_packaging/sia-dds/maven/v1</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>sia-dds</id>
+            <url>https://pkgs.dev.azure.com/sia-dds/_packaging/sia-dds/maven/v1</url>
+        </repository>
+    </distributionManagement>
 </project>
