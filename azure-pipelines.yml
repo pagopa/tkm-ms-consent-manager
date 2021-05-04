@@ -45,8 +45,8 @@ variables:
     dockerRegistryServiceConnection: ''
 
 stages:
-  - stage: Test Develop
-    displayName: Test
+  - stage: Test_Develop
+    displayName: Test Develop
     condition: or(eq(variables.isPullRequest, true), and(ne(variables.isSIT, true), ne(variables.isUAT, true), ne(variables.isPROD, true)))
     jobs:
       - job: Test
