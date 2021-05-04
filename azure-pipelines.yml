@@ -19,7 +19,7 @@ variables:
   vmImageNameDefault: 'ubuntu-latest'
 
   # Image Repository Name
-  imageRepository: 'bpdmspaymentinstrument'
+  imageRepository: ''
 
   isToDeploy: $[ne(variables['Build.Reason'], 'PullRequest')]
   isSIT: $[eq(variables['Build.SourceBranch'], 'refs/heads/release/st')]
@@ -150,7 +150,7 @@ stages:
         condition: and(succeeded(), eq(variables.isToDeploy, true), eq(variables.isSIT, true))
         pool:
           vmImage: $(vmImageNameDefault)
-        environment: 'sit.bpd-test'
+        environment: ''
         strategy:
           runOnce:
             deploy:
@@ -246,8 +246,8 @@ stages:
                   displayName: Deploy to Kubernetes cluster
                   inputs:
                     action: 'deploy'
-                    kubernetesServiceConnection: 'ddsakstest-self-connection-bpd-uat'
-                    namespace: 'bpd-uat'
+                    kubernetesServiceConnection: ''
+                    namespace: ''
                     manifests: |
                       $(Pipeline.Workspace)/manifests/$(deployment).yml
                       $(Pipeline.Workspace)/manifests/service.yml
@@ -325,8 +325,8 @@ stages:
                   displayName: Deploy to Kubernetes cluster
                   inputs:
                     action: 'deploy'
-                    kubernetesServiceConnection: 'u87aksprod-bpd-self-connection'
-                    namespace: 'bpd'
+                    kubernetesServiceConnection: ''
+                    namespace: ''
                     manifests: |
                       $(Pipeline.Workspace)/manifests/$(deployment).yml
                       $(Pipeline.Workspace)/manifests/service.yml
