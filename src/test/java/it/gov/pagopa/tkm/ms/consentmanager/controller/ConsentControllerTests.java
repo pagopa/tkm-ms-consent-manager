@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static it.gov.pagopa.tkm.ms.consentmanager.TestBeans.*;
+import static it.gov.pagopa.tkm.ms.consentmanager.constant.TestBeans.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConsentControllerTests {

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.*;
 
+import java.time.*;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -32,6 +34,8 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private CardServiceRepository cardServiceRepository;
 
+    private final Instant now = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+
     @Override
     public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException {
         TkmUser user = updateOrCreateUser(taxCode, clientId, consent);
@@ -46,17 +50,15 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     private void updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentEnum consent) {
-        List<TkmCardService> cardServices = cardServiceRepository.findByServiceInAndCard(services, card);
-        if (CollectionUtils.isEmpty(cardServices)) {
-            cardServices = services.stream().map(
-                    s -> new TkmCardService()
+        List<TkmCardService> cardServicesList = cardServiceRepository.findByServiceInAndCard(services, card);
+        List<TkmCardService> cardServices = CollectionUtils.isEmpty(cardServicesList) ? new ArrayList<>() : new ArrayList<>(cardServicesList);
+        List<TkmService> existingServicesOnCard = cardServices.stream().map(TkmCardService::getService).collect(Collectors.toList());
+        cardServices.addAll(services.stream().filter(s -> !existingServicesOnCard.contains(s)).map(
+                s -> new TkmCardService()
                         .setCard(card)
                         .setService(s)
-                        .setConsentType(consent)
-            ).collect(Collectors.toList());
-        } else {
-            cardServices.forEach(s -> s.setConsentType(consent));
-        }
+        ).collect(Collectors.toList()));
+        cardServices.forEach(s -> s.setConsentType(consent));
         cardServiceRepository.saveAll(cardServices);
     }
 
@@ -65,13 +67,13 @@ public class ConsentServiceImpl implements ConsentService {
         if (user == null) {
             user = new TkmUser()
                     .setTaxCode(taxCode)
-                    .setConsentDate(new Date())
+                    .setConsentDate(now)
                     .setConsentType(consent.isPartial() ? PARTIAL : consent.getConsent())
                     .setConsentLastClient(clientId);
         } else {
-            checkNotAllowToPartial(user.getConsentType(), consent);
+            checkNotFromAllowToPartial(user.getConsentType(), consent);
             user
-                    .setConsentUpdateDate(new Date())
+                    .setConsentUpdateDate(now)
                     .setConsentType(consent.isPartial() ? PARTIAL : consent.getConsent())
                     .setConsentLastClient(clientId);
         }
@@ -79,8 +81,8 @@ public class ConsentServiceImpl implements ConsentService {
         return user;
     }
 
-    private void checkNotAllowToPartial(ConsentEnum userConsent, Consent consent) {
-        if (ALLOW.equals(userConsent) && ALLOW.equals(consent.getConsent()) && consent.isPartial()) {
+    private void checkNotFromAllowToPartial(ConsentEnum userConsent, Consent requestedConsent) {
+        if (ALLOW.equals(userConsent) && ALLOW.equals(requestedConsent.getConsent()) && requestedConsent.isPartial()) {
             throw new ConsentException(CONSENT_TYPE_NOT_CONSISTENT);
         }
     }
@@ -91,8 +93,8 @@ public class ConsentServiceImpl implements ConsentService {
             card = new TkmCard()
                     .setHpan(hpan)
                     .setUser(user);
+            cardRepository.save(card);
         }
-        cardRepository.save(card);
         return card;
     }
 

@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.experimental.*;
 
 import javax.persistence.*;
-import java.util.*;
+import java.time.*;
 
 @Entity
 @Table(name = "TKM_USER")
@@ -26,10 +26,10 @@ public class TkmUser {
     private ConsentEnum consentType;
 
     @Column(name = "CONSENT_DATE", nullable = false)
-    private Date consentDate;
+    private Instant consentDate;
 
     @Column(name = "CONSENT_UPDATE_DATE")
-    private Date consentUpdateDate;
+    private Instant consentUpdateDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_LAST_CLIENT")
