@@ -98,13 +98,12 @@ public class ConsentServiceImpl implements ConsentService {
         return card;
     }
 
-    public GetConsentResponse getGetConsentResponse(String taxCode, String hpan, List<String> services) {
+    public GetConsentResponse getGetConsentResponse(String taxCode, String hpan, String[] services) {
 
         Set<ServiceEnum> servicesEnums;
         try {
-            servicesEnums = Optional.ofNullable(services)
-                    .map(Collection::stream)
-                    .orElseGet(Stream::empty)
+            servicesEnums = Arrays.asList(Optional.ofNullable(services)
+                    .orElse(new String[0])).stream()
                     .map(ServiceEnum::valueOf).collect(Collectors.toSet());
         } catch (IllegalArgumentException iae){
             throw new ConsentException(ILLEGAL_SERVICE_VALUE);

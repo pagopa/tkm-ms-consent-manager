@@ -33,7 +33,7 @@ public class ConsentControllerImpl implements ConsentController {
     }
 
     @Override
-    public GetConsentResponse getConsent(String taxCode, String hpan, List<String> services) {
+    public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
         return consentManagerService.getGetConsentResponse(taxCode, hpan, services);
     }
 

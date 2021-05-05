@@ -11,10 +11,14 @@ import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEnum.*;
 public class TestBeans {
 
     public static final String TAX_CODE = "AAABBBCCCDDD1111";
+    public static final String INVALID_TAX_CODE = "AAABBBCCCDDD0000";
     public static final ClientEnum CLIENT_ID = ClientEnum.EXAMPLE;
     public static final String HPAN = "92fc472e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61aa2b6f";
+    public static final String INVALID_HPAN = HPAN + "a";
     public static final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.EXAMPLE));
     public static final Set<ServiceEnum> MULTIPLE_SERVICE_SET = new HashSet<>(Arrays.asList(ServiceEnum.EXAMPLE, ServiceEnum.EXAMPLE_2));
+    public static final String[] MULTIPLE_SERVICE_STRING_ARRAY = {ServiceEnum.EXAMPLE.toString(), ServiceEnum.EXAMPLE_2.toString()};
+    public static final String[] INVALID_MULTIPLE_SERVICE_STRING_ARRAY = {ServiceEnum.EXAMPLE.toString(), "INVALID_SERVICE"};
 
     public static final Consent GLOBAL_ALLOW_CONSENT_REQUEST = new Consent().setConsent(ALLOW);
     public static final Consent GLOBAL_DENY_CONSENT_REQUEST = new Consent().setConsent(DENY);
