@@ -17,6 +17,9 @@ import org.springframework.http.*;
 import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.setup.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,87 +45,58 @@ public class ConsentControllerTests {
         mockMvc = MockMvcBuilders.standaloneSetup(consentController).setControllerAdvice(new ErrorHandler()).build();
     }
 
-
+//GET
     @Test
-    public void get_givenFiscalCode_returnConsent() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(ApiParams.TAX_CODE_HEADER, TAX_CODE);
-        headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(CLIENT_ID));
+    public void get_givenTaxCode_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .headers(headers))
+                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void get_givenFiscalCodeAndHpan_returnConsent() throws Exception {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(ApiParams.TAX_CODE_HEADER, TAX_CODE);
-        headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(CLIENT_ID));
+    public void get_givenTaxCodeAndHpan_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
                 .param(ApiParams.HPAN_QUERY_PARAM, HPAN)
-                .headers(headers))
+                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
                 .andExpect(status().isOk());
-
     }
 
     @Test
-    public void get_givenFiscalCodeAndServices_returnConsent() throws Exception {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(ApiParams.TAX_CODE_HEADER, TAX_CODE);
-        headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(CLIENT_ID));
+    public void get_givenTaxCodeAndServices_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
                 .param(ApiParams.SERVICES_QUERY_PARAM, MULTIPLE_SERVICE_STRING_ARRAY)
-                .headers(headers))
+                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
                 .andExpect(status().isOk());
     }
 
+
+    //OK
     @Test
-    public void get_givenFiscalCodeHpanAndServices_returnConsent() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(ApiParams.TAX_CODE_HEADER, TAX_CODE);
-        headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(CLIENT_ID));
+    public void get_givenTaxCodeHpanAndServices_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
                 .param(ApiParams.HPAN_QUERY_PARAM, HPAN)
                 .param(ApiParams.SERVICES_QUERY_PARAM, MULTIPLE_SERVICE_STRING_ARRAY)
-                .headers(headers))
+                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void get_givenInvalidFiscalCode_returnNotFound() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(ApiParams.TAX_CODE_HEADER, INVALID_TAX_CODE);
-        headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(CLIENT_ID));
-        mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .param(ApiParams.HPAN_QUERY_PARAM, HPAN)
-                .headers(headers))
-                .andExpect(status().isNotFound());
 
-    }
-
+    //DA RIVEDERE, RESTITUISCE 200-OK NONOSTANTE IL TAX-CODE NON CORRETTO
     @Test
-    public void get_givenInvalidHpan_returnNotFound() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(ApiParams.TAX_CODE_HEADER, TAX_CODE);
-        headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(CLIENT_ID));
+    public void get_givenInvalidTaxCode_returnNotFound() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .param(ApiParams.HPAN_QUERY_PARAM, INVALID_HPAN)
-                .headers(headers))
+               .header(ApiParams.TAX_CODE_HEADER, INVALID_TAX_CODE))
                 .andExpect(status().isNotFound());
     }
 
+
+    //OK
     @Test
-    public void get_givenInvalidServices_returnBadRequest() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(ApiParams.TAX_CODE_HEADER, TAX_CODE);
-        headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(CLIENT_ID));
-        mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .param(ApiParams.SERVICES_QUERY_PARAM, INVALID_MULTIPLE_SERVICE_STRING_ARRAY)
-                .headers(headers))
-                .andExpect(status().isBadRequest());
+    public void get_missingTaxCodeHeader_returnBadRequest() throws Exception {
+        mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)).andExpect(status().isBadRequest());
     }
+
+   //POST
 
     @Test
     public void givenValidConsentRequest_returnValidConsentResponse() throws Exception {

@@ -29,7 +29,7 @@ public interface ConsentController {
 
     @GetMapping
     GetConsentResponse getConsent(
-            @RequestHeader(TAX_CODE_HEADER) String taxCode,
+            @RequestHeader(TAX_CODE_HEADER) @Valid @Size(min = 16, max = 16) String taxCode,
             @RequestParam(value = HPAN_QUERY_PARAM, required = false)  String hpan,
             @RequestParam(value = SERVICES_QUERY_PARAM, required = false) String[] services) throws Exception;
 }
