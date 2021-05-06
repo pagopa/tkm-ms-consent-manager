@@ -113,4 +113,11 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>sia-dds</id>
+            <url>https://pkgs.dev.azure.com/sia-dds/_packaging/sia-dds/maven/v1</url>
+        </repository>
+    </distributionManagement>
+
 </project>
