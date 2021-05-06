@@ -121,29 +121,30 @@ public class ConsentServiceTests {
         verify(cardServiceRepository).saveAll(CARD_SERVICES_FOR_ONE_SERVICE_LIST);
     }
 
+
+    //GET
     @Test
-    public void get_givenTaxCodeWithGlobalAllow_returnValidConsent(){
-        GetConsentResponse expectedResponse= new GetConsentResponse();
-        expectedResponse.setConsent(ConsentEnum.ALLOW);
-        expectedResponse.setDetails(null);
-
-        given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
-        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_ALLOW_CONSENT);
-
-        GetConsentResponse response = consentService.getGetConsentResponse(TAX_CODE, null, null);
-        Assert.assertEquals(response, expectedResponse);
-
-    }
-
-
-    @Test
-    public void get_givenTaxCodeWithGlobalDeny_returnValidConsent(){
+    public void get_givenTaxCodeWithGlobalDenyAndNoHpan_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
         expectedResponse.setConsent(ConsentEnum.DENY);
         expectedResponse.setDetails(null);
 
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
         given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_DENY_CONSENT);
+
+        GetConsentResponse response = consentService.getGetConsentResponse(TAX_CODE, null, null);
+        Assert.assertEquals(response, expectedResponse);
+
+    }
+
+    @Test
+    public void get_givenTaxCodeWithGlobalAllowAndNoHpan_returnValidConsent(){
+        GetConsentResponse expectedResponse= new GetConsentResponse();
+        expectedResponse.setConsent(ConsentEnum.ALLOW);
+        expectedResponse.setDetails(null);
+
+        given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
+        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_ALLOW_CONSENT);
 
         GetConsentResponse response = consentService.getGetConsentResponse(TAX_CODE, null, null);
         Assert.assertEquals(response, expectedResponse);
@@ -163,7 +164,6 @@ public class ConsentServiceTests {
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
         given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_PARTIAL_CONSENT);
         given(cardRepository.findByUser(USER_WITH_PARTIAL_CONSENT)).willReturn(PARTIAL_USER_CARDS_LIST);
-
         given(cardServiceRepository.findByServiceInAndCard(MULTIPLE_TKM_SERVICES, PARTIAL_USER_VALID_CARD)).willReturn(CARD_1_SERVICES);
         given(cardServiceRepository.findByServiceInAndCard(MULTIPLE_TKM_SERVICES, PARTIAL_USER_VALID_CARD_2)).willReturn(CARD_2_SERVICES);
 
@@ -173,7 +173,7 @@ public class ConsentServiceTests {
     }
 
     @Test
-    public void getGivenTaxCodeAndHpan_returnValidConsent(){
+    public void get_givenTaxCodeAndHpan_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
         expectedResponse.setConsent(ConsentEnum.PARTIAL);
         Consent consent1 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(HPAN).setServices(CARD_1_SERVICE_SET);
@@ -191,7 +191,7 @@ public class ConsentServiceTests {
     }
 
     @Test
-    public void getGivenTaxCodeAndServices_returnValidConsent(){
+    public void get_givenTaxCodeAndServices_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
         expectedResponse.setConsent(ConsentEnum.PARTIAL);
         Consent consent1 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(HPAN).setServices(ONE_SERVICE_SET);
@@ -212,7 +212,7 @@ public class ConsentServiceTests {
     }
 
     @Test
-    public void getGivenTaxCodeAndHpanAndServices_returnValidConsent(){
+    public void get_givenTaxCodeAndHpanAndServices_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
         expectedResponse.setConsent(ConsentEnum.PARTIAL);
         Consent consent1 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(HPAN).setServices(CARD_1_SERVICE_SET);
@@ -229,22 +229,22 @@ public class ConsentServiceTests {
 
     }
 
-    @Test
-    public void getGivenInvalidTaxCode_expectNotFound() throws Exception {
+    @Test(expected = ConsentDataNotFoundException.class)
+    public void get_givenNotExistentTaxCode_expectNotFound() throws Exception {
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
         given(userRepository.findByTaxCode(TAX_CODE)).willReturn(null);
         consentService.getGetConsentResponse(TAX_CODE, null, null);
     }
 
-    @Test
-    public void getGivenInvalidHpan_expectNotFound() throws Exception {
+    @Test(expected = ConsentDataNotFoundException.class)
+    public void get_givenNotExistentHpan_expectNotFound() throws Exception {
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
         given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_PARTIAL_CONSENT);
         given(cardRepository.findByHpan(HPAN)).willReturn(null);
         consentService.getGetConsentResponse(TAX_CODE, HPAN, null);
     }
 
-    @Test
+    @Test(expected = ConsentException.class)
     public void get_givenInvalidServices_expectBadRequest() throws Exception {
         consentService.getGetConsentResponse(TAX_CODE, null, SERVICES_INVALID_SINGLE_ARRAY);
     }

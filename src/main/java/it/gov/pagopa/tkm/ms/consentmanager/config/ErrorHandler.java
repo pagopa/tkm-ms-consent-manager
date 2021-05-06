@@ -23,7 +23,7 @@ public class ErrorHandler {
     @ExceptionHandler(ConsentDataNotFoundException.class)
     public ResponseEntity<ErrorCodeEnum> handleConsentDataNotFoundException(ConsentDataNotFoundException ce) {
         log.error(ce.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCodeEnum.HPAN_NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ce.getErrorCode());
     }
 
 

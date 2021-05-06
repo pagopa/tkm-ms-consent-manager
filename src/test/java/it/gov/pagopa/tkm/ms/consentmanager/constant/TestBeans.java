@@ -17,6 +17,7 @@ public class TestBeans {
     public static final ClientEnum CLIENT_ID = ClientEnum.EXAMPLE;
     public static final String HPAN = "92fc472e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61aa2b6f";
     public static final String HPAN_2 = "nw629p2e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61be80q1";
+    public static final String INVALID_HPAN = HPAN + "a";
 
     public static final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.EXAMPLE));
     public static final Set<ServiceEnum> ALL_SERVICES_SET = new HashSet<>(Arrays.asList(ServiceEnum.values()));

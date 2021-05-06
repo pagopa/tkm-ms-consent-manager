@@ -80,17 +80,23 @@ public class ConsentControllerTests {
                 .andExpect(status().isOk());
     }
 
-
     //DA RIVEDERE, RESTITUISCE 200-OK NONOSTANTE IL TAX-CODE NON CORRETTO
     @Test
     public void get_givenInvalidTaxCode_returnNotFound() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
                .header(ApiParams.TAX_CODE_HEADER, INVALID_TAX_CODE))
                 .andExpect(status().isNotFound());
+
     }
 
+    @Test
+    public void get_givenInvalidHpan_returnNotFound() throws Exception {
+        mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
+                .param(ApiParams.HPAN_QUERY_PARAM, INVALID_HPAN)
+                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
+                .andExpect(status().isNotFound());
+    }
 
-    //OK
     @Test
     public void get_missingTaxCodeHeader_returnBadRequest() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)).andExpect(status().isBadRequest());
