@@ -19,10 +19,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.TestBeans.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ConsentControllerTests {
+public class TestConsentController {
 
     @InjectMocks
     private ConsentControllerImpl consentController;
@@ -30,7 +29,7 @@ public class ConsentControllerTests {
     @Mock
     private ConsentServiceImpl consentService;
 
-    private TestBeans testBeans;
+    private DefaultBeans testBeans;
 
     private MockMvc mockMvc;
 
@@ -39,7 +38,7 @@ public class ConsentControllerTests {
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(consentController).setControllerAdvice(new ErrorHandler()).build();
-        testBeans = new TestBeans();
+        testBeans = new DefaultBeans();
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.util.stream.*;
 
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEnum.*;
 
-public class TestBeans {
+public class DefaultBeans {
 
     public final String TAX_CODE = "AAABBBCCCDDD1111";
     public final ClientEnum CLIENT_ID = ClientEnum.EXAMPLE;
