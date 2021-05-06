@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ConsentServiceTests {
+public class TestConsentService {
 
     @InjectMocks
     private ConsentServiceImpl consentService;
@@ -41,11 +41,11 @@ public class ConsentServiceTests {
     @Captor
     private ArgumentCaptor<List<TkmCardService>> cardServiceListCaptor;
 
-    private TestBeans testBeans;
+    private DefaultBeans testBeans;
 
     @BeforeEach
     public void init() {
-        testBeans = new TestBeans();
+        testBeans = new DefaultBeans();
     }
 
     @Test
