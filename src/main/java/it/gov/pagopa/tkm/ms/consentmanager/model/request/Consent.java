@@ -2,19 +2,26 @@ package it.gov.pagopa.tkm.ms.consentmanager.model.request;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
+import lombok.experimental.*;
 
 import javax.validation.constraints.*;
 import java.util.*;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 public class Consent {
 
+    @NotNull
     private ConsentEnum consent;
 
-    @Size(min = 16, max = 16)
+    @Size(min = 64, max = 64)
     private String hpan;
 
-    private List<ServiceEnum> services;
+    private Set<ServiceEnum> services;
+
+    public boolean isPartial() {
+        return hpan != null;
+    }
 
 }
