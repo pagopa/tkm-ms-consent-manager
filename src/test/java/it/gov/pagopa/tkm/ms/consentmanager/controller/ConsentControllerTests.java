@@ -7,21 +7,21 @@ import it.gov.pagopa.tkm.ms.consentmanager.controller.impl.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 import it.gov.pagopa.tkm.ms.consentmanager.service.impl.*;
-import org.junit.*;
-import org.junit.runner.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.*;
 import org.mockito.*;
-import org.mockito.junit.*;
+import org.mockito.junit.jupiter.*;
 import org.springframework.http.*;
 import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.setup.*;
 
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.TestBeans.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ConsentControllerTests {
 
     @InjectMocks
@@ -34,7 +34,7 @@ public class ConsentControllerTests {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    @Before
+    @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(consentController).setControllerAdvice(new ErrorHandler()).build();
     }
@@ -46,7 +46,7 @@ public class ConsentControllerTests {
         headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(CLIENT_ID));
         for (Consent c : VALID_CONSENT_REQUESTS) {
             ConsentResponse consentResponse = new ConsentResponse(c);
-            given(consentService.postConsent(TAX_CODE, CLIENT_ID, c)).willReturn(consentResponse);
+            when(consentService.postConsent(TAX_CODE, CLIENT_ID, c)).thenReturn(consentResponse);
             mockMvc.perform(
                     post(ApiEndpoints.BASE_PATH_CONSENT)
                             .headers(headers)

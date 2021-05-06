@@ -54,6 +54,14 @@ public class TestBeans {
                     .setConsentDate(INSTANT)
                     .setConsentLastClient(CLIENT_ID);
 
+    public static final TkmUser USER_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
+            new TkmUser()
+            .setTaxCode(TAX_CODE)
+            .setConsentType(ALLOW)
+            .setConsentDate(INSTANT)
+            .setConsentLastClient(CLIENT_ID)
+            .setConsentUpdateDate(INSTANT);
+
     public static final TkmUser USER_WITH_PARTIAL_CONSENT =
             new TkmUser()
                     .setTaxCode(TAX_CODE)
@@ -66,9 +74,7 @@ public class TestBeans {
                 .setHpan(HPAN)
                 .setUser(USER_WITH_PARTIAL_CONSENT);
 
-    public static final List<TkmService> ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s ->
-                    new TkmService().setName(s))
-            .collect(Collectors.toList());
+    public static final List<TkmService> ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s -> new TkmService().setName(s)).collect(Collectors.toList());
 
     public static final TkmService ONE_SERVICE = new TkmService().setName(ServiceEnum.EXAMPLE);
 
