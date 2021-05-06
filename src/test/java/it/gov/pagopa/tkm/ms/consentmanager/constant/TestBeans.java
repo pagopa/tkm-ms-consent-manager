@@ -1,3 +1,4 @@
+
 package it.gov.pagopa.tkm.ms.consentmanager.constant;
 
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.*;

@@ -7,6 +7,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.*;
 import it.gov.pagopa.tkm.ms.consentmanager.service.*;
+import it.gov.pagopa.tkm.ms.consentmanager.utils.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.*;
@@ -37,8 +38,6 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Autowired
     private CardServiceRepository cardServiceRepository;
-
-    private final Instant now = Instant.now().truncatedTo(ChronoUnit.SECONDS);
 
     @Override
     public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException {
@@ -71,13 +70,13 @@ public class ConsentServiceImpl implements ConsentService {
         if (user == null) {
             user = new TkmUser()
                     .setTaxCode(taxCode)
-                    .setConsentDate(now)
+                    .setConsentDate(DateUtils.now())
                     .setConsentType(consent.isPartial() ? PARTIAL : consent.getConsent())
                     .setConsentLastClient(clientId);
         } else {
             checkNotFromAllowToPartial(user.getConsentType(), consent);
             user
-                    .setConsentUpdateDate(now)
+                    .setConsentUpdateDate(DateUtils.now())
                     .setConsentType(consent.isPartial() ? PARTIAL : consent.getConsent())
                     .setConsentLastClient(clientId);
         }
