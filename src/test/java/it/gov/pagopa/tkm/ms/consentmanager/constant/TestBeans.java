@@ -17,7 +17,7 @@ public class TestBeans {
     public static final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.EXAMPLE));
     public static final Set<ServiceEnum> ALL_SERVICES_SET = new HashSet<>(Arrays.asList(ServiceEnum.values()));
 
-    private static final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
+    public static final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
 
     public static final Consent GLOBAL_ALLOW_CONSENT_REQUEST = new Consent().setConsent(ALLOW);
     public static final Consent GLOBAL_DENY_CONSENT_REQUEST = new Consent().setConsent(DENY);
