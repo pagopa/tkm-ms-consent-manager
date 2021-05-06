@@ -2,6 +2,7 @@ package it.gov.pagopa.tkm.ms.consentmanager.constant;
 
 import lombok.*;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public enum ConsentEnum {
 
@@ -9,7 +10,7 @@ public enum ConsentEnum {
     ALLOW(1),
     PARTIAL(2);
 
-    private final int dbCode;
+    private  int dbCode;
 
     public int getDbCode() {
         return dbCode;
