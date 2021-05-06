@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static it.gov.pagopa.tkm.ms.consentmanager.TestBeans.*;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
@@ -129,7 +128,7 @@ public class ConsentServiceTests {
         expectedResponse.setDetails(null);
 
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
-        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_ALLOW);
+        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_ALLOW_CONSENT);
 
         GetConsentResponse response = consentService.getGetConsentResponse(TAX_CODE, null, null);
         Assert.assertEquals(response, expectedResponse);
@@ -144,7 +143,7 @@ public class ConsentServiceTests {
         expectedResponse.setDetails(null);
 
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
-        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_DENY);
+        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_DENY_CONSENT);
 
         GetConsentResponse response = consentService.getGetConsentResponse(TAX_CODE, null, null);
         Assert.assertEquals(response, expectedResponse);
@@ -162,8 +161,8 @@ public class ConsentServiceTests {
         expectedResponse.setDetails(Arrays.asList(consentResponse1, consentResponse2));
 
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
-        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_PARTIAL);
-        given(cardRepository.findByUser(USER_WITH_GLOBAL_PARTIAL)).willReturn(PARTIAL_USER_CARDS_LIST);
+        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_PARTIAL_CONSENT);
+        given(cardRepository.findByUser(USER_WITH_PARTIAL_CONSENT)).willReturn(PARTIAL_USER_CARDS_LIST);
 
         given(cardServiceRepository.findByServiceInAndCard(MULTIPLE_TKM_SERVICES, PARTIAL_USER_VALID_CARD)).willReturn(CARD_1_SERVICES);
         given(cardServiceRepository.findByServiceInAndCard(MULTIPLE_TKM_SERVICES, PARTIAL_USER_VALID_CARD_2)).willReturn(CARD_2_SERVICES);
@@ -182,7 +181,7 @@ public class ConsentServiceTests {
         expectedResponse.setDetails(Arrays.asList(consentResponse1));
 
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
-        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_PARTIAL);
+        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_PARTIAL_CONSENT);
         given(cardRepository.findByHpan(HPAN)).willReturn(PARTIAL_USER_VALID_CARD);
         given(cardServiceRepository.findByServiceInAndCard(MULTIPLE_TKM_SERVICES, PARTIAL_USER_VALID_CARD)).willReturn(CARD_1_SERVICES);
 
@@ -202,8 +201,8 @@ public class ConsentServiceTests {
         expectedResponse.setDetails(Arrays.asList(consentResponse1, consentResponse2));
 
         given(serviceRepository.findByNameIn(MULTIPLE_SERVICE_SUB_SET)).willReturn(MULTIPLE_TKM_SERVICES_SUB);
-        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_PARTIAL);
-        given(cardRepository.findByUser(USER_WITH_GLOBAL_PARTIAL)).willReturn(PARTIAL_USER_CARDS_LIST);
+        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_PARTIAL_CONSENT);
+        given(cardRepository.findByUser(USER_WITH_PARTIAL_CONSENT)).willReturn(PARTIAL_USER_CARDS_LIST);
         given(cardServiceRepository.findByServiceInAndCard(MULTIPLE_TKM_SERVICES_SUB, PARTIAL_USER_VALID_CARD)).willReturn(CARD_1_SERVICES_SUB);
         given(cardServiceRepository.findByServiceInAndCard(MULTIPLE_TKM_SERVICES_SUB, PARTIAL_USER_VALID_CARD_2)).willReturn(CARD_2_SERVICES);
 
@@ -221,7 +220,7 @@ public class ConsentServiceTests {
         expectedResponse.setDetails(Arrays.asList(consentResponse1));
 
         given(serviceRepository.findByNameIn(MULTIPLE_SERVICE_SUB_SET)).willReturn(MULTIPLE_TKM_SERVICES_SUB);
-        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_PARTIAL);
+        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_PARTIAL_CONSENT);
         given(cardRepository.findByHpan(HPAN)).willReturn(PARTIAL_USER_VALID_CARD);
         given(cardServiceRepository.findByServiceInAndCard(MULTIPLE_TKM_SERVICES_SUB, PARTIAL_USER_VALID_CARD)).willReturn(CARD_1_SERVICES);
 
@@ -240,7 +239,7 @@ public class ConsentServiceTests {
     @Test
     public void getGivenInvalidHpan_expectNotFound() throws Exception {
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
-        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_PARTIAL);
+        given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_PARTIAL_CONSENT);
         given(cardRepository.findByHpan(HPAN)).willReturn(null);
         consentService.getGetConsentResponse(TAX_CODE, HPAN, null);
     }

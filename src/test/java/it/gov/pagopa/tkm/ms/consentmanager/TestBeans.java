@@ -50,7 +50,7 @@ public class TestBeans {
     public static final List<TkmService> MULTIPLE_TKM_SERVICES = Arrays.asList( SERVICE_EXAMPLE, SERVICE_EXAMPLE_2, SERVICE_EXAMPLE_3);
     public static final List<TkmService> MULTIPLE_TKM_SERVICES_SUB = Arrays.asList( SERVICE_EXAMPLE, SERVICE_EXAMPLE_3);
 
-    public static final TkmUser USER_WITH_GLOBAL_ALLOW = new TkmUser().setId(1L).setTaxCode(TAX_CODE).setConsentType(ALLOW).setConsentDate(new Date()).setConsentLastClient(CLIENT_ID);
+  /*  public static final TkmUser USER_WITH_GLOBAL_ALLOW = new TkmUser().setId(1L).setTaxCode(TAX_CODE).setConsentType(ALLOW).setConsentDate(new Date()).setConsentLastClient(CLIENT_ID);
     public static final TkmUser USER_WITH_GLOBAL_DENY = new TkmUser().setId(1L).setTaxCode(TAX_CODE).setConsentType(DENY).setConsentDate(new Date()).setConsentLastClient(CLIENT_ID);
     public static final TkmUser USER_WITH_GLOBAL_PARTIAL = new TkmUser().setId(2L).setTaxCode(TAX_CODE).setConsentType(PARTIAL).setConsentDate(new Date()).setConsentLastClient(CLIENT_ID);
 
@@ -69,7 +69,7 @@ public class TestBeans {
     public static final List<TkmCardService> CARD_2_SERVICES = Arrays.asList(CARD_SERVICE_4, CARD_SERVICE_5);
 
     public static final String[] SERVICES_SUB_ARRAY = {ServiceEnum.EXAMPLE.toString(), ServiceEnum.EXAMPLE_3.toString()};
-    public static final String[] SERVICES_INVALID_SINGLE_ARRAY = {"INVALID"};
+    public static final String[] SERVICES_INVALID_SINGLE_ARRAY = {"INVALID"}; */
 
 
 
