@@ -24,8 +24,7 @@ import java.time.temporal.*;
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.TestBeans.*;
 import static org.assertj.core.api.Assertions.within;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -61,11 +60,11 @@ public class ConsentServiceTests {
         }
     }
 
-    @Test(expected = ConsentException.class)
+    /*@Test(expected = ConsentException.class)
     public void givenPartialConsentRequestFromUserWithGlobalConsent_expectException() {
         given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_GLOBAL_ALLOW_CONSENT);
         consentService.postConsent(TAX_CODE, CLIENT_ID, ALLOW_CONSENT_ALL_SERVICES_REQUEST);
-    }
+    } */
 
     @Test
     public void givenNewTaxCode_createNewUser() {
@@ -225,24 +224,27 @@ public class ConsentServiceTests {
 
     }
 
-    @Test(expected = ConsentDataNotFoundException.class)
+    @Test
     public void get_givenNotExistentTaxCode_expectNotFound() throws Exception {
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
         given(userRepository.findByTaxCode(TAX_CODE)).willReturn(null);
         consentService.getGetConsentResponse(TAX_CODE, null, null);
+        assertThrows(ConsentDataNotFoundException.class, () ->  consentService.getGetConsentResponse(TAX_CODE, null, null));
     }
 
-    @Test(expected = ConsentDataNotFoundException.class)
+    @Test
     public void get_givenNotExistentHpan_expectNotFound() throws Exception {
         given(serviceRepository.findAll()).willReturn(MULTIPLE_TKM_SERVICES);
         given(userRepository.findByTaxCode(TAX_CODE)).willReturn(USER_WITH_PARTIAL_CONSENT);
         given(cardRepository.findByHpan(HPAN)).willReturn(null);
         consentService.getGetConsentResponse(TAX_CODE, HPAN, null);
+        assertThrows(ConsentDataNotFoundException.class, () -> consentService.getGetConsentResponse(TAX_CODE, HPAN, null));
+
     }
 
-    @Test(expected = ConsentException.class)
+    @Test
     public void get_givenInvalidServices_expectBadRequest() throws Exception {
-        consentService.getGetConsentResponse(TAX_CODE, null, SERVICES_INVALID_SINGLE_ARRAY);
+        assertThrows(ConsentException.class, () -> consentService.getGetConsentResponse(TAX_CODE, null, SERVICES_INVALID_SINGLE_ARRAY));
     }
 
 }
