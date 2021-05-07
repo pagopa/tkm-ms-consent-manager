@@ -14,6 +14,8 @@ public enum ErrorCodeEnum {
     ILLEGAL_SERVICE_VALUE("C1004", "Not all services with specified names exist"),
     REQUEST_VALIDATION_FAILED("C1002", "Request validation failed, check for errors in the request body or headers"),
     MISSING_HEADERS("C1003", "Required header(s) missing");
+    REQUEST_VALIDATION_FAILED("C1001", "Request validation failed, check for errors in the request body or headers"),
+    MISSING_HEADERS("C1002", "Required header(s) missing");
 
     @Getter
     private final String errorCode;

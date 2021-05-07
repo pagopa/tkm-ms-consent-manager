@@ -6,6 +6,7 @@ import lombok.experimental.*;
 
 import javax.persistence.*;
 import java.time.*;
+import java.util.*;
 
 @Entity
 @Table(name = "TKM_USER")
@@ -21,9 +22,9 @@ public class TkmUser {
     @Column(name = "TAX_CODE", unique = true, nullable = false, length = 16)
     private String taxCode;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_TYPE", nullable = false)
-    private ConsentEnum consentType;
+    private ConsentEntityEnum consentType;
 
     @Column(name = "CONSENT_DATE", nullable = false)
     private Instant consentDate;
@@ -34,5 +35,8 @@ public class TkmUser {
     @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_LAST_CLIENT")
     private ClientEnum consentLastClient;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<TkmCard> cards = new HashSet<>();
 
 }

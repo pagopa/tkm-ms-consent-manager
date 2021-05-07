@@ -7,7 +7,8 @@ import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEnum.*;
+import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentRequestEnum.*;
+import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum.PARTIAL;
 
 public class DefaultBeans {
 
@@ -34,7 +35,6 @@ public class DefaultBeans {
     public final Consent DENY_CONSENT_MULTIPLE_SERVICES_REQUEST = new Consent().setConsent(DENY).setHpan(HPAN).setServices(ALL_SERVICES_SET);
 
     public final Consent MISSING_CONSENT_REQUEST = new Consent();
-    public final Consent PARTIAL_CONSENT_REQUEST = new Consent().setConsent(PARTIAL);
     public final Consent ALLOW_CONSENT_INVALID_HPAN_REQUEST = new Consent().setConsent(ALLOW).setHpan(HPAN + "a");
 
     public final List<Consent> VALID_CONSENT_REQUESTS = Arrays.asList(
@@ -49,13 +49,12 @@ public class DefaultBeans {
 
     public final List<Consent> INVALID_CONSENT_REQUESTS = Arrays.asList(
             MISSING_CONSENT_REQUEST,
-            PARTIAL_CONSENT_REQUEST,
             ALLOW_CONSENT_INVALID_HPAN_REQUEST);
 
     public final TkmUser USER_WITH_GLOBAL_ALLOW_CONSENT =
             new TkmUser()
                     .setTaxCode(TAX_CODE)
-                    .setConsentType(ALLOW)
+                    .setConsentType(ConsentEntityEnum.ALLOW)
                     .setConsentDate(INSTANT)
                     .setConsentLastClient(CLIENT_ID);
 
@@ -69,7 +68,7 @@ public class DefaultBeans {
     public final TkmUser USER_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
             new TkmUser()
             .setTaxCode(TAX_CODE)
-            .setConsentType(ALLOW)
+            .setConsentType(ConsentEntityEnum.ALLOW)
             .setConsentDate(INSTANT)
             .setConsentLastClient(CLIENT_ID)
             .setConsentUpdateDate(INSTANT);
@@ -95,13 +94,13 @@ public class DefaultBeans {
     public final List<TkmCardService> CARD_SERVICES_FOR_ONE_SERVICE_LIST = Collections.singletonList(
             new TkmCardService()
                     .setCard(CARD_FROM_USER_WITH_PARTIAL_CONSENT)
-                    .setConsentType(ALLOW)
+                    .setConsentType(ConsentEntityEnum.ALLOW)
                     .setService(ONE_SERVICE));
 
     public final List<TkmCardService> CARD_SERVICES_FOR_ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s ->
                     new TkmCardService()
                     .setCard(CARD_FROM_USER_WITH_PARTIAL_CONSENT)
-                    .setConsentType(ALLOW)
+                    .setConsentType(ConsentEntityEnum.ALLOW)
                     .setService(new TkmService().setName(s)))
             .collect(Collectors.toList());
 

@@ -13,7 +13,7 @@ import java.util.*;
 public class Consent {
 
     @NotNull
-    private ConsentEnum consent;
+    private ConsentRequestEnum consent;
 
     @Size(min = 64, max = 64)
     private String hpan;

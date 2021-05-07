@@ -26,6 +26,6 @@ public class TkmCardService {
     private TkmService service;
 
     @Column(name = "CONSENT_TYPE", nullable = false)
-    private ConsentEnum consentType;
+    private ConsentEntityEnum consentType;
 
 }

@@ -26,9 +26,6 @@ public class ConsentControllerImpl implements ConsentController {
 
     @Override
     public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException {
-        if (PARTIAL.equals(consent.getConsent())) {
-            throw new ConsentException(CONSENT_TYPE_NOT_PERMITTED);
-        }
         return consentManagerService.postConsent(taxCode, clientId, consent);
     }
 
