@@ -10,11 +10,12 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: Tkm Consent Manager ${instanceNumber}
+
 server:
   port: ${serverPort}
   servlet:
     context-path: /tkm-ms-consent-manager
 
-#logging:
-#  pattern:
-#    level: "[${APP_NAME},%X{traceId},%X{spanId},%X{spanExportable}]"
+logging:
+  pattern:
+    level: "[${spring.application.name}][%X{traceId}]"
