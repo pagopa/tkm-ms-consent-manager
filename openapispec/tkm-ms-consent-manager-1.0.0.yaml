@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management"
-  version: '1.0.1'
+  version: '1.0.2'
 servers:
   - url: http://localhost:2000/tkm-ms-consent-manager
   - url: http://tkm-sit/tkm-ms-consent-manager
@@ -31,7 +31,17 @@ paths:
           name: Client-Id
           schema:
             type: string
+            minLength: 36
+            maxLength: 36
+            example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
           required: true
+        - in: header
+          name: Request-Id
+          schema:
+            type: string
+            minLength: 16
+            maxLength: 16
+          required: false
       operationId: saveConsent
       description: Client identification
       requestBody:
@@ -42,14 +52,38 @@ paths:
       responses:
         '200':
           description: Success
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 36
+                maxLength: 36
+                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+              required: true
         '400':
           description: Bad Request
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 36
+                maxLength: 36
+                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+              required: true
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConsentError'
         '500':
           description: Internal Server Error
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 36
+                maxLength: 36
+                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+              required: true
     get:
       tags:
         - authenticated
@@ -71,7 +105,20 @@ paths:
             minLength: 64
             maxLength: 64
           required: false
-          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code 
+        - in: header
+          name: Client-Id
+          schema:
+            type: string
+            minLength: 36
+            maxLength: 36
+          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code
+        - in: header
+          name: Request-Id
+          schema:
+            type: string
+            minLength: 16
+            maxLength: 16
+          required: false
         - in: query
           name: services
           schema:
@@ -79,31 +126,54 @@ paths:
           required: false
           description: List of the service involved by the modified. If blank the changes is referred to all services
           example: Service1,Service2,Service3
-        - in: header
-          name: Client-Id
-          schema:
-            type: string
-          required: true
-          description: Client identification
       responses:
         '200':
           description: Success
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 36
+                maxLength: 36
+                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetConsentResponse'
         '400':
           description: Bad Request
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 36
+                maxLength: 36
+                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+              required: true
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConsentError'
         '404':
           description: Tax Code or Hpan not found
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 36
+                maxLength: 36
+                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+              required: true
         '500':
           description: Internal Server Error
-
-
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 36
+                maxLength: 36
+                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+              required: true
 components:
   schemas:
     Consent:
@@ -117,18 +187,18 @@ components:
           type: string
           minLength: 64
           maxLength: 64
-          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code 
+          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code
         services:
           type: array
           items:
             type: string
           description: List of the service involved by the modified. If blank the changes is referred to all services
-    
+
     ConsentResponse:
       required:
         - hpan
       allOf:
-       - $ref: '#/components/schemas/Consent'
+        - $ref: '#/components/schemas/Consent'
 
     ConsentError:
       required:
@@ -144,7 +214,7 @@ components:
           description: Error description
           example: [taxCode required, The new consent status is inconsistent with the current one]
     GetConsentResponse:
-      required: 
+      required:
         - consent
       type: object
       properties:
@@ -155,7 +225,7 @@ components:
           description: Details of hash pan. Blank if consent is ALLOW or DENY
           items:
             $ref: '#/components/schemas/ConsentResponse'
-            
+
     ConsentEnum:
       description: ALLOW and DENY are applied to all hpans. PARTIAL indicates to check in the details
       type: string
