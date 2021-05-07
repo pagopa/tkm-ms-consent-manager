@@ -45,7 +45,7 @@ public class TestConsentController {
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(consentController).setControllerAdvice(new ErrorHandler()).build();
-        testBeans = new DefaultBeans();
+//        testBeans = new DefaultBeans();
     }
 
 //GET
