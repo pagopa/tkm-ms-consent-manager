@@ -25,6 +25,7 @@ public class TkmCardService {
     @JoinColumn(name = "SERVICE_ID", nullable = false)
     private TkmService service;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_TYPE", nullable = false)
     private ConsentEntityEnum consentType;
 
