@@ -233,7 +233,6 @@ public class TestConsentService {
 
     @Test
     public void get_givenNotExistentTaxCode_expectNotFound() throws Exception {
-        when(serviceRepository.findAll()).thenReturn(testBeans.MULTIPLE_TKM_SERVICES);
         when(userRepository.findByTaxCode(testBeans.TAX_CODE)).thenReturn(null);
         assertThrows(ConsentDataNotFoundException.class, () ->  consentService.getConsent(testBeans.TAX_CODE, null, null));
     }

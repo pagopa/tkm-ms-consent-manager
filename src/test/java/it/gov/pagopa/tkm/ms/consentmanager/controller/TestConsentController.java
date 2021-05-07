@@ -66,8 +66,6 @@ public class TestConsentController {
                 .andExpect(status().isOk());
     }
 
-
-    //OK
     @Test
     public void get_givenTaxCodeHpanAndServices_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
@@ -77,7 +75,6 @@ public class TestConsentController {
                 .andExpect(status().isOk());
     }
 
-    //DA RIVEDERE, RESTITUISCE 200-OK NONOSTANTE IL TAX-CODE NON CORRETTO
     @Test
     public void get_givenInvalidTaxCode_returnNotFound() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)

@@ -1,5 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.config;
 
+import com.fasterxml.jackson.databind.exc.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.*;
 import lombok.extern.log4j.*;
@@ -27,7 +28,6 @@ public class ErrorHandler {
     }
 
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class, ValidationException.class})
     @ExceptionHandler({MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class, ValidationException.class, InvalidFormatException.class})
     public ResponseEntity<ErrorCodeEnum> handleValidationException(Exception ve) {
         log.error(ve.getMessage());
