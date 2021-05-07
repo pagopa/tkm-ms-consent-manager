@@ -9,9 +9,6 @@ import it.gov.pagopa.tkm.ms.consentmanager.service.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEnum.PARTIAL;
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum.CONSENT_TYPE_NOT_PERMITTED;
-
 @RestController
 public class ConsentControllerImpl implements ConsentController {
 
@@ -20,9 +17,6 @@ public class ConsentControllerImpl implements ConsentController {
 
     @Override
     public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException {
-        if (PARTIAL.equals(consent.getConsent())) {
-            throw new ConsentException(CONSENT_TYPE_NOT_PERMITTED);
-        }
         return consentManagerService.postConsent(taxCode, clientId, consent);
     }
 

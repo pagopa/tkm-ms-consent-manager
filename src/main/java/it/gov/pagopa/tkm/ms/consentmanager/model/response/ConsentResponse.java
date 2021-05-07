@@ -18,7 +18,7 @@ public class ConsentResponse {
         setServices(consent.getServices());
     }
 
-    private ConsentEnum consent;
+    private ConsentRequestEnum consent;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String hpan;

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.*;
 
 public interface CardRepository extends JpaRepository<TkmCard, Long> {
 
-    TkmCard findByHpan(String hpan);
+    TkmCard findByHpanAndUser(String hpan, TkmUser user);
 
 }
