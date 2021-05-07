@@ -1,7 +1,5 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller;
 
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.*;
 import it.gov.pagopa.tkm.ms.consentmanager.config.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
@@ -17,13 +15,9 @@ import org.springframework.http.*;
 import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.setup.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
