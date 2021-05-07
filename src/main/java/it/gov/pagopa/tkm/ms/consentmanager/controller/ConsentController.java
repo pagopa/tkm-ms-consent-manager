@@ -1,18 +1,22 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller;
 
-import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
-import it.gov.pagopa.tkm.ms.consentmanager.exception.*;
-import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
-import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
-import org.springframework.transaction.annotation.*;
-import org.springframework.validation.annotation.*;
-import org.springframework.web.bind.annotation.*;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ClientEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
+import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
+import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.*;
-import javax.validation.constraints.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiEndpoints.BASE_PATH_CONSENT;
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.*;
+import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.CLIENT_ID_HEADER;
+import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.TAX_CODE_HEADER;
 
 @RequestMapping(BASE_PATH_CONSENT)
 @Validated
@@ -24,5 +28,4 @@ public interface ConsentController {
             @RequestHeader(TAX_CODE_HEADER) @Valid @Size(min = 16, max = 16) String taxCode,
             @RequestHeader(CLIENT_ID_HEADER) ClientEnum clientId,
             @RequestBody @Valid Consent consent) throws ConsentException;
-
 }
