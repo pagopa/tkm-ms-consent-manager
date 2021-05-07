@@ -52,23 +52,23 @@ public class TestConsentController {
     @Test
     public void get_givenTaxCode_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
+                .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void get_givenTaxCodeAndHpan_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .param(ApiParams.HPAN_QUERY_PARAM, HPAN)
-                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
+                .param(ApiParams.HPAN_QUERY_PARAM, testBeans.HPAN)
+                .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void get_givenTaxCodeAndServices_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .param(ApiParams.SERVICES_QUERY_PARAM, MULTIPLE_SERVICE_STRING_ARRAY)
-                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
+                .param(ApiParams.SERVICES_QUERY_PARAM, testBeans.MULTIPLE_SERVICE_STRING_ARRAY)
+                .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE))
                 .andExpect(status().isOk());
     }
 
@@ -77,9 +77,9 @@ public class TestConsentController {
     @Test
     public void get_givenTaxCodeHpanAndServices_returnConsent() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .param(ApiParams.HPAN_QUERY_PARAM, HPAN)
-                .param(ApiParams.SERVICES_QUERY_PARAM, MULTIPLE_SERVICE_STRING_ARRAY)
-                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
+                .param(ApiParams.HPAN_QUERY_PARAM, testBeans.HPAN)
+                .param(ApiParams.SERVICES_QUERY_PARAM, testBeans.MULTIPLE_SERVICE_STRING_ARRAY)
+                .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE))
                 .andExpect(status().isOk());
     }
 
@@ -87,7 +87,7 @@ public class TestConsentController {
     @Test
     public void get_givenInvalidTaxCode_returnNotFound() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-               .header(ApiParams.TAX_CODE_HEADER, INVALID_TAX_CODE))
+               .header(ApiParams.TAX_CODE_HEADER, testBeans.INVALID_TAX_CODE))
                 .andExpect(status().isNotFound());
 
     }
@@ -95,8 +95,8 @@ public class TestConsentController {
     @Test
     public void get_givenInvalidHpan_returnNotFound() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
-                .param(ApiParams.HPAN_QUERY_PARAM, INVALID_HPAN)
-                .header(ApiParams.TAX_CODE_HEADER, TAX_CODE))
+                .param(ApiParams.HPAN_QUERY_PARAM, testBeans.INVALID_HPAN)
+                .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE))
                 .andExpect(status().isNotFound());
     }
 

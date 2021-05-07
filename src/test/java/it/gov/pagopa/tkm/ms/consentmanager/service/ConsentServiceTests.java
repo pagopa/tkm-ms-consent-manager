@@ -1,8 +1,6 @@
 
 package it.gov.pagopa.tkm.ms.consentmanager.service;
 
-import it.gov.pagopa.tkm.ms.consentmanager.constant.ApiEndpoints;
-import it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.*;
@@ -11,18 +9,17 @@ import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.*;
 import it.gov.pagopa.tkm.ms.consentmanager.service.impl.*;
 import org.junit.*;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.*;
 import org.mockito.*;
 import org.mockito.internal.matchers.apachecommons.*;
 import org.mockito.junit.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import java.time.*;
 import java.time.temporal.*;
-import java.util.*;
 
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.TestBeans.*;
 import static org.assertj.core.api.Assertions.within;
@@ -30,8 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
