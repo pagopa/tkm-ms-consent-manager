@@ -59,6 +59,13 @@ public class DefaultBeans {
                     .setConsentDate(INSTANT)
                     .setConsentLastClient(CLIENT_ID);
 
+    public final TkmUser USER_WITH_GLOBAL_DENY_CONSENT =
+            new TkmUser()
+                    .setTaxCode(TAX_CODE)
+                    .setConsentType(DENY)
+                    .setConsentDate(INSTANT)
+                    .setConsentLastClient(CLIENT_ID);
+
     public final TkmUser USER_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
             new TkmUser()
             .setTaxCode(TAX_CODE)
