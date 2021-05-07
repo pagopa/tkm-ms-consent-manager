@@ -1,7 +1,11 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service.impl;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
-import it.gov.pagopa.tkm.ms.consentmanager.model.entity.*;
+import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmUser;
+import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCard;
+import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmService;
+import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCardService;
+
 import it.gov.pagopa.tkm.ms.consentmanager.exception.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
@@ -105,8 +109,7 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
 
-
-    public GetConsentResponse getGetConsentResponse(String taxCode, String hpan, String[] services) {
+    public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
 
         TkmUser tkmUser = userRepository.findByTaxCode(taxCode);
         if (tkmUser == null)
@@ -186,18 +189,18 @@ public class ConsentServiceImpl implements ConsentService {
 
         List<TkmCardService> serviceByConsent;
 
-        serviceByConsent = cardServices.stream().filter(b-> b.getConsentType().equals(ConsentEnum.ALLOW))
+        serviceByConsent = cardServices.stream().filter(b-> b.getConsentType().equals(ConsentEntityEnum.ALLOW))
                     .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(serviceByConsent)) return details;
 
         Consent consent = new Consent();
-        createConsentFromTkmCard(consent, ConsentEnum.ALLOW, serviceByConsent, tkmCard.getHpan());
+        createConsentFromTkmCard(consent, ConsentRequestEnum.ALLOW, serviceByConsent, tkmCard.getHpan());
         details.add(new ConsentResponse(consent));
         return details;
     }
 
 
-    private Consent createConsentFromTkmCard(Consent consent, ConsentEnum consentEnum, List<TkmCardService> services, String hpan) {
+    private Consent createConsentFromTkmCard(Consent consent, ConsentRequestEnum consentEnum, List<TkmCardService> services, String hpan) {
 
         Set<ServiceEnum> serviceEnumsSet =  services.stream().map(s-> s.getService().getName()).collect(Collectors.toSet());
 

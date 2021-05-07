@@ -61,7 +61,7 @@ public class DefaultBeans {
     public final TkmUser USER_WITH_GLOBAL_DENY_CONSENT =
             new TkmUser()
                     .setTaxCode(TAX_CODE)
-                    .setConsentType(DENY)
+                    .setConsentType(ConsentEntityEnum.DENY)
                     .setConsentDate(INSTANT)
                     .setConsentLastClient(CLIENT_ID);
 
@@ -123,11 +123,11 @@ public class DefaultBeans {
 
     public final List<TkmCard> PARTIAL_USER_CARDS_LIST = Arrays.asList(PARTIAL_USER_VALID_CARD, PARTIAL_USER_VALID_CARD_2);
 
-    public final TkmCardService CARD_SERVICE_1 = new TkmCardService().setId(1L).setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ALLOW);
-    public final TkmCardService CARD_SERVICE_2 = new TkmCardService().setId(2L).setService(SERVICE_EXAMPLE_2).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ALLOW);
-    public final TkmCardService CARD_SERVICE_3 = new TkmCardService().setId(3L).setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD).setConsentType(DENY);
-    public final TkmCardService CARD_SERVICE_4 = new TkmCardService().setId(4L).setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ALLOW);
-    public final TkmCardService CARD_SERVICE_5 = new TkmCardService().setId(5L).setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ALLOW);
+    public final TkmCardService CARD_SERVICE_1 = new TkmCardService().setId(1L).setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.ALLOW);
+    public final TkmCardService CARD_SERVICE_2 = new TkmCardService().setId(2L).setService(SERVICE_EXAMPLE_2).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.ALLOW);
+    public final TkmCardService CARD_SERVICE_3 = new TkmCardService().setId(3L).setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.DENY);
+    public final TkmCardService CARD_SERVICE_4 = new TkmCardService().setId(4L).setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ConsentEntityEnum.ALLOW);
+    public final TkmCardService CARD_SERVICE_5 = new TkmCardService().setId(5L).setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ConsentEntityEnum.ALLOW);
 
     public final List<TkmCardService> CARD_1_SERVICES = Arrays.asList(CARD_SERVICE_1, CARD_SERVICE_2, CARD_SERVICE_3);
     public final List<TkmCardService> CARD_1_SERVICES_SUB = Arrays.asList(CARD_SERVICE_1);

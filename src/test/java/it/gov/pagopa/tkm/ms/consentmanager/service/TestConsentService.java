@@ -1,6 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service;
 
-import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentRequestEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.DefaultBeans;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentDataNotFoundException;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
@@ -129,12 +130,12 @@ public class TestConsentService {
     @Test
     public void get_givenTaxCodeWithGlobalDenyAndNoHpan_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
-        expectedResponse.setConsent(ConsentEnum.DENY);
+        expectedResponse.setConsent(ConsentEntityEnum.DENY);
         expectedResponse.setDetails(null);
 
         when(userRepository.findByTaxCode(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_GLOBAL_DENY_CONSENT);
 
-        GetConsentResponse response = consentService.getGetConsentResponse(testBeans.TAX_CODE, null, null);
+        GetConsentResponse response = consentService.getConsent(testBeans.TAX_CODE, null, null);
         Assert.assertEquals(response, expectedResponse);
 
     }
@@ -142,12 +143,12 @@ public class TestConsentService {
     @Test
     public void get_givenTaxCodeWithGlobalAllowAndNoHpan_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
-        expectedResponse.setConsent(ConsentEnum.ALLOW);
+        expectedResponse.setConsent(ConsentEntityEnum.ALLOW);
         expectedResponse.setDetails(null);
 
         when(userRepository.findByTaxCode(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_GLOBAL_ALLOW_CONSENT);
 
-        GetConsentResponse response = consentService.getGetConsentResponse(testBeans.TAX_CODE, null, null);
+        GetConsentResponse response = consentService.getConsent(testBeans.TAX_CODE, null, null);
         Assert.assertEquals(response, expectedResponse);
 
     }
@@ -155,10 +156,10 @@ public class TestConsentService {
     @Test
     public void get_givenTaxCode_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
-        expectedResponse.setConsent(ConsentEnum.PARTIAL);
-        Consent consent1 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(testBeans.HPAN).setServices(testBeans.CARD_1_SERVICE_SET);
+        expectedResponse.setConsent(ConsentEntityEnum.PARTIAL);
+        Consent consent1 = new Consent().setConsent(ConsentRequestEnum.ALLOW).setHpan(testBeans.HPAN).setServices(testBeans.CARD_1_SERVICE_SET);
         ConsentResponse consentResponse1 = new ConsentResponse(consent1);
-        Consent consent2 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(testBeans.HPAN_2).setServices(testBeans.CARD_2_SERVICE_SET);
+        Consent consent2 = new Consent().setConsent(ConsentRequestEnum.ALLOW).setHpan(testBeans.HPAN_2).setServices(testBeans.CARD_2_SERVICE_SET);
         ConsentResponse consentResponse2 = new ConsentResponse(consent2);
         expectedResponse.setDetails(Arrays.asList(consentResponse1, consentResponse2));
 
@@ -168,7 +169,7 @@ public class TestConsentService {
         when(cardServiceRepository.findByServiceInAndCard(testBeans.MULTIPLE_TKM_SERVICES, testBeans.PARTIAL_USER_VALID_CARD)).thenReturn(testBeans.CARD_1_SERVICES);
         when(cardServiceRepository.findByServiceInAndCard(testBeans.MULTIPLE_TKM_SERVICES, testBeans.PARTIAL_USER_VALID_CARD_2)).thenReturn(testBeans.CARD_2_SERVICES);
 
-        GetConsentResponse response = consentService.getGetConsentResponse(testBeans.TAX_CODE, null, null);
+        GetConsentResponse response = consentService.getConsent(testBeans.TAX_CODE, null, null);
         Assert.assertEquals(response, expectedResponse);
 
     }
@@ -176,8 +177,8 @@ public class TestConsentService {
     @Test
     public void get_givenTaxCodeAndHpan_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
-        expectedResponse.setConsent(ConsentEnum.PARTIAL);
-        Consent consent1 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(testBeans.HPAN).setServices(testBeans.CARD_1_SERVICE_SET);
+        expectedResponse.setConsent(ConsentEntityEnum.PARTIAL);
+        Consent consent1 = new Consent().setConsent(ConsentRequestEnum.ALLOW).setHpan(testBeans.HPAN).setServices(testBeans.CARD_1_SERVICE_SET);
         ConsentResponse consentResponse1 = new ConsentResponse(consent1);
         expectedResponse.setDetails(Arrays.asList(consentResponse1));
 
@@ -186,7 +187,7 @@ public class TestConsentService {
         when(cardRepository.findByHpan(testBeans.HPAN)).thenReturn(testBeans.PARTIAL_USER_VALID_CARD);
         when(cardServiceRepository.findByServiceInAndCard(testBeans.MULTIPLE_TKM_SERVICES, testBeans.PARTIAL_USER_VALID_CARD)).thenReturn(testBeans.CARD_1_SERVICES);
 
-        GetConsentResponse response = consentService.getGetConsentResponse(testBeans.TAX_CODE, testBeans.HPAN, null);
+        GetConsentResponse response = consentService.getConsent(testBeans.TAX_CODE, testBeans.HPAN, null);
         Assert.assertEquals(response, expectedResponse);
 
     }
@@ -194,10 +195,10 @@ public class TestConsentService {
     @Test
     public void get_givenTaxCodeAndServices_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
-        expectedResponse.setConsent(ConsentEnum.PARTIAL);
-        Consent consent1 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(testBeans.HPAN).setServices(testBeans.ONE_SERVICE_SET);
+        expectedResponse.setConsent(ConsentEntityEnum.PARTIAL);
+        Consent consent1 = new Consent().setConsent(ConsentRequestEnum.ALLOW).setHpan(testBeans.HPAN).setServices(testBeans.ONE_SERVICE_SET);
         ConsentResponse consentResponse1 = new ConsentResponse(consent1);
-        Consent consent2 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(testBeans.HPAN_2).setServices(testBeans.CARD_2_SERVICE_SET);
+        Consent consent2 = new Consent().setConsent(ConsentRequestEnum.ALLOW).setHpan(testBeans.HPAN_2).setServices(testBeans.CARD_2_SERVICE_SET);
         ConsentResponse consentResponse2 = new ConsentResponse(consent2);
         expectedResponse.setDetails(Arrays.asList(consentResponse1, consentResponse2));
 
@@ -207,7 +208,7 @@ public class TestConsentService {
         when(cardServiceRepository.findByServiceInAndCard(testBeans.MULTIPLE_TKM_SERVICES_SUB, testBeans.PARTIAL_USER_VALID_CARD)).thenReturn(testBeans.CARD_1_SERVICES_SUB);
         when(cardServiceRepository.findByServiceInAndCard(testBeans.MULTIPLE_TKM_SERVICES_SUB, testBeans.PARTIAL_USER_VALID_CARD_2)).thenReturn(testBeans.CARD_2_SERVICES);
 
-        GetConsentResponse response = consentService.getGetConsentResponse(testBeans.TAX_CODE, null, testBeans.SERVICES_SUB_ARRAY);
+        GetConsentResponse response = consentService.getConsent(testBeans.TAX_CODE, null, testBeans.SERVICES_SUB_ARRAY);
         Assert.assertEquals(response, expectedResponse);
 
     }
@@ -215,8 +216,8 @@ public class TestConsentService {
     @Test
     public void get_givenTaxCodeAndHpanAndServices_returnValidConsent(){
         GetConsentResponse expectedResponse= new GetConsentResponse();
-        expectedResponse.setConsent(ConsentEnum.PARTIAL);
-        Consent consent1 = new Consent().setConsent(ConsentEnum.ALLOW).setHpan(testBeans.HPAN).setServices(testBeans.CARD_1_SERVICE_SET);
+        expectedResponse.setConsent(ConsentEntityEnum.PARTIAL);
+        Consent consent1 = new Consent().setConsent(ConsentRequestEnum.ALLOW).setHpan(testBeans.HPAN).setServices(testBeans.CARD_1_SERVICE_SET);
         ConsentResponse consentResponse1 = new ConsentResponse(consent1);
         expectedResponse.setDetails(Arrays.asList(consentResponse1));
 
@@ -225,7 +226,7 @@ public class TestConsentService {
         when(cardRepository.findByHpan(testBeans.HPAN)).thenReturn(testBeans.PARTIAL_USER_VALID_CARD);
         when(cardServiceRepository.findByServiceInAndCard(testBeans.MULTIPLE_TKM_SERVICES_SUB, testBeans.PARTIAL_USER_VALID_CARD)).thenReturn(testBeans.CARD_1_SERVICES);
 
-        GetConsentResponse response = consentService.getGetConsentResponse(testBeans.TAX_CODE, testBeans.HPAN, testBeans.SERVICES_SUB_ARRAY);
+        GetConsentResponse response = consentService.getConsent(testBeans.TAX_CODE, testBeans.HPAN, testBeans.SERVICES_SUB_ARRAY);
         Assert.assertEquals(response, expectedResponse);
 
     }
@@ -234,20 +235,20 @@ public class TestConsentService {
     public void get_givenNotExistentTaxCode_expectNotFound() throws Exception {
         when(serviceRepository.findAll()).thenReturn(testBeans.MULTIPLE_TKM_SERVICES);
         when(userRepository.findByTaxCode(testBeans.TAX_CODE)).thenReturn(null);
-        assertThrows(ConsentDataNotFoundException.class, () ->  consentService.getGetConsentResponse(testBeans.TAX_CODE, null, null));
+        assertThrows(ConsentDataNotFoundException.class, () ->  consentService.getConsent(testBeans.TAX_CODE, null, null));
     }
 
     @Test
     public void get_givenNotExistentHpan_expectNotFound() throws Exception {
         when(userRepository.findByTaxCode(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_PARTIAL_CONSENT);
         when(cardRepository.findByHpan(testBeans.HPAN)).thenReturn(null);
-        assertThrows(ConsentDataNotFoundException.class, () -> consentService.getGetConsentResponse(testBeans.TAX_CODE, testBeans.HPAN, null));
+        assertThrows(ConsentDataNotFoundException.class, () -> consentService.getConsent(testBeans.TAX_CODE, testBeans.HPAN, null));
 
     }
 
     @Test
     public void get_givenInvalidServices_expectBadRequest() throws Exception {
-        assertThrows(ConsentException.class, () -> consentService.getGetConsentResponse(testBeans.TAX_CODE, null, testBeans.SERVICES_INVALID_SINGLE_ARRAY));
+        assertThrows(ConsentException.class, () -> consentService.getConsent(testBeans.TAX_CODE, null, testBeans.SERVICES_INVALID_SINGLE_ARRAY));
     }
 
 }

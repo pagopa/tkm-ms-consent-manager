@@ -1,6 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.response;
 
-import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class GetConsentResponse {
 
-    private ConsentEnum consent;
+    private ConsentEntityEnum consent;
 
     private List<ConsentResponse> details;
 
