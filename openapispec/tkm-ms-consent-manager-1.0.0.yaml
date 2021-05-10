@@ -160,24 +160,62 @@ paths:
                 maxLength: 16
                 example: 937aee55bbabd29b
               required: true
-  /deleteUser:
     delete:
+      tags:
+        - authenticated
       summary: Delete user logically
       operationId: deleteUser
       parameters:
         - in: header
-          name: User-Id
+          name: Tax-Code
           schema:
-            type: long
+            type: string
+            minLength: 16
+            maxLength: 16
           required: true
-          description: User ID
+        - in: header
+          name: Client-Id
+          schema:
+            type: string
+            minLength: 36
+            maxLength: 36
+            example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+          required: true
       responses:
         '200':
           description: Success
-        '404':
-          description: User not found
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
+              required: true
+        '400':
+          description: Bad Request
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentError'
         '500':
           description: Internal Server Error
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
+              required: true
 components:
   schemas:
     Consent:
