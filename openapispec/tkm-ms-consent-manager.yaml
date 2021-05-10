@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management"
-  version: '1.0.3'
+  version: '1.0.4'
 servers:
   - url: http://localhost:2000/tkm-ms-consent-manager
   - url: http://tkm-sit/tkm-ms-consent-manager
@@ -31,9 +31,7 @@ paths:
           name: Client-Id
           schema:
             type: string
-            minLength: 36
-            maxLength: 36
-            example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+            maxLength: 70
           required: true
       operationId: saveConsent
       description: Client identification
@@ -90,7 +88,7 @@ paths:
             minLength: 16
             maxLength: 16
           required: true
-          description: User tax Code
+          description: User tax code
         - in: query
           name: hpan
           schema:
@@ -102,9 +100,8 @@ paths:
           name: Client-Id
           schema:
             type: string
-            minLength: 36
-            maxLength: 36
-          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code
+            maxLength: 70
+          description: User client id
         - in: query
           name: services
           schema:
