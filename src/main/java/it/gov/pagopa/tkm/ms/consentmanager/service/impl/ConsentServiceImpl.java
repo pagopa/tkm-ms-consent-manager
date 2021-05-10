@@ -62,14 +62,15 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     private TkmUser updateOrCreateUser(String taxCode, ClientEnum clientId, Consent consent) {
-        TkmUser user = userRepository.findByTaxCode(taxCode);
+        TkmUser user = userRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (user == null) {
             user = new TkmUser()
                     .setTaxCode(taxCode)
                     .setConsentDate(Instant.now())
                     .setConsentType(consent.isPartial() ?
                             PARTIAL : ConsentEntityEnum.valueOf(consent.getConsent().name()))
-                    .setConsentLastClient(clientId);
+                    .setConsentLastClient(clientId)
+                    .setDeleted(false);
         } else {
             checkNotFromAllowToPartial(user.getConsentType(), consent);
             user
@@ -93,7 +94,8 @@ public class ConsentServiceImpl implements ConsentService {
         if (card == null) {
             card = new TkmCard()
                     .setHpan(hpan)
-                    .setUser(user);
+                    .setUser(user)
+                    .setDeleted(false);
             cardRepository.save(card);
         }
         return card;

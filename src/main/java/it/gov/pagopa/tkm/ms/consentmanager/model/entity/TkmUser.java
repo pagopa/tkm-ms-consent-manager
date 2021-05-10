@@ -36,6 +36,9 @@ public class TkmUser {
     @Column(name = "CONSENT_LAST_CLIENT")
     private ClientEnum consentLastClient;
 
+    @Column(name = "DELETED")
+    private boolean deleted;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<TkmCard> cards = new HashSet<>();
 

@@ -51,7 +51,8 @@ public class DefaultBeans {
                     .setTaxCode(TAX_CODE)
                     .setConsentType(ConsentEntityEnum.ALLOW)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID);
+                    .setConsentLastClient(CLIENT_ID)
+                    .setDeleted(false);
 
     public final TkmUser USER_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
             new TkmUser()
@@ -59,19 +60,22 @@ public class DefaultBeans {
             .setConsentType(ConsentEntityEnum.ALLOW)
             .setConsentDate(INSTANT)
             .setConsentLastClient(CLIENT_ID)
-            .setConsentUpdateDate(INSTANT);
+            .setConsentUpdateDate(INSTANT)
+            .setDeleted(false);
 
     public final TkmUser USER_WITH_PARTIAL_CONSENT =
             new TkmUser()
                     .setTaxCode(TAX_CODE)
                     .setConsentType(PARTIAL)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID);
+                    .setConsentLastClient(CLIENT_ID)
+                    .setDeleted(false);
 
     public final TkmCard CARD_FROM_USER_WITH_PARTIAL_CONSENT =
             new TkmCard()
                 .setHpan(HPAN)
-                .setUser(USER_WITH_PARTIAL_CONSENT);
+                .setUser(USER_WITH_PARTIAL_CONSENT)
+                .setDeleted(false);
 
     public final List<TkmService> ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s -> new TkmService().setName(s)).collect(Collectors.toList());
 
