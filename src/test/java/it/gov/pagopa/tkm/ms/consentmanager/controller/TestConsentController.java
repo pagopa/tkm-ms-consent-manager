@@ -15,6 +15,9 @@ import org.springframework.http.*;
 import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.setup.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -75,7 +78,7 @@ public class TestConsentController {
                 .andExpect(status().isOk());
     }
 
-   /* @Test
+   /*@Test
     public void get_givenInvalidTaxCode_returnBadRequest() throws Exception {
         mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
                .header(ApiParams.TAX_CODE_HEADER, testBeans.INVALID_TAX_CODE))

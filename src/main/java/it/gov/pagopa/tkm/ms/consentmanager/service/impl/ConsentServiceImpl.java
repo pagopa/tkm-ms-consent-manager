@@ -14,12 +14,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.service.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.*;
-import lombok.extern.log4j.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
-import java.time.*;
-import java.time.temporal.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
