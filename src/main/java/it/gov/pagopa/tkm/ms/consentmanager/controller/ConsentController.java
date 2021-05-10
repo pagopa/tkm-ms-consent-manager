@@ -1,6 +1,5 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller;
 
-import it.gov.pagopa.tkm.ms.consentmanager.constant.ClientEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
@@ -26,6 +25,6 @@ public interface ConsentController {
     @Transactional
     ConsentResponse postConsent(
             @RequestHeader(TAX_CODE_HEADER) @Valid @Size(min = 16, max = 16) String taxCode,
-            @RequestHeader(CLIENT_ID_HEADER) ClientEnum clientId,
+            @RequestHeader(CLIENT_ID_HEADER) String clientId,
             @RequestBody @Valid Consent consent) throws ConsentException;
 }

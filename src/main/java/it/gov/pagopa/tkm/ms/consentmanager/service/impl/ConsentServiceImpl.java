@@ -34,7 +34,7 @@ public class ConsentServiceImpl implements ConsentService {
     private CardServiceRepository cardServiceRepository;
 
     @Override
-    public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException {
+    public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
         TkmUser user = updateOrCreateUser(taxCode, clientId, consent);
         if (consent.isPartial()) {
             TkmCard card = getOrCreateCard(user, consent.getHpan());
@@ -61,7 +61,7 @@ public class ConsentServiceImpl implements ConsentService {
         cardServiceRepository.saveAll(cardServices);
     }
 
-    private TkmUser updateOrCreateUser(String taxCode, ClientEnum clientId, Consent consent) {
+    private TkmUser updateOrCreateUser(String taxCode, String clientId, Consent consent) {
         TkmUser user = userRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (user == null) {
             user = new TkmUser()

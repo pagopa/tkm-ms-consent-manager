@@ -32,9 +32,8 @@ public class TkmUser {
     @Column(name = "CONSENT_UPDATE_DATE")
     private Instant consentUpdateDate;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_LAST_CLIENT")
-    private ClientEnum consentLastClient;
+    private String consentLastClient;
 
     @Column(name = "DELETED")
     private boolean deleted;

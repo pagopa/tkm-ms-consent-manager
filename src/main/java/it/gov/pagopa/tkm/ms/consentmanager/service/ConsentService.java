@@ -7,6 +7,6 @@ import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 
 public interface ConsentService {
 
-    ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException;
+    ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException;
 
 }
