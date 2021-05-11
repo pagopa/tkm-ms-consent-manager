@@ -11,6 +11,7 @@ import java.util.*;
 @Entity
 @Table(name = "TKM_USER")
 @Data
+@EqualsAndHashCode(exclude = "cards")
 @Accessors(chain = true)
 public class TkmUser {
 

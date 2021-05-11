@@ -45,7 +45,7 @@ public class TestConsentController {
     public void givenValidConsentRequest_returnValidConsentResponse() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.set(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE);
-        headers.set(ApiParams.CLIENT_ID_HEADER, String.valueOf(testBeans.CLIENT_ID));
+        headers.set(ApiParams.CLIENT_ID_HEADER, testBeans.CLIENT_ID);
         for (Consent c : testBeans.VALID_CONSENT_REQUESTS) {
             ConsentResponse consentResponse = new ConsentResponse(c);
             when(consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, c)).thenReturn(consentResponse);
@@ -65,7 +65,7 @@ public class TestConsentController {
             mockMvc.perform(
                     post(ApiEndpoints.BASE_PATH_CONSENT)
                             .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE)
-                            .header(ApiParams.CLIENT_ID_HEADER, String.valueOf(testBeans.CLIENT_ID))
+                            .header(ApiParams.CLIENT_ID_HEADER, testBeans.CLIENT_ID)
                             .content(mapper.writeValueAsString(c))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
@@ -82,7 +82,7 @@ public class TestConsentController {
                 .andExpect(status().isBadRequest());
         mockMvc.perform(
                 post(ApiEndpoints.BASE_PATH_CONSENT)
-                        .header(ApiParams.CLIENT_ID_HEADER, String.valueOf(testBeans.CLIENT_ID))
+                        .header(ApiParams.CLIENT_ID_HEADER, testBeans.CLIENT_ID)
                         .content(mapper.writeValueAsString(testBeans.GLOBAL_ALLOW_CONSENT_REQUEST))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());

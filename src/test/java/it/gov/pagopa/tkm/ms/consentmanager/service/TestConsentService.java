@@ -72,6 +72,12 @@ public class TestConsentService {
     }
 
     @Test
+    public void givenRequestOfSameConsentAsUser_expectException() {
+        when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_GLOBAL_ALLOW_CONSENT);
+        assertThrows(ConsentException.class, () -> consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.GLOBAL_ALLOW_CONSENT_REQUEST));
+    }
+
+    @Test
     public void givenNewTaxCode_createNewUser() {
         when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(null);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.GLOBAL_ALLOW_CONSENT_REQUEST);
@@ -97,11 +103,9 @@ public class TestConsentService {
     public void givenPartialConsentRequestWithoutServices_applyConsentToAllServices() {
         when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_PARTIAL_CONSENT);
         when(serviceRepository.findAll()).thenReturn(testBeans.ALL_SERVICES_LIST);
-        when(cardServiceRepository.findByServiceInAndCard(testBeans.ALL_SERVICES_LIST, testBeans.CARD_FROM_USER_WITH_PARTIAL_CONSENT)).thenReturn(testBeans.CARD_SERVICES_FOR_ONE_SERVICE_LIST);
         when(cardRepository.findByHpanAndUser(testBeans.HPAN, testBeans.USER_WITH_PARTIAL_CONSENT)).thenReturn(testBeans.CARD_FROM_USER_WITH_PARTIAL_CONSENT);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_ALL_SERVICES_REQUEST);
         verify(serviceRepository).findAll();
-        verify(cardServiceRepository).findByServiceInAndCard(testBeans.ALL_SERVICES_LIST, testBeans.CARD_FROM_USER_WITH_PARTIAL_CONSENT);
         verify(cardServiceRepository).saveAll(cardServiceListCaptor.capture());
         assertThat(cardServiceListCaptor.getValue()).containsExactlyInAnyOrderElementsOf(testBeans.CARD_SERVICES_FOR_ALL_SERVICES_LIST);
     }
@@ -110,10 +114,8 @@ public class TestConsentService {
     public void givenPartialConsentRequestWithServices_applyConsentToGivenServices() {
         when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_PARTIAL_CONSENT);
         when(serviceRepository.findByNameIn(testBeans.ONE_SERVICE_SET)).thenReturn(testBeans.ONE_SERVICE_LIST);
-        when(cardServiceRepository.findByServiceInAndCard(testBeans.ONE_SERVICE_LIST, testBeans.CARD_FROM_USER_WITH_PARTIAL_CONSENT)).thenReturn(null);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_ONE_SERVICE_REQUEST);
         verify(serviceRepository).findByNameIn(testBeans.ONE_SERVICE_SET);
-        verify(cardServiceRepository).findByServiceInAndCard(testBeans.ONE_SERVICE_LIST, testBeans.CARD_FROM_USER_WITH_PARTIAL_CONSENT);
         verify(cardServiceRepository).saveAll(cardServiceListCaptor.capture());
         assertThat(cardServiceListCaptor.getValue()).containsExactlyInAnyOrderElementsOf(testBeans.CARD_SERVICES_FOR_ONE_SERVICE_LIST);
     }

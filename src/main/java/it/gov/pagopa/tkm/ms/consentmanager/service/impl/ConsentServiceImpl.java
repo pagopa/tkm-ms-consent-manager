@@ -43,21 +43,19 @@ public class ConsentServiceImpl implements ConsentService {
                     serviceRepository.findByNameIn(consent.getServices());
             updateOrCreateCardServices(services, card, consent.getConsent());
         } else {
-            user.getCards().forEach(c -> updateOrCreateCardServices(serviceRepository.findAll(), c, consent.getConsent()));
+            List<TkmService> allServices = serviceRepository.findAll();
+            user.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
         }
         return new ConsentResponse(consent);
     }
 
     private void updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {
-        List<TkmCardService> cardServicesList = cardServiceRepository.findByServiceInAndCard(services, card);
-        List<TkmCardService> cardServices = CollectionUtils.isEmpty(cardServicesList) ? new ArrayList<>() : new ArrayList<>(cardServicesList);
-        List<TkmService> existingServicesOnCard = cardServices.stream().map(TkmCardService::getService).collect(Collectors.toList());
-        cardServices.addAll(services.stream().filter(s -> !existingServicesOnCard.contains(s)).map(
+        List<TkmCardService> cardServices = services.stream().map(
                 s -> new TkmCardService()
                         .setCard(card)
                         .setService(s)
-        ).collect(Collectors.toList()));
-        cardServices.forEach(s -> s.setConsentType(ConsentEntityEnum.valueOf(consent.name())));
+                        .setConsentType(toConsentEntityEnum(consent))
+        ).collect(Collectors.toList());
         cardServiceRepository.saveAll(cardServices);
     }
 
@@ -68,15 +66,16 @@ public class ConsentServiceImpl implements ConsentService {
                     .setTaxCode(taxCode)
                     .setConsentDate(Instant.now())
                     .setConsentType(consent.isPartial() ?
-                            PARTIAL : ConsentEntityEnum.valueOf(consent.getConsent().name()))
+                            PARTIAL : toConsentEntityEnum(consent.getConsent()))
                     .setConsentLastClient(clientId)
                     .setDeleted(false);
         } else {
             checkNotFromAllowToPartial(user.getConsentType(), consent);
+            checkNotSameConsentType(user.getConsentType(), consent);
             user
                     .setConsentUpdateDate(Instant.now())
                     .setConsentType(consent.isPartial() ?
-                            PARTIAL : ConsentEntityEnum.valueOf(consent.getConsent().name()))
+                            PARTIAL : toConsentEntityEnum(consent.getConsent()))
                     .setConsentLastClient(clientId);
         }
         userRepository.save(user);
@@ -86,6 +85,12 @@ public class ConsentServiceImpl implements ConsentService {
     private void checkNotFromAllowToPartial(ConsentEntityEnum userConsent, Consent requestedConsent) {
         if (ALLOW.equals(userConsent) && requestedConsent.isPartial()) {
             throw new ConsentException(CONSENT_TYPE_NOT_CONSISTENT);
+        }
+    }
+
+    private void checkNotSameConsentType(ConsentEntityEnum userConsent, Consent requestedConsent) {
+        if (!requestedConsent.isPartial() && userConsent.equals(toConsentEntityEnum(requestedConsent.getConsent()))) {
+            throw new ConsentException(CONSENT_TYPE_ALREADY_SET);
         }
     }
 
