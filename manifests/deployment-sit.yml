@@ -25,7 +25,7 @@ spec:
             - secretRef:
                 name: postgres-credentials
             - configMapRef:
-                name: jvm
+                name: tkmmsconsentmanager
           livenessProbe:
             httpGet:
               path: /actuator/health
