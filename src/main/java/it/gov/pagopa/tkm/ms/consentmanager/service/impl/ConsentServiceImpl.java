@@ -8,6 +8,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.*;
 import it.gov.pagopa.tkm.ms.consentmanager.service.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.*;
 
@@ -46,6 +47,17 @@ public class ConsentServiceImpl implements ConsentService {
             user.getCards().forEach(c -> updateOrCreateCardServices(serviceRepository.findAll(), c, consent.getConsent()));
         }
         return new ConsentResponse(consent);
+    }
+
+    @Override
+    public HttpStatus deleteUser(String taxCode, String clientId) throws ConsentException {
+        TkmUser user = userRepository.findByTaxCodeAndDeletedFalse(taxCode);
+        if (Objects.isNull(user)) {
+            throw new ConsentException(MISSING_USER);
+        }
+        user.setDeleted(true);
+        userRepository.save(user);
+        return HttpStatus.OK;
     }
 
     private void updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {

@@ -7,6 +7,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
 import it.gov.pagopa.tkm.ms.consentmanager.service.ConsentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
@@ -19,5 +20,10 @@ public class ConsentControllerImpl implements ConsentController {
     @Override
     public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
         return consentManagerService.postConsent(taxCode, clientId, consent);
+    }
+
+    @Override
+    public HttpStatus deleteUser(String taxCode, String clientId) throws ConsentException {
+        return consentManagerService.deleteUser(taxCode, clientId);
     }
 }
