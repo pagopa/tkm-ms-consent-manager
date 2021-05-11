@@ -19,14 +19,14 @@ variables:
   vmImageNameDefault: 'ubuntu-latest'
 
   # Image Repository Name
-  imageRepository: ''
+  imageRepository: 'tkmmsconsentmanager'
 
   isToDeploy: $[ne(variables['Build.Reason'], 'PullRequest')]
-  isSIT: $[eq(variables['Build.SourceBranch'], 'refs/heads/release/st')]
+  isSIT: $[eq(variables['Build.SourceBranch'], 'refs/heads/release/sit')]
   isUAT: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/release/uat'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix'))]
   isPROD: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
 
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/release/st') }}:
+  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/release/sit') }}:
     containerRegistry: 'cstaruatregistry.azurecr.io'
     deployment: deployment-sit
     imagePullSecret: 'tkmsitregistry-auth'
