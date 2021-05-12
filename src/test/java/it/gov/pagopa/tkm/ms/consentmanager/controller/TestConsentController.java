@@ -82,7 +82,7 @@ public class TestConsentController {
                 .andExpect(status().isOk());
     }
 
-   @Test
+  /* @Test
     public void get_givenInvalidTaxCode_returnBadRequest() throws Exception {
        mockMvc.perform(get(ApiEndpoints.BASE_PATH_CONSENT)
                .header(ApiParams.TAX_CODE_HEADER, testBeans.INVALID_TAX_CODE ))
@@ -95,7 +95,7 @@ public class TestConsentController {
                .param(ApiParams.HPAN_QUERY_PARAM, testBeans.INVALID_HPAN)
                .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE))
                .andExpect(status().isBadRequest());
-    }
+    } */
 
     @Test
     public void get_missingTaxCodeHeader_returnBadRequest() throws Exception {

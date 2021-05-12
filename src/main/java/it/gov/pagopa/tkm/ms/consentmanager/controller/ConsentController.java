@@ -4,17 +4,12 @@ import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.GetConsentResponse;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Constraint;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-
-import java.util.List;
 
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiEndpoints.BASE_PATH_CONSENT;
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.CLIENT_ID_HEADER;
