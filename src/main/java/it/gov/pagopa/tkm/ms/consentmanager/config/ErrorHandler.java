@@ -9,7 +9,9 @@ import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.*;
+import java.util.List;
 
 @RestControllerAdvice
 @Log4j2
@@ -44,6 +46,11 @@ public class ErrorHandler {
     public ResponseEntity<Void> handleException(Exception e) {
         log.error(e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public void handleConstraint(ConstraintViolationException ex) {
+        System.out.println("Error");
     }
 
 }
