@@ -1,7 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.config;
 
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.cloud.sleuth.*;
+import brave.*;
 import org.springframework.core.annotation.*;
 import org.springframework.lang.*;
 import org.springframework.stereotype.*;
@@ -22,7 +22,7 @@ public class RequestIdTracer extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
-        servletResponse.setHeader(REQUEST_ID_HEADER, tracer.currentSpan().context().traceId());
+        servletResponse.setHeader(REQUEST_ID_HEADER, tracer.currentSpan().context().traceIdString());
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

@@ -13,15 +13,15 @@ import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum.PAR
 public class DefaultBeans {
 
     public final String TAX_CODE = "AAABBBCCCDDD1111";
-    public final String INVALID_TAX_CODE = TAX_CODE + "1";
-
-    public final ClientEnum CLIENT_ID = ClientEnum.EXAMPLE;
+    public final String CLIENT_ID = "TEST_CLIENT";
     public final String HPAN = "92fc472e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61aa2b6f";
+    public final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.BPD));
     public final String HPAN_2 = "nw629p2e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61be80q1";
     public final String INVALID_HPAN = HPAN + "a";
 
     public final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.EXAMPLE));
     public final Set<ServiceEnum> ALL_SERVICES_SET = new HashSet<>(Arrays.asList(ServiceEnum.values()));
+    public final String INVALID_TAX_CODE = TAX_CODE + "1";
 
     public  final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
 
@@ -56,38 +56,40 @@ public class DefaultBeans {
                     .setTaxCode(TAX_CODE)
                     .setConsentType(ConsentEntityEnum.ALLOW)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID);
-
+                    .setConsentLastClient(CLIENT_ID)
+                    .setDeleted(false);
     public final TkmUser USER_WITH_GLOBAL_DENY_CONSENT =
             new TkmUser()
                     .setTaxCode(TAX_CODE)
                     .setConsentType(ConsentEntityEnum.DENY)
                     .setConsentDate(INSTANT)
                     .setConsentLastClient(CLIENT_ID);
-
     public final TkmUser USER_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
             new TkmUser()
             .setTaxCode(TAX_CODE)
             .setConsentType(ConsentEntityEnum.ALLOW)
             .setConsentDate(INSTANT)
             .setConsentLastClient(CLIENT_ID)
-            .setConsentUpdateDate(INSTANT);
+            .setConsentUpdateDate(INSTANT)
+            .setDeleted(false);
 
     public final TkmUser USER_WITH_PARTIAL_CONSENT =
             new TkmUser()
                     .setTaxCode(TAX_CODE)
                     .setConsentType(PARTIAL)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID);
+                    .setConsentLastClient(CLIENT_ID)
+                    .setDeleted(false);
 
     public final TkmCard CARD_FROM_USER_WITH_PARTIAL_CONSENT =
             new TkmCard()
                 .setHpan(HPAN)
-                .setUser(USER_WITH_PARTIAL_CONSENT);
+                .setUser(USER_WITH_PARTIAL_CONSENT)
+                .setDeleted(false);
 
     public final List<TkmService> ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s -> new TkmService().setName(s)).collect(Collectors.toList());
 
-    public final TkmService ONE_SERVICE = new TkmService().setName(ServiceEnum.EXAMPLE);
+    public final TkmService ONE_SERVICE = new TkmService().setName(ServiceEnum.BPD);
 
     public final List<TkmService> ONE_SERVICE_LIST = Collections.singletonList(ONE_SERVICE);
 
