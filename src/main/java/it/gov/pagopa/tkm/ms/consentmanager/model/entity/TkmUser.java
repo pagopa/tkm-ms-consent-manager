@@ -11,6 +11,7 @@ import java.util.*;
 @Entity
 @Table(name = "TKM_USER")
 @Data
+@EqualsAndHashCode(exclude = "cards")
 @Accessors(chain = true)
 public class TkmUser {
 
@@ -32,9 +33,11 @@ public class TkmUser {
     @Column(name = "CONSENT_UPDATE_DATE")
     private Instant consentUpdateDate;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_LAST_CLIENT")
-    private ClientEnum consentLastClient;
+    private String consentLastClient;
+
+    @Column(name = "DELETED")
+    private boolean deleted;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<TkmCard> cards = new HashSet<>();

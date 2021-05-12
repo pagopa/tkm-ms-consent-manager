@@ -24,6 +24,6 @@ public class TkmCard {
     private String hpan;
 
     @Column(name = "DELETED")
-    private Boolean deleted;
+    private boolean deleted;
 
 }

@@ -38,7 +38,7 @@ public class ConsentServiceImpl implements ConsentService {
     private CardServiceRepository cardServiceRepository;
 
     @Override
-    public ConsentResponse postConsent(String taxCode, ClientEnum clientId, Consent consent) throws ConsentException {
+    public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
         TkmUser user = updateOrCreateUser(taxCode, clientId, consent);
         if (consent.isPartial()) {
             TkmCard card = getOrCreateCard(user, consent.getHpan());
@@ -47,39 +47,39 @@ public class ConsentServiceImpl implements ConsentService {
                     serviceRepository.findByNameIn(consent.getServices());
             updateOrCreateCardServices(services, card, consent.getConsent());
         } else {
-            user.getCards().forEach(c -> updateOrCreateCardServices(serviceRepository.findAll(), c, consent.getConsent()));
+            List<TkmService> allServices = serviceRepository.findAll();
+            user.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
         }
         return new ConsentResponse(consent);
     }
 
     private void updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {
-        List<TkmCardService> cardServicesList = cardServiceRepository.findByServiceInAndCard(services, card);
-        List<TkmCardService> cardServices = CollectionUtils.isEmpty(cardServicesList) ? new ArrayList<>() : new ArrayList<>(cardServicesList);
-        List<TkmService> existingServicesOnCard = cardServices.stream().map(TkmCardService::getService).collect(Collectors.toList());
-        cardServices.addAll(services.stream().filter(s -> !existingServicesOnCard.contains(s)).map(
+        List<TkmCardService> cardServices = services.stream().map(
                 s -> new TkmCardService()
                         .setCard(card)
                         .setService(s)
-        ).collect(Collectors.toList()));
-        cardServices.forEach(s -> s.setConsentType(ConsentEntityEnum.valueOf(consent.name())));
+                        .setConsentType(toConsentEntityEnum(consent))
+        ).collect(Collectors.toList());
         cardServiceRepository.saveAll(cardServices);
     }
 
-    private TkmUser updateOrCreateUser(String taxCode, ClientEnum clientId, Consent consent) {
-        TkmUser user = userRepository.findByTaxCode(taxCode);
+    private TkmUser updateOrCreateUser(String taxCode, String clientId, Consent consent) {
+        TkmUser user = userRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (user == null) {
             user = new TkmUser()
                     .setTaxCode(taxCode)
                     .setConsentDate(Instant.now())
                     .setConsentType(consent.isPartial() ?
-                            PARTIAL : ConsentEntityEnum.valueOf(consent.getConsent().name()))
-                    .setConsentLastClient(clientId);
+                            PARTIAL : toConsentEntityEnum(consent.getConsent()))
+                    .setConsentLastClient(clientId)
+                    .setDeleted(false);
         } else {
             checkNotFromAllowToPartial(user.getConsentType(), consent);
+            checkNotSameConsentType(user.getConsentType(), consent);
             user
                     .setConsentUpdateDate(Instant.now())
                     .setConsentType(consent.isPartial() ?
-                            PARTIAL : ConsentEntityEnum.valueOf(consent.getConsent().name()))
+                            PARTIAL : toConsentEntityEnum(consent.getConsent()))
                     .setConsentLastClient(clientId);
         }
         userRepository.save(user);
@@ -92,12 +92,19 @@ public class ConsentServiceImpl implements ConsentService {
         }
     }
 
+    private void checkNotSameConsentType(ConsentEntityEnum userConsent, Consent requestedConsent) {
+        if (!requestedConsent.isPartial() && userConsent.equals(toConsentEntityEnum(requestedConsent.getConsent()))) {
+            throw new ConsentException(CONSENT_TYPE_ALREADY_SET);
+        }
+    }
+
     private TkmCard getOrCreateCard(TkmUser user, String hpan) {
         TkmCard card = cardRepository.findByHpanAndUser(hpan, user);
         if (card == null) {
             card = new TkmCard()
                     .setHpan(hpan)
-                    .setUser(user);
+                    .setUser(user)
+                    .setDeleted(false);
             cardRepository.save(card);
         }
         return card;

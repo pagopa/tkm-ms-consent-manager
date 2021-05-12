@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management"
-  version: '1.0.2'
+  version: '1.0.4'
 servers:
   - url: http://localhost:2000/tkm-ms-consent-manager
   - url: http://tkm-sit/tkm-ms-consent-manager
@@ -31,17 +31,8 @@ paths:
           name: Client-Id
           schema:
             type: string
-            minLength: 36
-            maxLength: 36
-            example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+            maxLength: 70
           required: true
-        - in: header
-          name: Request-Id
-          schema:
-            type: string
-            minLength: 16
-            maxLength: 16
-          required: false
       operationId: saveConsent
       description: Client identification
       requestBody:
@@ -56,9 +47,9 @@ paths:
             Request-Id:
               schema:
                 type: string
-                minLength: 36
-                maxLength: 36
-                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
               required: true
         '400':
           description: Bad Request
@@ -66,9 +57,9 @@ paths:
             Request-Id:
               schema:
                 type: string
-                minLength: 36
-                maxLength: 36
-                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
               required: true
           content:
             application/json:
@@ -80,9 +71,9 @@ paths:
             Request-Id:
               schema:
                 type: string
-                minLength: 36
-                maxLength: 36
-                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
               required: true
     get:
       tags:
@@ -97,7 +88,7 @@ paths:
             minLength: 16
             maxLength: 16
           required: true
-          description: User tax Code
+          description: User tax code
         - in: query
           name: hpan
           schema:
@@ -109,16 +100,8 @@ paths:
           name: Client-Id
           schema:
             type: string
-            minLength: 36
-            maxLength: 36
-          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code
-        - in: header
-          name: Request-Id
-          schema:
-            type: string
-            minLength: 16
-            maxLength: 16
-          required: false
+            maxLength: 70
+          description: User client id
         - in: query
           name: services
           schema:
@@ -133,9 +116,9 @@ paths:
             Request-Id:
               schema:
                 type: string
-                minLength: 36
-                maxLength: 36
-                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
           content:
             application/json:
               schema:
@@ -146,9 +129,9 @@ paths:
             Request-Id:
               schema:
                 type: string
-                minLength: 36
-                maxLength: 36
-                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
               required: true
           content:
             application/json:
@@ -160,9 +143,9 @@ paths:
             Request-Id:
               schema:
                 type: string
-                minLength: 36
-                maxLength: 36
-                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
               required: true
         '500':
           description: Internal Server Error
@@ -170,9 +153,9 @@ paths:
             Request-Id:
               schema:
                 type: string
-                minLength: 36
-                maxLength: 36
-                example: ac90d5a6-3673-40c6-866f-95e4ff65a5b7
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
               required: true
 components:
   schemas:
