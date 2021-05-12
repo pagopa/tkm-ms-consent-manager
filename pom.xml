@@ -116,5 +116,8 @@
             <url>https://pkgs.dev.azure.com/sia-dds/_packaging/sia-dds/maven/v1</url>
         </repository>
     </distributionManagement>
-
+    <scm>
+        <developerConnection>scm:git:https://github.com/pagopa/tkm-ms-consent-manager.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 </project>
