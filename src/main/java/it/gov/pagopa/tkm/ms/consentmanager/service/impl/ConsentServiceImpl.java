@@ -113,7 +113,7 @@ public class ConsentServiceImpl implements ConsentService {
 
     public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
 
-        TkmUser tkmUser = userRepository.findByTaxCode(taxCode);
+        TkmUser tkmUser = userRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (tkmUser == null)
             throw new ConsentDataNotFoundException(USER_NOT_FOUND);
 
