@@ -20,7 +20,7 @@ public class TkmUser {
     @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "TAX_CODE", unique = true, nullable = false, length = 16)
+    @Column(name = "TAX_CODE", nullable = false, length = 16)
     private String taxCode;
 
     @Enumerated(EnumType.STRING)
