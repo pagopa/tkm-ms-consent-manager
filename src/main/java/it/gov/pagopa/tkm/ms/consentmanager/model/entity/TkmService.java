@@ -7,7 +7,7 @@ import lombok.experimental.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "TKM_SERVICE")
+@Table(name = "SERVICE")
 @Data
 @Accessors(chain = true)
 public class TkmService {

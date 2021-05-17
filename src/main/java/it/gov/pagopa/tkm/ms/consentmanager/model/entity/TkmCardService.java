@@ -7,7 +7,7 @@ import lombok.experimental.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "TKM_CARD_SERVICE")
+@Table(name = "CARD_SERVICE")
 @IdClass(CardServiceId.class)
 @Data
 @Accessors(chain = true)
