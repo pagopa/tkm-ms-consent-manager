@@ -147,7 +147,7 @@ stages:
         dependsOn: Build
         condition: and(succeeded(), eq(variables.isToDeploy, true), eq(variables.isSIT, true))
         pool:
-          vmImage: $(vmImageNameDefault)
+          name: uat_agent_pool
         environment: 'sit'
         strategy:
           runOnce:
