@@ -4,8 +4,9 @@
 > develop
 
  1. Run:<br>
- 	`mvn --set-upstream release:clean release:prepare`<br>
- 	`git checkout -b tmp/${version} starter-parent-${version}`<br> 
+    `$version=??` for poweshell or `version=??` for gitbash<br>
+ 	`mvn --batch-mode release:clean release:prepare`<br>
+ 	`git checkout -b tmp/${version} consent-manager-${version}`<br> 
  	`git push --set-upstream origin tmp/${version}`<br>
  	
  2. Merge **tmp/${version}** into **release/sit**
