@@ -26,6 +26,7 @@ variables:
   isPROD: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
 
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/release/sit') }}:
+    dockerRegistryServiceConnection: 'tkm-cstaruatregistry-connector'
     containerRegistry: 'cstaruatregistry.azurecr.io'
     deployment: deployment-sit
     imagePullSecret: 'tkmsitregistry-auth'
@@ -34,7 +35,7 @@ variables:
     deployment: deployment-uat
     imagePullSecret: ''
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
-    dockerRegistryServiceConnection: ''
+    dockerRegistryServiceConnection: 'tkm-cstaruatregistry-connector'
     containerRegistry: ''
     deployment: ''
     imagePullSecret: ''
@@ -163,6 +164,7 @@ stages:
                   inputs:
                     namespace: tkm-sit
                     action: deploy
+                    kubernetesServiceConnection: 'ddsakstest-self-connection-tkm-sit'
                     manifests: |
                       $(Pipeline.Workspace)/manifests/$(deployment).yml
                       $(Pipeline.Workspace)/manifests/service.yml
