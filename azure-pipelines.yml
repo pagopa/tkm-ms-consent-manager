@@ -164,6 +164,7 @@ stages:
                   inputs:
                     namespace: tkm-sit
                     action: deploy
+                    kubernetesServiceConnection: 'ddsakstest-self-connection-tkm-sit'
                     manifests: |
                       $(Pipeline.Workspace)/manifests/$(deployment).yml
                       $(Pipeline.Workspace)/manifests/service.yml
