@@ -9,7 +9,7 @@ import java.time.*;
 import java.util.*;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "\"USER\"")
 @Data
 @EqualsAndHashCode(exclude = "cards")
 @Accessors(chain = true)
