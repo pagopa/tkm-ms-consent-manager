@@ -25,3 +25,7 @@ management:
   health:
     db:
       enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "info,health,prometheus"
