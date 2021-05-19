@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>consent-manager</artifactId>
-    <version>0.0.3.1</version>
+    <version>0.0.6.1</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -116,6 +116,6 @@
     </distributionManagement>
     <scm>
         <developerConnection>scm:git:https://github.com/pagopa/tkm-ms-consent-manager.git</developerConnection>
-        <tag>consent-manager-0.0.3.1</tag>
+        <tag>consent-manager-0.0.6.1</tag>
     </scm>
 </project>
