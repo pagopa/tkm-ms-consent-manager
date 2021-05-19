@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>consent-manager</artifactId>
-    <version>0.0.6.1</version>
+    <version>0.0.7</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -20,6 +20,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.7.0</version>
         </dependency>
     </dependencies>
 
@@ -116,6 +121,6 @@
     </distributionManagement>
     <scm>
         <developerConnection>scm:git:https://github.com/pagopa/tkm-ms-consent-manager.git</developerConnection>
-        <tag>consent-manager-0.0.6.1</tag>
+        <tag>consent-manager-0.0.7</tag>
     </scm>
 </project>
