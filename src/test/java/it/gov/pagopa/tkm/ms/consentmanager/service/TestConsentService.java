@@ -8,7 +8,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.CardRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.CardServiceRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.ServiceRepository;
-import it.gov.pagopa.tkm.ms.consentmanager.repository.UserRepository;
+import it.gov.pagopa.tkm.ms.consentmanager.repository.CitizenRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.service.impl.ConsentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class TestConsentService {
     private ServiceRepository serviceRepository;
 
     @Mock
-    private UserRepository userRepository;
+    private CitizenRepository citizenRepository;
 
     @Captor
     private ArgumentCaptor<List<TkmCardService>> cardServiceListCaptor;
@@ -66,44 +66,44 @@ public class TestConsentService {
     }
 
     @Test
-    public void givenPartialConsentRequestFromUserWithGlobalConsent_expectException() {
-        when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_GLOBAL_ALLOW_CONSENT);
+    public void givenPartialConsentRequestFromCitizenWithGlobalConsent_expectException() {
+        when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_GLOBAL_ALLOW_CONSENT);
         assertThrows(ConsentException.class, () -> consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_ALL_SERVICES_REQUEST));
     }
 
     @Test
-    public void givenRequestOfSameConsentAsUser_expectException() {
-        when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_GLOBAL_ALLOW_CONSENT);
+    public void givenRequestOfSameConsentAsCitizen_expectException() {
+        when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_GLOBAL_ALLOW_CONSENT);
         assertThrows(ConsentException.class, () -> consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.GLOBAL_ALLOW_CONSENT_REQUEST));
     }
 
     @Test
-    public void givenNewTaxCode_createNewUser() {
-        when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(null);
+    public void givenNewTaxCode_createNewCitizen() {
+        when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(null);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.GLOBAL_ALLOW_CONSENT_REQUEST);
-        verify(userRepository).save(testBeans.USER_WITH_GLOBAL_ALLOW_CONSENT);
+        verify(citizenRepository).save(testBeans.CITIZEN_WITH_GLOBAL_ALLOW_CONSENT);
     }
 
     @Test
-    public void givenExistingTaxCode_updateUser() {
-        when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_PARTIAL_CONSENT);
+    public void givenExistingTaxCode_updateCitizen() {
+        when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.GLOBAL_ALLOW_CONSENT_REQUEST);
-        verify(userRepository).save(testBeans.USER_WITH_GLOBAL_ALLOW_CONSENT_UPDATED);
+        verify(citizenRepository).save(testBeans.CITIZEN_WITH_GLOBAL_ALLOW_CONSENT_UPDATED);
     }
 
     @Test
     public void givenNewHpan_createNewCard() {
-        when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_PARTIAL_CONSENT);
-        when(cardRepository.findByHpanAndUser(testBeans.HPAN, testBeans.USER_WITH_PARTIAL_CONSENT)).thenReturn(null);
+        when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
+        when(cardRepository.findByHpanAndCitizen(testBeans.HPAN, testBeans.CITIZEN_WITH_PARTIAL_CONSENT)).thenReturn(null);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_ALL_SERVICES_REQUEST);
-        verify(cardRepository).save(testBeans.CARD_FROM_USER_WITH_PARTIAL_CONSENT);
+        verify(cardRepository).save(testBeans.CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT);
     }
 
     @Test
     public void givenPartialConsentRequestWithoutServices_applyConsentToAllServices() {
-        when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_PARTIAL_CONSENT);
+        when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
         when(serviceRepository.findAll()).thenReturn(testBeans.ALL_SERVICES_LIST);
-        when(cardRepository.findByHpanAndUser(testBeans.HPAN, testBeans.USER_WITH_PARTIAL_CONSENT)).thenReturn(testBeans.CARD_FROM_USER_WITH_PARTIAL_CONSENT);
+        when(cardRepository.findByHpanAndCitizen(testBeans.HPAN, testBeans.CITIZEN_WITH_PARTIAL_CONSENT)).thenReturn(testBeans.CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_ALL_SERVICES_REQUEST);
         verify(serviceRepository).findAll();
         verify(cardServiceRepository).saveAll(cardServiceListCaptor.capture());
@@ -112,7 +112,7 @@ public class TestConsentService {
 
     @Test
     public void givenPartialConsentRequestWithServices_applyConsentToGivenServices() {
-        when(userRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.USER_WITH_PARTIAL_CONSENT);
+        when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
         when(serviceRepository.findByNameIn(testBeans.ONE_SERVICE_SET)).thenReturn(testBeans.ONE_SERVICE_LIST);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_ONE_SERVICE_REQUEST);
         verify(serviceRepository).findByNameIn(testBeans.ONE_SERVICE_SET);

@@ -9,11 +9,12 @@ import java.time.*;
 import java.util.*;
 
 @Entity
-@Table(name = "\"USER\"")
+@Table(name = "CITIZEN")
 @Data
 @EqualsAndHashCode(exclude = "cards")
+@ToString(exclude = "cards")
 @Accessors(chain = true)
-public class TkmUser {
+public class TkmCitizen {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +40,7 @@ public class TkmUser {
     @Column(name = "DELETED")
     private boolean deleted;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "citizen")
     private Set<TkmCard> cards = new HashSet<>();
 
 }
