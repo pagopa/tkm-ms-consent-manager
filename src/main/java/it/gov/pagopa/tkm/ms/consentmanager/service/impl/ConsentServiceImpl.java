@@ -65,17 +65,15 @@ public class ConsentServiceImpl implements ConsentService {
             citizen = new TkmCitizen()
                     .setTaxCode(taxCode)
                     .setConsentDate(Instant.now())
-                    .setConsentType(consent.isPartial() ?
-                            Partial : toConsentEntityEnum(consent.getConsent()))
-                    .setConsentLastClient(clientId);
+                    .setConsentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()))
+                    .setConsentClient(clientId);
         } else {
             checkNotFromAllowToPartial(citizen.getConsentType(), consent);
             checkNotSameConsentType(citizen.getConsentType(), consent);
             citizen
                     .setConsentUpdateDate(Instant.now())
-                    .setConsentType(consent.isPartial() ?
-                            Partial : toConsentEntityEnum(consent.getConsent()))
-                    .setConsentLastClient(clientId);
+                    .setConsentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()))
+                    .setConsentUpdateClient(clientId);
         }
         citizenRepository.save(citizen);
         return citizen;

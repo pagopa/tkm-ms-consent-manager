@@ -12,10 +12,10 @@ import java.util.*;
 @NoArgsConstructor
 public class ConsentResponse {
 
-    public ConsentResponse(Consent consent) {
-        setConsent(consent.getConsent());
-        setHpan(consent.getHpan());
-        setServices(consent.getServices());
+    public ConsentResponse(Consent c) {
+        consent = c.getConsent();
+        hpan = c.getHpan();
+        services = c.getServices();
     }
 
     private ConsentRequestEnum consent;
