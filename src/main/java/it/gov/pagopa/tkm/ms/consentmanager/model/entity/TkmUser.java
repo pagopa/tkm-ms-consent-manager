@@ -12,6 +12,7 @@ import java.util.*;
 @Table(name = "\"USER\"")
 @Data
 @EqualsAndHashCode(exclude = "cards")
+@ToString(exclude = "cards")
 @Accessors(chain = true)
 public class TkmUser {
 
