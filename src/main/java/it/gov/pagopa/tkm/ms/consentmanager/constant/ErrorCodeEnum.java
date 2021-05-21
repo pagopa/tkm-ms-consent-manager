@@ -14,6 +14,7 @@ public enum ErrorCodeEnum {
     HPAN_NOT_FOUND("C1005", "No Card found with the requested Hpan "),
     USER_NOT_FOUND("C1005", "No User found with the requested tax code "),
     ILLEGAL_SERVICE_VALUE("C1006", "Not all services with specified names exist");
+    
     @Getter
     private final String errorCode;
 

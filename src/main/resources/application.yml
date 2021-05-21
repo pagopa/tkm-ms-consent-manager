@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST_PORT}/consent_manager
+    url: jdbc:postgresql://${DB_SERVER}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -14,10 +14,18 @@ spring:
 server:
   port: ${SERVER_PORT:8080}
   servlet:
-    context-path: /tkm-ms-consent-manager
+    context-path: ${CONTEXT_PATH:/}
 
 logging:
   level:
     root: ${LOGGING_LEVEL:INFO}
   pattern:
     level: "${LOGGING_PATTERN:%p [${spring.application.name}][%X{traceId}]}"
+management:
+  health:
+    db:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "info,health,prometheus"
