@@ -17,8 +17,8 @@ public class TkmCard {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
-    private TkmUser user;
+    @JoinColumn(name = "CITIZEN_ID", nullable = false)
+    private TkmCitizen citizen;
 
     @Column(name = "HPAN", nullable = false, length = 64)
     private String hpan;
