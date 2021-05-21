@@ -34,8 +34,11 @@ public class TkmCitizen {
     @Column(name = "CONSENT_UPDATE_DATE")
     private Instant consentUpdateDate;
 
-    @Column(name = "CONSENT_LAST_CLIENT")
-    private String consentLastClient;
+    @Column(name = "CONSENT_CLIENT", nullable = false)
+    private String consentClient;
+
+    @Column(name = "CONSENT_UPDATE_CLIENT")
+    private String consentUpdateClient;
 
     @Column(name = "DELETED")
     private boolean deleted;

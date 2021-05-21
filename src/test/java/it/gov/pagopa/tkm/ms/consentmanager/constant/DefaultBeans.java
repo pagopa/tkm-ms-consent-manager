@@ -51,7 +51,7 @@ public class DefaultBeans {
                     .setTaxCode(TAX_CODE)
                     .setConsentType(ConsentEntityEnum.Allow)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID)
+                    .setConsentClient(CLIENT_ID)
                     .setDeleted(false);
 
     public final TkmCitizen CITIZEN_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
@@ -59,7 +59,8 @@ public class DefaultBeans {
             .setTaxCode(TAX_CODE)
             .setConsentType(ConsentEntityEnum.Allow)
             .setConsentDate(INSTANT)
-            .setConsentLastClient(CLIENT_ID)
+            .setConsentClient(CLIENT_ID)
+            .setConsentUpdateClient(CLIENT_ID)
             .setConsentUpdateDate(INSTANT)
             .setDeleted(false);
 
@@ -68,7 +69,7 @@ public class DefaultBeans {
                     .setTaxCode(TAX_CODE)
                     .setConsentType(Partial)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID)
+                    .setConsentClient(CLIENT_ID)
                     .setDeleted(false);
 
     public final TkmCard CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT =
