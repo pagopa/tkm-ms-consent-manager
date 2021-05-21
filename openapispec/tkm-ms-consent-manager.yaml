@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management"
-  version: '1.0.4'
+  version: '1.0.6'
 servers:
   - url: http://localhost:2000/tkm-ms-consent-manager
   - url: http://tkm-sit/tkm-ms-consent-manager
@@ -165,7 +165,7 @@ components:
       type: object
       properties:
         consent:
-          $ref: '#/components/schemas/ConsentEnum'
+          $ref: '#/components/schemas/ConsentRequestEnum'
         hpan:
           type: string
           minLength: 64
@@ -202,29 +202,22 @@ components:
       type: object
       properties:
         consent:
-          $ref: '#/components/schemas/ConsentEnum'
+          $ref: '#/components/schemas/ConsentResponseEnum'
         details:
           type: array
-          description: Details of hash pan. Blank if consent is ALLOW or DENY
+          description: Details of hash pan. Blank if consent is Allow or Deny
           items:
             $ref: '#/components/schemas/ConsentResponse'
-
-    ConsentEnum:
-      description: ALLOW and DENY are applied to all hpans. PARTIAL indicates to check in the details
+    ConsentRequestEnum:
+      description: Type of consent
+      type: string
+      enum:
+        - Allow
+        - Deny
+    ConsentResponseEnum:
+      description: Allow and Deny are applied to all hpans. Partial indicates to check in the details
       type: string
       enum:
         - Allow
         - Deny
         - Partial
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
