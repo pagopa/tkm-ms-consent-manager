@@ -9,9 +9,10 @@ import java.time.*;
 import java.util.*;
 
 @Entity
-@Table(name = "TKM_USER")
+@Table(name = "\"USER\"")
 @Data
 @EqualsAndHashCode(exclude = "cards")
+@ToString(exclude = "cards")
 @Accessors(chain = true)
 public class TkmUser {
 
@@ -20,7 +21,7 @@ public class TkmUser {
     @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "TAX_CODE", unique = true, nullable = false, length = 16)
+    @Column(name = "TAX_CODE", nullable = false, length = 16)
     private String taxCode;
 
     @Enumerated(EnumType.STRING)

@@ -71,8 +71,7 @@ public class ConsentServiceImpl implements ConsentService {
                     .setConsentDate(Instant.now())
                     .setConsentType(consent.isPartial() ?
                             PARTIAL : toConsentEntityEnum(consent.getConsent()))
-                    .setConsentLastClient(clientId)
-                    .setDeleted(false);
+                    .setConsentLastClient(clientId);
         } else {
             checkNotFromAllowToPartial(user.getConsentType(), consent);
             checkNotSameConsentType(user.getConsentType(), consent);
@@ -103,8 +102,7 @@ public class ConsentServiceImpl implements ConsentService {
         if (card == null) {
             card = new TkmCard()
                     .setHpan(hpan)
-                    .setUser(user)
-                    .setDeleted(false);
+                    .setUser(user);
             cardRepository.save(card);
         }
         return card;
