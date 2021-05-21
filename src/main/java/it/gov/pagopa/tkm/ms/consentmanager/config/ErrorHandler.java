@@ -1,6 +1,5 @@
 package it.gov.pagopa.tkm.ms.consentmanager.config;
 
-import com.fasterxml.jackson.databind.exc.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.*;
 import lombok.extern.log4j.*;

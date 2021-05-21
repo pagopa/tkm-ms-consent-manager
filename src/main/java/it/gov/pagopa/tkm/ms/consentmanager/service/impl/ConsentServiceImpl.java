@@ -157,7 +157,7 @@ public class ConsentServiceImpl implements ConsentService {
                     .orElse(new String[0]))
                     .map(ServiceEnum::valueOf).collect(Collectors.toSet());
         } catch (IllegalArgumentException iae) {
-            throw new ConsentException(ILLEGAL_SERVICE_VALUE);
+            throw new ConsentException(INVALID_SERVICE_VALUE);
         }
         return CollectionUtils.isEmpty(servicesEnums) ?
                 serviceRepository.findAll() :

@@ -7,7 +7,6 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 public class ConsentException extends RuntimeException {
 
-    public ConsentException(){ }
     private ErrorCodeEnum errorCode;
 
     public ConsentException(ErrorCodeEnum errorCode) {
