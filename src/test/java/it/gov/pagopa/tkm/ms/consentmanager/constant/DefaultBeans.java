@@ -68,12 +68,12 @@ public class DefaultBeans {
             .setConsentUpdateDate(INSTANT)
             .setDeleted(false);
 
-    public final TkmUser USER_WITH_GLOBAL_DENY_CONSENT_UPDATED =
-            new TkmUser()
+    public final TkmCitizen USER_WITH_GLOBAL_DENY_CONSENT_UPDATED =
+            new TkmCitizen()
                     .setTaxCode(TAX_CODE)
-                    .setConsentType(ConsentEntityEnum.DENY)
+                    .setConsentType(ConsentEntityEnum.Deny)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID)
+                    .setConsentUpdateClient(CLIENT_ID)
                     .setConsentUpdateDate(INSTANT)
                     .setDeleted(false);
 
@@ -124,18 +124,20 @@ public class DefaultBeans {
     public final Set<ServiceEnum> CARD_1_SERVICE_SET = new HashSet<>(Arrays.asList(ServiceEnum.BPD, ServiceEnum.PAGOPA));
     public final Set<ServiceEnum> CARD_2_SERVICE_SET = new HashSet<>(Arrays.asList(ServiceEnum.BPD, ServiceEnum.FA));
 
-    public final TkmCard PARTIAL_USER_VALID_CARD = new TkmCard().setId(1L).setHpan(HPAN).setUser(USER_WITH_PARTIAL_CONSENT).setDeleted(false);
-    public final TkmCard PARTIAL_USER_VALID_CARD_2 = new TkmCard().setId(2L).setHpan(HPAN_2).setUser(USER_WITH_PARTIAL_CONSENT).setDeleted(false);
+    public final TkmCard PARTIAL_USER_VALID_CARD = new TkmCard().setId(1L).setHpan(HPAN).setCitizen(CITIZEN_WITH_PARTIAL_CONSENT).setDeleted(false);
+    public final TkmCard PARTIAL_USER_VALID_CARD_2 = new TkmCard().setId(2L).setHpan(HPAN_2).setCitizen(CITIZEN_WITH_PARTIAL_CONSENT).setDeleted(false);
 
+    public final List<TkmCard> PARTIAL_USER_CARD_1_AS_LIST = Arrays.asList(PARTIAL_USER_VALID_CARD);
+    public final List<TkmCard> PARTIAL_USER_CARDS_2_AS_LIST = Arrays.asList(PARTIAL_USER_VALID_CARD_2);
     public final List<TkmCard> PARTIAL_USER_CARDS_LIST = Arrays.asList(PARTIAL_USER_VALID_CARD, PARTIAL_USER_VALID_CARD_2);
 
-    public final TkmCardService CARD_SERVICE_1 = new TkmCardService().setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.ALLOW);
-    public final TkmCardService CARD_SERVICE_2 = new TkmCardService().setService(SERVICE_EXAMPLE_2).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.ALLOW);
-    public final TkmCardService CARD_SERVICE_3 = new TkmCardService().setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.DENY);
-    public final TkmCardService CARD_SERVICE_4 = new TkmCardService().setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ConsentEntityEnum.ALLOW);
-    public final TkmCardService CARD_SERVICE_5 = new TkmCardService().setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ConsentEntityEnum.ALLOW);
+    public final TkmCardService CARD_SERVICE_1 = new TkmCardService().setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.Allow);
+    public final TkmCardService CARD_SERVICE_2 = new TkmCardService().setService(SERVICE_EXAMPLE_2).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.Allow);
+    public final TkmCardService CARD_SERVICE_3 = new TkmCardService().setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.Allow);
+    public final TkmCardService CARD_SERVICE_4 = new TkmCardService().setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ConsentEntityEnum.Allow);
+    public final TkmCardService CARD_SERVICE_5 = new TkmCardService().setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ConsentEntityEnum.Allow);
 
-    public final List<TkmCardService> CARD_1_SERVICES = Arrays.asList(CARD_SERVICE_1, CARD_SERVICE_2, CARD_SERVICE_3);
+    public final List<TkmCardService> CARD_1_SERVICES = Arrays.asList(CARD_SERVICE_1, CARD_SERVICE_2);
     public final List<TkmCardService> CARD_1_SERVICES_SUB = Arrays.asList(CARD_SERVICE_1);
     public final List<TkmCardService> CARD_2_SERVICES = Arrays.asList(CARD_SERVICE_4, CARD_SERVICE_5);
 

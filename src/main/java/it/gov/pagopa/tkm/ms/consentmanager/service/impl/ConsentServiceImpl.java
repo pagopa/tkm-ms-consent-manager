@@ -1,7 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service.impl;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
-import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmUser;
+import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCitizen;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCard;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmService;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCardService;
@@ -109,8 +109,8 @@ public class ConsentServiceImpl implements ConsentService {
 
     public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
 
-        TkmUser tkmUser = userRepository.findByTaxCodeAndDeletedFalse(taxCode);
-        if (tkmUser == null)
+        TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
+        if (tkmCitizen == null)
             throw new ConsentDataNotFoundException(USER_NOT_FOUND);
 
         GetConsentResponse getConsentResponse = new GetConsentResponse();
@@ -126,20 +126,20 @@ public class ConsentServiceImpl implements ConsentService {
             if (!CollectionUtils.isEmpty(details)){
                 getConsentResponse.setDetails(details);
             }
-            getConsentResponse.setConsent(tkmUser.getConsentType());
+            getConsentResponse.setConsent(tkmCitizen.getConsentType());
 
         } else {
-            switch (tkmUser.getConsentType()) {
-                case DENY:
-                    getConsentResponse.setConsent(DENY);
+            switch (tkmCitizen.getConsentType()) {
+                case Deny:
+                    getConsentResponse.setConsent(Deny);
                     break;
-                case ALLOW:
-                    getConsentResponse.setConsent(ALLOW);
+                case Allow:
+                    getConsentResponse.setConsent(Allow);
                     break;
-                case PARTIAL:
+                case Partial:
                     List<ConsentResponse> details=null;
 
-                    List<TkmCard> tkmUserCards = cardRepository.findByUser(tkmUser);
+                    List<TkmCard> tkmUserCards = cardRepository.findByCitizen(tkmCitizen);
                     for (TkmCard tkmCard : tkmUserCards) {
                         details=addDetail(tkmCard, null, details);
                     }
@@ -147,7 +147,7 @@ public class ConsentServiceImpl implements ConsentService {
                     if (!CollectionUtils.isEmpty(details)) {
                         getConsentResponse.setDetails(details);
                     }
-                    getConsentResponse.setConsent(PARTIAL);
+                    getConsentResponse.setConsent(Partial);
 
                     break;
 
@@ -179,7 +179,7 @@ public class ConsentServiceImpl implements ConsentService {
 
 
     private List<ConsentResponse>  addDetail (TkmCard tkmCard, List<TkmService> tkmServices, List<ConsentResponse> details){
-        List<TkmCardService> cardServices = tkmServices==null||tkmServices.isEmpty()?
+        List<TkmCardService> cardServices = CollectionUtils.isEmpty(tkmServices)?
                 cardServiceRepository.findByCard(tkmCard):
                 cardServiceRepository.findByServiceInAndCard(tkmServices, tkmCard);
 
@@ -189,12 +189,12 @@ public class ConsentServiceImpl implements ConsentService {
 
         List<TkmCardService> serviceByConsent;
 
-        serviceByConsent = cardServices.stream().filter(b-> b.getConsentType().equals(ConsentEntityEnum.ALLOW))
+        serviceByConsent = cardServices.stream().filter(b-> b.getConsentType().equals(Allow))
                     .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(serviceByConsent)) return details;
 
         Consent consent = new Consent();
-        createConsentFromTkmCard(consent, ConsentRequestEnum.ALLOW, serviceByConsent, tkmCard.getHpan());
+        createConsentFromTkmCard(consent, ConsentRequestEnum.Allow, serviceByConsent, tkmCard.getHpan());
         details.add(new ConsentResponse(consent));
 
         return details;
