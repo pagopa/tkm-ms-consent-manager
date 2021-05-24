@@ -112,17 +112,17 @@ public class ConsentServiceImpl implements ConsentService {
     public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
 
         TkmUser tkmUser = userRepository.findByTaxCodeAndDeletedFalse(taxCode);
-        if (tkmUser == null || tkmUser.isDeleted())
+        if (tkmUser == null)
             throw new ConsentDataNotFoundException(USER_NOT_FOUND);
 
         GetConsentResponse getConsentResponse = new GetConsentResponse();
+        List<TkmService> tkmServices = getRequestedTkmServices(services);
 
         if (hpan != null) {
             TkmCard tkmCard = cardRepository.findByHpan(hpan);
             if (tkmCard == null) throw new ConsentDataNotFoundException(HPAN_NOT_FOUND);
 
             List<ConsentResponse> details = null;
-            List<TkmService> tkmServices = getRequestedTkmServices(services);
             details=addDetail(tkmCard, tkmServices, details);
 
             if (!CollectionUtils.isEmpty(details)){
@@ -139,12 +139,11 @@ public class ConsentServiceImpl implements ConsentService {
                     getConsentResponse.setConsent(ALLOW);
                     break;
                 case PARTIAL:
-                    List<TkmService> tkmServices = getRequestedTkmServices(services);
                     List<ConsentResponse> details=null;
 
                     List<TkmCard> tkmUserCards = cardRepository.findByUser(tkmUser);
                     for (TkmCard tkmCard : tkmUserCards) {
-                        details=addDetail(tkmCard, tkmServices, details);
+                        details=addDetail(tkmCard, null, details);
                     }
 
                     if (!CollectionUtils.isEmpty(details)) {
@@ -182,7 +181,10 @@ public class ConsentServiceImpl implements ConsentService {
 
 
     private List<ConsentResponse>  addDetail (TkmCard tkmCard, List<TkmService> tkmServices, List<ConsentResponse> details){
-        List<TkmCardService> cardServices = cardServiceRepository.findByServiceInAndCard(tkmServices, tkmCard);
+        List<TkmCardService> cardServices = tkmServices==null||tkmServices.isEmpty()?
+                cardServiceRepository.findByCard(tkmCard):
+                cardServiceRepository.findByServiceInAndCard(tkmServices, tkmCard);
+
         if (CollectionUtils.isEmpty(cardServices)) return details;
 
         details=details==null?new ArrayList<>():details;
@@ -196,6 +198,7 @@ public class ConsentServiceImpl implements ConsentService {
         Consent consent = new Consent();
         createConsentFromTkmCard(consent, ConsentRequestEnum.ALLOW, serviceByConsent, tkmCard.getHpan());
         details.add(new ConsentResponse(consent));
+
         return details;
     }
 
