@@ -9,12 +9,12 @@ import java.time.*;
 import java.util.*;
 
 @Entity
-@Table(name = "\"USER\"")
+@Table(name = "CITIZEN")
 @Data
 @EqualsAndHashCode(exclude = "cards")
 @ToString(exclude = "cards")
 @Accessors(chain = true)
-public class TkmUser {
+public class TkmCitizen {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +34,16 @@ public class TkmUser {
     @Column(name = "CONSENT_UPDATE_DATE")
     private Instant consentUpdateDate;
 
-    @Column(name = "CONSENT_LAST_CLIENT")
-    private String consentLastClient;
+    @Column(name = "CONSENT_CLIENT", nullable = false)
+    private String consentClient;
+
+    @Column(name = "CONSENT_UPDATE_CLIENT")
+    private String consentUpdateClient;
 
     @Column(name = "DELETED")
     private boolean deleted;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "citizen")
     private Set<TkmCard> cards = new HashSet<>();
 
 }

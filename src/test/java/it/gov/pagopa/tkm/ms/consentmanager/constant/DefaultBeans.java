@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentRequestEnum.*;
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum.PARTIAL;
+import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum.Partial;
 
 public class DefaultBeans {
 
@@ -24,17 +24,17 @@ public class DefaultBeans {
 
     public  final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
 
-    public final Consent GLOBAL_ALLOW_CONSENT_REQUEST = new Consent().setConsent(ALLOW);
-    public final Consent GLOBAL_DENY_CONSENT_REQUEST = new Consent().setConsent(DENY);
-    public final Consent ALLOW_CONSENT_ALL_SERVICES_REQUEST = new Consent().setConsent(ALLOW).setHpan(HPAN);
-    public final Consent DENY_CONSENT_ALL_SERVICES_REQUEST = new Consent().setConsent(DENY).setHpan(HPAN);
-    public final Consent ALLOW_CONSENT_ONE_SERVICE_REQUEST = new Consent().setConsent(ALLOW).setHpan(HPAN).setServices(ONE_SERVICE_SET);
-    public final Consent DENY_CONSENT_ONE_SERVICE_REQUEST = new Consent().setConsent(DENY).setHpan(HPAN).setServices(ONE_SERVICE_SET);
-    public final Consent ALLOW_CONSENT_MULTIPLE_SERVICES_REQUEST = new Consent().setConsent(ALLOW).setHpan(HPAN).setServices(ALL_SERVICES_SET);
-    public final Consent DENY_CONSENT_MULTIPLE_SERVICES_REQUEST = new Consent().setConsent(DENY).setHpan(HPAN).setServices(ALL_SERVICES_SET);
+    public final Consent GLOBAL_ALLOW_CONSENT_REQUEST = new Consent().setConsent(Allow);
+    public final Consent GLOBAL_DENY_CONSENT_REQUEST = new Consent().setConsent(Deny);
+    public final Consent ALLOW_CONSENT_ALL_SERVICES_REQUEST = new Consent().setConsent(Allow).setHpan(HPAN);
+    public final Consent DENY_CONSENT_ALL_SERVICES_REQUEST = new Consent().setConsent(Deny).setHpan(HPAN);
+    public final Consent ALLOW_CONSENT_ONE_SERVICE_REQUEST = new Consent().setConsent(Allow).setHpan(HPAN).setServices(ONE_SERVICE_SET);
+    public final Consent DENY_CONSENT_ONE_SERVICE_REQUEST = new Consent().setConsent(Deny).setHpan(HPAN).setServices(ONE_SERVICE_SET);
+    public final Consent ALLOW_CONSENT_MULTIPLE_SERVICES_REQUEST = new Consent().setConsent(Allow).setHpan(HPAN).setServices(ALL_SERVICES_SET);
+    public final Consent DENY_CONSENT_MULTIPLE_SERVICES_REQUEST = new Consent().setConsent(Deny).setHpan(HPAN).setServices(ALL_SERVICES_SET);
 
     public final Consent MISSING_CONSENT_REQUEST = new Consent();
-    public final Consent ALLOW_CONSENT_INVALID_HPAN_REQUEST = new Consent().setConsent(ALLOW).setHpan(HPAN + "a");
+    public final Consent ALLOW_CONSENT_INVALID_HPAN_REQUEST = new Consent().setConsent(Allow).setHpan(HPAN + "a");
 
     public final List<Consent> VALID_CONSENT_REQUESTS = Arrays.asList(
             GLOBAL_ALLOW_CONSENT_REQUEST,
@@ -50,20 +50,21 @@ public class DefaultBeans {
             MISSING_CONSENT_REQUEST,
             ALLOW_CONSENT_INVALID_HPAN_REQUEST);
 
-    public final TkmUser USER_WITH_GLOBAL_ALLOW_CONSENT =
-            new TkmUser()
+    public final TkmCitizen CITIZEN_WITH_GLOBAL_ALLOW_CONSENT =
+            new TkmCitizen()
                     .setTaxCode(TAX_CODE)
-                    .setConsentType(ConsentEntityEnum.ALLOW)
+                    .setConsentType(ConsentEntityEnum.Allow)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID)
+                    .setConsentClient(CLIENT_ID)
                     .setDeleted(false);
 
-    public final TkmUser USER_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
-            new TkmUser()
+    public final TkmCitizen CITIZEN_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
+            new TkmCitizen()
             .setTaxCode(TAX_CODE)
-            .setConsentType(ConsentEntityEnum.ALLOW)
+            .setConsentType(ConsentEntityEnum.Allow)
             .setConsentDate(INSTANT)
-            .setConsentLastClient(CLIENT_ID)
+            .setConsentClient(CLIENT_ID)
+            .setConsentUpdateClient(CLIENT_ID)
             .setConsentUpdateDate(INSTANT)
             .setDeleted(false);
 
@@ -76,18 +77,18 @@ public class DefaultBeans {
                     .setConsentUpdateDate(INSTANT)
                     .setDeleted(false);
 
-    public final TkmUser USER_WITH_PARTIAL_CONSENT =
-            new TkmUser()
+    public final TkmCitizen CITIZEN_WITH_PARTIAL_CONSENT =
+            new TkmCitizen()
                     .setTaxCode(TAX_CODE)
-                    .setConsentType(PARTIAL)
+                    .setConsentType(Partial)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID)
+                    .setConsentClient(CLIENT_ID)
                     .setDeleted(false);
 
-    public final TkmCard CARD_FROM_USER_WITH_PARTIAL_CONSENT =
+    public final TkmCard CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT =
             new TkmCard()
                 .setHpan(HPAN)
-                .setUser(USER_WITH_PARTIAL_CONSENT)
+                .setCitizen(CITIZEN_WITH_PARTIAL_CONSENT)
                 .setDeleted(false);
 
     public final List<TkmService> ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s -> new TkmService().setName(s)).collect(Collectors.toList());
@@ -98,14 +99,14 @@ public class DefaultBeans {
 
     public final List<TkmCardService> CARD_SERVICES_FOR_ONE_SERVICE_LIST = Collections.singletonList(
             new TkmCardService()
-                    .setCard(CARD_FROM_USER_WITH_PARTIAL_CONSENT)
-                    .setConsentType(ConsentEntityEnum.ALLOW)
+                    .setCard(CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT)
+                    .setConsentType(ConsentEntityEnum.Allow)
                     .setService(ONE_SERVICE));
 
     public final List<TkmCardService> CARD_SERVICES_FOR_ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s ->
                     new TkmCardService()
-                    .setCard(CARD_FROM_USER_WITH_PARTIAL_CONSENT)
-                    .setConsentType(ConsentEntityEnum.ALLOW)
+                    .setCard(CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT)
+                    .setConsentType(ConsentEntityEnum.Allow)
                     .setService(new TkmService().setName(s)))
             .collect(Collectors.toList());
 

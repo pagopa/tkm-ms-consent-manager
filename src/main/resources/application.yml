@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST_PORT}/consent_manager
+    url: jdbc:postgresql://${DB_SERVER}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -47,7 +47,7 @@ keyvault:
 management:
   health:
     db:
-      enabled: false
+      enabled: true
   endpoints:
     web:
       exposure:
