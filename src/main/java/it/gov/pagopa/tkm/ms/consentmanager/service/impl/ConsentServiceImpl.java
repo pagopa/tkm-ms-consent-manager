@@ -45,6 +45,9 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private CardServiceRepository cardServiceRepository;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @Override
     public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
         TkmCitizen citizen = updateOrCreateCitizen(taxCode, clientId, consent);
@@ -209,6 +212,82 @@ public class ConsentServiceImpl implements ConsentService {
 
     }
 
+
+    public GetConsentResponse getConsentV3(String taxCode, String hpan, ServiceEnum[] services) {
+
+        TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
+        if (tkmCitizen == null)
+            throw new ConsentDataNotFoundException(USER_NOT_FOUND);
+
+        GetConsentResponse getConsentResponse = new GetConsentResponse();
+
+        switch (tkmCitizen.getConsentType()) {
+            case Deny:
+                //restituisco deny e basta
+                getConsentResponse.setConsent(Deny);
+                break;
+            case Allow:
+                //restituisco allow e basta
+                getConsentResponse.setConsent(Allow);
+                break;
+            case Partial:
+                //in pratica devo recuperare i tkmcardservice delle card dell'utente
+                //se ho passato la card, solo di quella
+                //se non ho passato la card, di tutte
+                //il filtro dei service viene usato solo se si cerca una card specifica con l'hpam
+
+                //tkmCardService join card join user dove lo user = user oppure card.hpan = hpan
+                //               join Service dove service In (:services) o services is null
+
+                List<TkmCardService> tkmCardServices =
+                        cardServiceRepository.findTkmCardServices(tkmCitizen, hpan, Arrays.asList(services));
+
+                Map<TkmCard, ConsentResponse> cardsResponseMap = new HashMap<>();
+
+
+                for (TkmCardService tkmCs : tkmCardServices ){
+                    if(cardsResponseMap.get(tkmCs.getCard())==null){
+                       cardsResponseMap.put(tkmCs.getCard(), new ConsentResponse());
+                    }
+                    cardsResponseMap.get(tkmCs.getCard()).getServices().add(tkmCs.getService().getName());
+                }
+
+                for (TkmCard tkmCard : cardsResponseMap.keySet()){
+                    createConsent(cardsResponseMap.get(tkmCard).getServices(), tkmCard.getHpan());
+                }
+
+                break;
+
+            default:
+                break;
+        }
+
+        return getConsentResponse;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private List<TkmService> getRequestedTkmServices(ServiceEnum[] services){
         Set<ServiceEnum> servicesEnums = new HashSet<>(Arrays.asList(services));
 
@@ -250,5 +329,16 @@ public class ConsentServiceImpl implements ConsentService {
         return consent;
   }
 
+
+    private Consent createConsent(Set<ServiceEnum> services, String hpan) {
+
+        Consent consent = new Consent();
+
+        consent.setConsent(ConsentRequestEnum.Allow);
+        consent.setHpan(hpan);
+        consent.setServices(services);
+
+        return consent;
+    }
 
 }

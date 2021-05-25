@@ -29,7 +29,7 @@ public class ConsentControllerImpl implements ConsentController {
     public GetConsentResponse getConsent(String taxCode, String hpan, ServiceEnum[] services) {
         hpan= hpan == null ? null : hpan.toLowerCase();
         taxCode = taxCode.toUpperCase();
-        return consentManagerService.getConsentV2(taxCode, hpan, services);
+        return consentManagerService.getConsentV3(taxCode, hpan, services);
     }
 
 }
