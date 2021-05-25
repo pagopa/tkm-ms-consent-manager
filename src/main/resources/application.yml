@@ -9,7 +9,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   application:
-    name: Tkm Consent Manager ${INSTANCE_NUMBER:0}
+    name: Tkm Consent Manager ${HOSTNAME:0}
 
 server:
   port: ${SERVER_PORT:8080}
