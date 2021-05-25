@@ -1,5 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller.impl;
 
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ServiceEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.controller.ConsentController;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
@@ -25,10 +26,10 @@ public class ConsentControllerImpl implements ConsentController {
     }
 
     @Override
-    public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
+    public GetConsentResponse getConsent(String taxCode, String hpan, ServiceEnum[] services) {
         hpan= hpan == null ? null : hpan.toLowerCase();
         taxCode = taxCode.toUpperCase();
-        return consentManagerService.getConsent(taxCode, hpan, services);
+        return consentManagerService.getConsentV2(taxCode, hpan, services);
     }
 
 }

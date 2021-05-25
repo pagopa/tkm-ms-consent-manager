@@ -15,6 +15,13 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -24,6 +31,7 @@ import static it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum.*;
 
 @Service
 public class ConsentServiceImpl implements ConsentService {
+
 
     @Autowired
     private CitizenRepository citizenRepository;
@@ -107,7 +115,7 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
 
-    public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
+   /* public GetConsentResponse getConsent(String taxCode, String hpan, String[] services) {
 
         TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (tkmCitizen == null)
@@ -158,19 +166,51 @@ public class ConsentServiceImpl implements ConsentService {
 
         return getConsentResponse;
 
+    } */
+
+    public GetConsentResponse getConsentV2(String taxCode, String hpan, ServiceEnum[] services) {
+
+        List<TkmService> tkmServices = getRequestedTkmServices(services);
+        TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
+        if (tkmCitizen == null)
+            throw new ConsentDataNotFoundException(USER_NOT_FOUND);
+        GetConsentResponse getConsentResponse = new GetConsentResponse();
+
+        switch (tkmCitizen.getConsentType()) {
+                case Deny:
+                    getConsentResponse.setConsent(Deny);
+                    break;
+                case Allow:
+                    getConsentResponse.setConsent(Allow);
+                    break;
+                case Partial:
+                    List<ConsentResponse> details=null;
+
+                    List<TkmCard> tkmUserCards =
+                            hpan!=null ? cardRepository.findByCitizenAndHpan(tkmCitizen, hpan)
+                                    : cardRepository.findByCitizen(tkmCitizen);
+                    for (TkmCard tkmCard : tkmUserCards) {
+                        details=addDetail(tkmCard, tkmServices, details);
+                    }
+
+                    if (!CollectionUtils.isEmpty(details)) {
+                        getConsentResponse.setDetails(details);
+                    }
+
+                    getConsentResponse.setConsent(Partial);
+
+                    break;
+
+                default:
+                    break;
+        }
+
+        return getConsentResponse;
+
     }
 
-
-    private List<TkmService> getRequestedTkmServices(String[] services){
-        Set<ServiceEnum> servicesEnums;
-
-        try {
-            servicesEnums = Arrays.asList(Optional.ofNullable(services)
-                    .orElse(new String[0])).stream()
-                    .map(ServiceEnum::valueOf).collect(Collectors.toSet());
-        } catch (IllegalArgumentException iae) {
-            throw new ConsentException(ILLEGAL_SERVICE_VALUE);
-        }
+    private List<TkmService> getRequestedTkmServices(ServiceEnum[] services){
+        Set<ServiceEnum> servicesEnums = new HashSet<>(Arrays.asList(services));
 
         return CollectionUtils.isEmpty(servicesEnums) ?
                 serviceRepository.findAll() :
@@ -179,9 +219,7 @@ public class ConsentServiceImpl implements ConsentService {
 
 
     private List<ConsentResponse>  addDetail (TkmCard tkmCard, List<TkmService> tkmServices, List<ConsentResponse> details){
-        List<TkmCardService> cardServices = CollectionUtils.isEmpty(tkmServices)?
-                cardServiceRepository.findByCard(tkmCard):
-                cardServiceRepository.findByServiceInAndCard(tkmServices, tkmCard);
+        List<TkmCardService> cardServices = cardServiceRepository.findByServiceInAndCard(tkmServices, tkmCard);
 
         if (CollectionUtils.isEmpty(cardServices)) return details;
 

@@ -33,5 +33,5 @@ public interface ConsentController {
     GetConsentResponse getConsent(
             @RequestHeader(TAX_CODE_HEADER) @Valid @Size(min = 16, max = 16) String taxCode,
             @RequestParam(value = HPAN_QUERY_PARAM, required = false)  @Valid @Size(min = 64, max = 64) String hpan,
-            @RequestParam(value = SERVICES_QUERY_PARAM, required = false) String[] services) throws Exception;
+            @RequestParam(value = SERVICES_QUERY_PARAM, required = false) ServiceEnum[] services) throws Exception;
 }

@@ -10,5 +10,6 @@ public interface CardRepository extends JpaRepository<TkmCard, Long> {
     TkmCard findByHpanAndCitizen(String hpan, TkmCitizen citizen);
     TkmCard findByHpan(String hpan);
     List<TkmCard> findByCitizen(TkmCitizen citizen);
+    List<TkmCard> findByCitizenAndHpan(TkmCitizen citizen, String hpan);
 
 }
