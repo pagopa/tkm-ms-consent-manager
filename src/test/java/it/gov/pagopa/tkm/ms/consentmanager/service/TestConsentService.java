@@ -181,6 +181,7 @@ public class TestConsentService {
         expectedResponse.setDetails(Arrays.asList(consentResponse1));
 
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
+        when(cardRepository.findByHpan(testBeans.HPAN)).thenReturn(testBeans.PARTIAL_USER_VALID_CARD);
         when(cardServiceRepository.findTkmCardServices(testBeans.CITIZEN_WITH_PARTIAL_CONSENT, testBeans.HPAN, null)).thenReturn(testBeans.CARD_1_SERVICES);
 
         GetConsentResponse response = consentService.getConsentV3(testBeans.TAX_CODE, testBeans.HPAN, null);
@@ -197,6 +198,7 @@ public class TestConsentService {
         expectedResponse.setDetails(Arrays.asList(consentResponse1));
 
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
+        when(cardRepository.findByHpan(testBeans.HPAN)).thenReturn(testBeans.PARTIAL_USER_VALID_CARD);
         when(cardServiceRepository.findTkmCardServices(testBeans.CITIZEN_WITH_PARTIAL_CONSENT, testBeans.HPAN, testBeans.SERVICES_SUB_ARRAY)).thenReturn(testBeans.CARD_1_SERVICES);
 
         GetConsentResponse response = consentService.getConsentV3(testBeans.TAX_CODE, testBeans.HPAN, testBeans.SERVICES_SUB_ARRAY);
