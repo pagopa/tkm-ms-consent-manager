@@ -1,5 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.request;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import it.gov.pagopa.tkm.jsondeserializer.ToLowerCaseDeserializer;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
 import lombok.experimental.*;
@@ -16,6 +18,7 @@ public class Consent {
     private ConsentRequestEnum consent;
 
     @Size(min = 64, max = 64)
+    @JsonDeserialize(using = ToLowerCaseDeserializer.class)
     private String hpan;
 
     private Set<ServiceEnum> services;

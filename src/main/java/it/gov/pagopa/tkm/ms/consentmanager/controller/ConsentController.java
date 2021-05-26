@@ -1,5 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller;
 
+import it.gov.pagopa.tkm.annotation.StringFormat;
+import it.gov.pagopa.tkm.annotation.StringFormatEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
@@ -33,7 +35,7 @@ public interface ConsentController {
 
     @GetMapping
     GetConsentResponse getConsent(
-            @RequestHeader(TAX_CODE_HEADER) @Valid @Size(min = 16, max = 16) String taxCode,
+            @RequestHeader(TAX_CODE_HEADER) @Valid @Pattern(regexp = Constants.FISCAL_CODE_REGEX) @StringFormat(StringFormatEnum.UPPERCASE) String taxCode,
             @RequestParam(value = HPAN_QUERY_PARAM, required = false)  @Valid @Size(min = 64, max = 64) String hpan,
             @RequestParam(value = SERVICES_QUERY_PARAM, required = false) List<ServiceEnum> services) throws Exception;
 }
