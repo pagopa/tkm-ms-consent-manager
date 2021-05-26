@@ -18,8 +18,6 @@ public class ConsentControllerImpl implements ConsentController {
 
     @Override
     public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
-        consent.setHpan(consent.getHpan() == null ? null : consent.getHpan().toLowerCase());
-        taxCode = taxCode.toUpperCase();
         return consentManagerService.postConsent(taxCode, clientId, consent);
     }
 }

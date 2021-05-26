@@ -12,7 +12,7 @@ import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum.Par
 
 public class DefaultBeans {
 
-    public final String TAX_CODE = "AAABBBCCCDDD1111";
+    public final String TAX_CODE = "PCCRLE04M24L219D";
     public final String CLIENT_ID = "TEST_CLIENT";
     public final String HPAN = "92fc472e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61aa2b6f";
     public final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.BPD));
@@ -51,7 +51,7 @@ public class DefaultBeans {
                     .setTaxCode(TAX_CODE)
                     .setConsentType(ConsentEntityEnum.Allow)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID)
+                    .setConsentClient(CLIENT_ID)
                     .setDeleted(false);
 
     public final TkmCitizen CITIZEN_WITH_GLOBAL_ALLOW_CONSENT_UPDATED =
@@ -59,7 +59,8 @@ public class DefaultBeans {
             .setTaxCode(TAX_CODE)
             .setConsentType(ConsentEntityEnum.Allow)
             .setConsentDate(INSTANT)
-            .setConsentLastClient(CLIENT_ID)
+            .setConsentClient(CLIENT_ID)
+            .setConsentUpdateClient(CLIENT_ID)
             .setConsentUpdateDate(INSTANT)
             .setDeleted(false);
 
@@ -68,7 +69,7 @@ public class DefaultBeans {
                     .setTaxCode(TAX_CODE)
                     .setConsentType(Partial)
                     .setConsentDate(INSTANT)
-                    .setConsentLastClient(CLIENT_ID)
+                    .setConsentClient(CLIENT_ID)
                     .setDeleted(false);
 
     public final TkmCard CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT =
