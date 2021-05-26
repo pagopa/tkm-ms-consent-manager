@@ -29,8 +29,6 @@ public class ConsentControllerImpl implements ConsentController {
 
     @Override
     public GetConsentResponse getConsent(String taxCode, String hpan, List<ServiceEnum> services) {
-        hpan= hpan == null ? null : hpan.toLowerCase();
-        taxCode = taxCode.toUpperCase();
         return consentManagerService.getConsentV3(taxCode, hpan, services);
     }
 
