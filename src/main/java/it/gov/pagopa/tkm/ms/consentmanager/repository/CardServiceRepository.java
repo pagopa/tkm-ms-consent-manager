@@ -11,17 +11,14 @@ public interface CardServiceRepository extends JpaRepository<TkmCardService, Lon
     List<TkmCardService> findByCard(TkmCard card);
     List<TkmCardService> findByServiceInAndCard(List<TkmService> services, TkmCard card);
 
-    @Query("select p from TkmCardService tkmCs " +
-            "join tkmCs.card card " +
-            "join tkmCs.service service " +
-            "join card.citizen citizen" +
-            "where citizen = :citizen " +
-            "and card.hpan = :hpan or :hpan is null " +
-            "and service.name in :services or :services is null "+
-            "and tkmCs.consentType = 'Allow'")
-    List<TkmCardService> findTkmCardServices(@Param("citizen") TkmCitizen citizen,
-                                             @Param("hpan") String hpan,
-                                             @Param("services") List<ServiceEnum> services);
+    @Query("select tkmCs from TkmCardService tkmCs" +
+           " where tkmCs.consentType = 'Allow'" +
+           " and tkmCs.card.citizen = :citizen" +
+           " and (tkmCs.card.hpan = :hpan or :hpan is null)" +
+           " and (tkmCs.service.name in :services or :services is null)")
+    List<TkmCardService> findTkmCardServices(@Param("citizen")TkmCitizen citizen,
+                                             @Param("hpan")String hpan,
+                                             @Param("services")List<ServiceEnum> services);
 
 
 

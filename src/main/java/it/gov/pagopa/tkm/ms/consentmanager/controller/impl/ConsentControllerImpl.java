@@ -11,6 +11,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Log4j2
 @RestController
 public class ConsentControllerImpl implements ConsentController {
@@ -26,7 +28,7 @@ public class ConsentControllerImpl implements ConsentController {
     }
 
     @Override
-    public GetConsentResponse getConsent(String taxCode, String hpan, ServiceEnum[] services) {
+    public GetConsentResponse getConsent(String taxCode, String hpan, List<ServiceEnum> services) {
         hpan= hpan == null ? null : hpan.toLowerCase();
         taxCode = taxCode.toUpperCase();
         return consentManagerService.getConsentV3(taxCode, hpan, services);

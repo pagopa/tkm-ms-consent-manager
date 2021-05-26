@@ -141,7 +141,7 @@ public class DefaultBeans {
     public final List<TkmCardService> CARD_1_SERVICES_SUB = Arrays.asList(CARD_SERVICE_1);
     public final List<TkmCardService> CARD_2_SERVICES = Arrays.asList(CARD_SERVICE_4, CARD_SERVICE_5);
 
-    public final ServiceEnum[] SERVICES_SUB_ARRAY = {ServiceEnum.BPD, ServiceEnum.FA};
+    public final List<ServiceEnum> SERVICES_SUB_ARRAY = Arrays.asList(new ServiceEnum[]{ServiceEnum.BPD, ServiceEnum.FA});
     public final String[] SERVICES_INVALID_SINGLE_ARRAY = {"INVALID"};
 
 

@@ -11,7 +11,6 @@ import java.util.Set;
 public interface ConsentService {
 
     ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException;
-    GetConsentResponse getConsentV2(String taxCode, String hpan, ServiceEnum[] services);
-    GetConsentResponse getConsentV3(String taxCode, String hpan, ServiceEnum[] services);
+    GetConsentResponse getConsentV3(String taxCode, String hpan, List<ServiceEnum> services);
 
 }
