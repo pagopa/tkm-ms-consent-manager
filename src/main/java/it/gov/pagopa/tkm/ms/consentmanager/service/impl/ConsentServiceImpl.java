@@ -123,11 +123,6 @@ public class ConsentServiceImpl implements ConsentService {
         if (tkmCitizen == null)
             throw new ConsentDataNotFoundException(USER_NOT_FOUND);
 
-        if (hpan != null) {
-            TkmCard tkmCard = cardRepository.findByHpan(hpan);
-            if (tkmCard == null) throw new ConsentDataNotFoundException(HPAN_NOT_FOUND);
-        }
-
         GetConsentResponse getConsentResponse = new GetConsentResponse();
 
         switch (tkmCitizen.getConsentType()) {
@@ -138,31 +133,21 @@ public class ConsentServiceImpl implements ConsentService {
                 getConsentResponse.setConsent(Allow);
                 break;
             case Partial:
+                List<ConsentResponse> responseDetails = new ArrayList<>();
 
-                List<TkmCardService> tkmCardServices = cardServiceRepository.findTkmCardServices(tkmCitizen, hpan, services);
+                if (hpan != null) {
+                    TkmCard tkmCard = cardRepository.findByHpan(hpan);
+                    if (tkmCard == null) throw new ConsentDataNotFoundException(HPAN_NOT_FOUND);
 
-                if (!CollectionUtils.isEmpty(tkmCardServices)) {
-                    Map<TkmCard, ConsentResponse> cardsResponseMap = new HashMap<>();
-
-                    List<ConsentResponse> details = new ArrayList<>();
-
-                    for (TkmCardService tkmCs : tkmCardServices) {
-                        if (cardsResponseMap.get(tkmCs.getCard()) == null) {
-                            ConsentResponse cr = new ConsentResponse();
-                            cr.setHpan(tkmCs.getCard().getHpan());
-                            cr.setConsent(ConsentRequestEnum.Allow);
-                            cr.setServices(new HashSet<>());
-                            cardsResponseMap.put(tkmCs.getCard(), cr);
-                        }
-
-                        cardsResponseMap.get(tkmCs.getCard()).getServices().add(tkmCs.getService().getName());
+                      responseDetails = Collections.singletonList(createConsentDetail(tkmCard, services));
+                } else {
+                    for (TkmCard tkmCard : tkmCitizen.getCards()) {
+                        responseDetails.add(createConsentDetail(tkmCard, services));
                     }
+                }
 
-                    cardsResponseMap.keySet().stream().forEach(c -> details.add(cardsResponseMap.get(c)));
-
-                    if (!CollectionUtils.isEmpty(details)) {
-                        getConsentResponse.setDetails(details);
-                    }
+                if (!CollectionUtils.isEmpty(responseDetails)) {
+                    getConsentResponse.setDetails(responseDetails);
                 }
 
                 getConsentResponse.setConsent(Partial);
@@ -174,6 +159,24 @@ public class ConsentServiceImpl implements ConsentService {
 
         return getConsentResponse;
     }
+
+
+    private ConsentResponse createConsentDetail(TkmCard tkmCard, List<ServiceEnum> services) {
+        List<TkmCardService> tkmCardServices = filterCardServicesbyConsentAndService(tkmCard, services);
+
+        ConsentResponse consentResponse = new ConsentResponse();
+        consentResponse.setConsent(ConsentRequestEnum.Allow);
+        consentResponse.setServices(tkmCardServices.stream().map(a->a.getService().getName()).collect(Collectors.toSet()));
+        consentResponse.setHpan(tkmCard.getHpan());
+        return consentResponse;
+    }
+
+     private  List<TkmCardService> filterCardServicesbyConsentAndService(TkmCard tkmCard, List<ServiceEnum> services){
+         return  tkmCard.getTkmCardServices().stream()
+                         .filter(z->z.getConsentType().equals(Allow) &&(services!=null?services.contains(z.getService().getName()):true))
+                 .collect(Collectors.toList());
+
+     }
+
+
 }
-
-
