@@ -9,7 +9,7 @@ trigger:
       - develop
       - release/*
       - hotfix/*
-
+pr: none
 
 variables:
   dockerfileRelativePath: 'Dockerfile'
