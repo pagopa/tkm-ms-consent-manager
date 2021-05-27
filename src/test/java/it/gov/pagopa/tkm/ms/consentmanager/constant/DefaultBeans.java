@@ -18,7 +18,7 @@ public class DefaultBeans {
     public final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.BPD));
     public final Set<ServiceEnum> ALL_SERVICES_SET = new HashSet<>(Arrays.asList(ServiceEnum.values()));
 
-    public  final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
+    public final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
 
     public final Consent GLOBAL_ALLOW_CONSENT_REQUEST = new Consent().setConsent(Allow);
     public final Consent GLOBAL_DENY_CONSENT_REQUEST = new Consent().setConsent(Deny);
