@@ -31,9 +31,9 @@ azure:
     uri: ${AZURE_KEYVAULT_URI}
 
 keyvault:
-  eventhubLogSaslJaasConfig: ${${profile:prod}-eventhubLogSaslJaasConfig}
-  consentMDbUsername: ${${profile:prod}-consentMDbUsername}
-  consentMDbPassword: ${${profile:prod}-consentMDbPassword}
+  eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig}
+  consentMDbUsername: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername}
+  consentMDbPassword: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword}
 
 management:
   health:
