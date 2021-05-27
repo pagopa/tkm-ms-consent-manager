@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://${DB_SERVER}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${keyvault.consentMDbUsername}
+    password: ${keyvault.consentMDbPassword}
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
@@ -21,6 +21,20 @@ logging:
     root: ${LOGGING_LEVEL:INFO}
   pattern:
     level: "${LOGGING_PATTERN:%p [${spring.application.name}][%X{traceId}]}"
+
+azure:
+  keyvault:
+    enabled: true
+    client-id: ${AZURE_KEYVAULT_CLIENT_ID}
+    client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
+    tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
+    uri: ${AZURE_KEYVAULT_URI}
+
+keyvault:
+  eventhubLogSaslJaasConfig: ${${profile:prod}-eventhubLogSaslJaasConfig}
+  consentMDbUsername: ${${profile:prod}-consentMDbUsername}
+  consentMDbPassword: ${${profile:prod}-consentMDbPassword}
+
 management:
   health:
     db:

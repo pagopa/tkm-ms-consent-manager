@@ -12,6 +12,9 @@ import org.junit.jupiter.api.extension.*;
 import org.mockito.*;
 import org.mockito.junit.jupiter.*;
 import org.springframework.http.*;
+import org.springframework.http.converter.*;
+import org.springframework.http.converter.json.*;
+import org.springframework.http.converter.xml.*;
 import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.setup.*;
 
@@ -39,6 +42,13 @@ public class TestConsentController {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(consentController)
                 .setControllerAdvice(new ErrorHandler())
+                .setMessageConverters(
+                        new ByteArrayHttpMessageConverter(),
+                        new StringHttpMessageConverter(),
+                        new ResourceHttpMessageConverter(),
+                        new FormHttpMessageConverter(),
+                        new MappingJackson2HttpMessageConverter(),
+                        new Jaxb2RootElementHttpMessageConverter())
                 .build();
         testBeans = new DefaultBeans();
     }
