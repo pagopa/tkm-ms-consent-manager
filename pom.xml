@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>consent-manager</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.4</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>it.gov.pagopa.tkm.ms</groupId>
         <artifactId>starter-parent</artifactId>
-        <version>1.12</version>
+        <version>2.1.1</version>
     </parent>
 
     <dependencies>
@@ -27,19 +27,9 @@
             <version>1.7.0</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.2.9.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>5.3.7.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>it.gov.pagopa.tkm</groupId>
-            <artifactId>common</artifactId>
-            <version>2.2.0</version>
+            <groupId>com.azure.spring</groupId>
+            <artifactId>azure-spring-boot-starter-keyvault-secrets</artifactId>
+            <version>3.2.0</version>
         </dependency>
     </dependencies>
 
@@ -136,6 +126,6 @@
     </distributionManagement>
     <scm>
         <developerConnection>scm:git:https://github.com/pagopa/tkm-ms-consent-manager.git</developerConnection>
-        <tag>consent-manager-0.1.0</tag>
+        <tag>consent-manager-0.1.4</tag>
     </scm>
 </project>

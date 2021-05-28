@@ -1,28 +1,19 @@
 spring:
   datasource:
     url: jdbc:postgresql://${DB_SERVER}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${keyvault.consentMDbUsername}
+    password: ${keyvault.consentMDbPassword}
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
   application:
-    name: Tkm Consent Manager ${INSTANCE_NUMBER:0}
-  kafka:
-    consumer:
-     bootstrap-servers: ${KAFKA_SERVERS}
-     group-id: ${KAFKA_GROUP_ID}
-     client-id: ${KAFKA_GROUP_ID}${INSTANCE_NUMBER:0}
-     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-     value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-     enable-auto-commit: true
-    producer:
-     bootstrap-servers: ${KAFKA_SERVERS}
-     client-id: ${KAFKA_GROUP_ID}${INSTANCE_NUMBER:0}
-     key-serializer: org.apache.kafka.common.serialization.StringSerializer
-     value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    name: Tkm Consent Manager ${HOSTNAME:0}
+
 server:
   port: ${SERVER_PORT:8080}
   servlet:
@@ -41,9 +32,12 @@ azure:
     client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
     tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
     uri: ${AZURE_KEYVAULT_URI}
+
 keyvault:
-      readQueuePrvPgpKey: ${${profile:prod}-readQueuePrvPgpKey}
-      readQueuePubPgpKey: ${${profile:prod}-readQueuePubPgpKey}
+  eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig}
+  consentMDbUsername: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername}
+  consentMDbPassword: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword}
+
 management:
   health:
     db:

@@ -23,7 +23,9 @@ spec:
             - containerPort: 8080
           envFrom:
             - secretRef:
-                name: postgres-credentials
+                name: keyvault-connection-informations
+            - configMapRef:
+                name: kafka-log-configuration
             - configMapRef:
                 name: tkmmsconsentmanager
           livenessProbe:

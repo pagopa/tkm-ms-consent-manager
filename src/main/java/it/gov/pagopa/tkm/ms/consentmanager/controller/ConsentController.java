@@ -1,7 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller;
 
-import it.gov.pagopa.tkm.annotation.StringFormat;
-import it.gov.pagopa.tkm.annotation.StringFormatEnum;
+import it.gov.pagopa.tkm.annotation.*;
+import it.gov.pagopa.tkm.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
@@ -29,7 +29,7 @@ public interface ConsentController {
     @PostMapping
     @Transactional
     ConsentResponse postConsent(
-            @RequestHeader(TAX_CODE_HEADER) @Valid @Pattern(regexp = Constants.FISCAL_CODE_REGEX) String taxCode,
+            @RequestHeader(TAX_CODE_HEADER) @Valid @Pattern(regexp = Constants.FISCAL_CODE_REGEX) @StringFormat(StringFormatEnum.UPPERCASE) String taxCode,
             @RequestHeader(CLIENT_ID_HEADER) String clientId,
             @RequestBody @Valid Consent consent) throws ConsentException;
 

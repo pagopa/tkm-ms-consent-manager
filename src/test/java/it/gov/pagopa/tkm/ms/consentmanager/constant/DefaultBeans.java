@@ -12,7 +12,7 @@ import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum.Par
 
 public class DefaultBeans {
 
-    public final String TAX_CODE = "AAABBBCCCDDD1111";
+    public final String TAX_CODE = "PCCRLE04M24L219D";
     public final String CLIENT_ID = "TEST_CLIENT";
     public final String HPAN = "92fc472e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61aa2b6f";
     public final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.BPD));
@@ -22,7 +22,7 @@ public class DefaultBeans {
     public final Set<ServiceEnum> ALL_SERVICES_SET = new HashSet<>(Arrays.asList(ServiceEnum.values()));
     public final String INVALID_TAX_CODE = TAX_CODE + "1";
 
-    public  final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
+    public final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
 
     public final Consent GLOBAL_ALLOW_CONSENT_REQUEST = new Consent().setConsent(Allow);
     public final Consent GLOBAL_DENY_CONSENT_REQUEST = new Consent().setConsent(Deny);

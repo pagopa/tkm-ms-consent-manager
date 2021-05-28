@@ -1,7 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.request;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import it.gov.pagopa.tkm.jsondeserializer.ToLowerCaseDeserializer;
+import com.fasterxml.jackson.databind.annotation.*;
+import it.gov.pagopa.tkm.jsondeserializer.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
 import lombok.experimental.*;
