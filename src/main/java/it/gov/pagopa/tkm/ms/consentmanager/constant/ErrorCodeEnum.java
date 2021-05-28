@@ -13,7 +13,8 @@ public enum ErrorCodeEnum {
     HPAN_NOT_FOUND("C1005", "No Card found with the requested Hpan "),
     USER_NOT_FOUND("C1005", "No User found with the requested tax code "),
     ILLEGAL_SERVICE_VALUE("C1006", "Not all services with specified names exist"),
-    CONSENT_TYPE_ALREADY_SET("C1003", "Citizen already holds this consent type");
+    CONSENT_TYPE_ALREADY_SET("C1003", "Citizen already holds this consent type"),
+    HPAN_AND_SERVICES_PARAMS_NOT_COHERENT ("C1007", "Hpan and services params must be both present or both non present");
 
     @Getter
     private final String errorCode;

@@ -1,5 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller.impl;
 
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ServiceEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.controller.ConsentController;
 import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
@@ -9,6 +10,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.model.response.GetConsentResponse;
 import it.gov.pagopa.tkm.ms.consentmanager.service.ConsentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,6 +31,9 @@ public class ConsentControllerImpl implements ConsentController {
 
     @Override
     public GetConsentResponse getConsent(String taxCode, String hpan, List<ServiceEnum> services) {
+        if ((hpan!=null && CollectionUtils.isEmpty(services)) || (hpan==null && !CollectionUtils.isEmpty(services))){
+            throw new ConsentException(ErrorCodeEnum.HPAN_AND_SERVICES_PARAMS_NOT_COHERENT);
+        }
         return consentManagerService.getConsentV3(taxCode, hpan, services);
     }
 
