@@ -2,7 +2,6 @@ package it.gov.pagopa.tkm.ms.consentmanager.constant;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.gson.Gson;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCard;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCardService;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCitizen;
@@ -11,11 +10,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.CardServiceConsent;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.ServiceConsent;
-import org.springframework.core.io.ClassPathResource;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -228,12 +223,12 @@ public class DefaultBeans {
         return tkmCardService;
     }
 
-    public <T> T getJson(String fileName, Class<T> aClass) {
-        try (Reader reader = new InputStreamReader(new ClassPathResource(fileName).getInputStream())) {
-            return new Gson().fromJson(reader, aClass);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public <T> T getJson(String fileName, Class<T> aClass) {
+//        try (Reader reader = new InputStreamReader(new ClassPathResource(fileName).getInputStream())) {
+//            return new Gson().fromJson(reader, aClass);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 }
