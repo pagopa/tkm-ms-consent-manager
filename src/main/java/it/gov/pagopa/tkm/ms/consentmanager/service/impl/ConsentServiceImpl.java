@@ -53,10 +53,10 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
-        checkHpanAndServicesBothPresentOrBothAbsent(consent.getHpan(), consent.getServices());
         TkmCitizen citizen = updateOrCreateCitizen(taxCode, clientId, consent);
         ConsentResponse consentResponse = new ConsentResponse();
         if (consent.isPartial()) {
+            checkServicesNotPresentWithGlobalConsent(consent.getServices());
             TkmCard card = getOrCreateCard(citizen, consent.getHpan());
             List<TkmService> services = CollectionUtils.isEmpty(consent.getServices()) ?
                     serviceRepository.findAll() :
@@ -188,6 +188,12 @@ public class ConsentServiceImpl implements ConsentService {
 
     private void checkHpanAndServicesBothPresentOrBothAbsent(String hpan, Set<ServiceEnum> services) {
         if ((StringUtils.isNotBlank(hpan) && CollectionUtils.isEmpty(services)) || (StringUtils.isBlank(hpan) && CollectionUtils.isNotEmpty(services))) {
+            throw new ConsentException(ErrorCodeEnum.HPAN_AND_SERVICES_PARAMS_NOT_COHERENT);
+        }
+    }
+
+    private void checkServicesNotPresentWithGlobalConsent(Set<ServiceEnum> services) {
+        if (CollectionUtils.isNotEmpty(services)) {
             throw new ConsentException(ErrorCodeEnum.HPAN_AND_SERVICES_PARAMS_NOT_COHERENT);
         }
     }
