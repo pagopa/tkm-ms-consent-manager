@@ -10,11 +10,11 @@ public enum ErrorCodeEnum {
     REQUEST_VALIDATION_FAILED("C1000", "Request validation failed, check for errors in the request body or headers"),
     MISSING_HEADERS("C1001", "Required header(s) missing"),
     CONSENT_TYPE_NOT_CONSISTENT("C1002", "Cannot give a partial consent after a global consent"),
-    HPAN_NOT_FOUND("C1005", "No Card found with the requested Hpan "),
-    USER_NOT_FOUND("C1005", "No User found with the requested tax code "),
-    ILLEGAL_SERVICE_VALUE("C1006", "Not all services with specified names exist"),
-    CONSENT_TYPE_ALREADY_SET("C1003", "Citizen already holds this consent type"),
-    HPAN_AND_SERVICES_PARAMS_NOT_COHERENT ("C1007", "Hpan and services params must be both present or both non present");
+    HPAN_NOT_FOUND("C1003", "No Card found with the requested Hpan "),
+    USER_NOT_FOUND("C1004", "No User found with the requested tax code "),
+    CONSENT_TYPE_ALREADY_SET("C1005", "Citizen already holds this consent type"),
+    HPAN_AND_SERVICES_PARAMS_NOT_COHERENT ("C1006", "Hpan and services params must be both present or both non present"),
+    INVALID_CONSENT_TYPE("C1007", "Invalid consent type");
 
     @Getter
     private final String errorCode;

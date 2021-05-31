@@ -16,11 +16,8 @@ public class DefaultBeans {
     public final String CLIENT_ID = "TEST_CLIENT";
     public final String HPAN = "92fc472e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61aa2b6f";
     public final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.BPD));
-    public final String HPAN_2 = "nw629p2e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61be80q1";
-    public final String INVALID_HPAN = HPAN + "a";
 
     public final Set<ServiceEnum> ALL_SERVICES_SET = new HashSet<>(Arrays.asList(ServiceEnum.values()));
-    public final String INVALID_TAX_CODE = TAX_CODE + "1";
 
     public final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
 
@@ -111,39 +108,19 @@ public class DefaultBeans {
             .collect(Collectors.toList());
 
     public final TkmService SERVICE_EXAMPLE = new TkmService().setName(ServiceEnum.BPD);
-    public final TkmService SERVICE_EXAMPLE_2 = new TkmService().setName(ServiceEnum.PAGOPA);
-    public final TkmService SERVICE_EXAMPLE_3 = new TkmService().setName(ServiceEnum.FA);
+    public final TkmService SERVICE_EXAMPLE_2 = new TkmService().setName(ServiceEnum.FA);
 
+    public final String[] MULTIPLE_SERVICE_STRING_ARRAY = {ServiceEnum.BPD.toString(), ServiceEnum.FA.toString()};
 
-    public final String[] MULTIPLE_SERVICE_STRING_ARRAY = {ServiceEnum.BPD.toString(), ServiceEnum.PAGOPA.toString()};
-    public final String[] INVALID_MULTIPLE_SERVICE_STRING_ARRAY = {ServiceEnum.BPD.toString(), "INVALID_SERVICE"};
-    public final List<TkmService> MULTIPLE_TKM_SERVICES = Arrays.asList( SERVICE_EXAMPLE, SERVICE_EXAMPLE_2, SERVICE_EXAMPLE_3);
-    public final List<TkmService> MULTIPLE_TKM_SERVICES_SUB = Arrays.asList( SERVICE_EXAMPLE, SERVICE_EXAMPLE_3);
-
-    public final Set<ServiceEnum> MULTIPLE_SERVICE_SUB_SET = new HashSet<>(Arrays.asList(ServiceEnum.BPD, ServiceEnum.FA));
-    public final Set<ServiceEnum> CARD_1_SERVICE_SET = new HashSet<>(Arrays.asList(ServiceEnum.BPD, ServiceEnum.PAGOPA));
-    public final Set<ServiceEnum> CARD_2_SERVICE_SET = new HashSet<>(Arrays.asList(ServiceEnum.BPD, ServiceEnum.FA));
+    public final Set<ServiceEnum> CARD_1_SERVICE_SET = new HashSet<>(Arrays.asList(ServiceEnum.BPD, ServiceEnum.FA));
 
     public final TkmCard PARTIAL_USER_VALID_CARD = new TkmCard().setId(1L).setHpan(HPAN).setCitizen(CITIZEN_WITH_PARTIAL_CONSENT).setDeleted(false);
-    public final TkmCard PARTIAL_USER_VALID_CARD_2 = new TkmCard().setId(2L).setHpan(HPAN_2).setCitizen(CITIZEN_WITH_PARTIAL_CONSENT).setDeleted(false);
-
-    public final List<TkmCard> PARTIAL_USER_CARD_1_AS_LIST = Arrays.asList(PARTIAL_USER_VALID_CARD);
-    public final List<TkmCard> PARTIAL_USER_CARDS_2_AS_LIST = Arrays.asList(PARTIAL_USER_VALID_CARD_2);
-    public final List<TkmCard> PARTIAL_USER_CARDS_LIST = Arrays.asList(PARTIAL_USER_VALID_CARD, PARTIAL_USER_VALID_CARD_2);
 
     public final TkmCardService CARD_SERVICE_1 = new TkmCardService().setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.Allow);
     public final TkmCardService CARD_SERVICE_2 = new TkmCardService().setService(SERVICE_EXAMPLE_2).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.Allow);
-    public final TkmCardService CARD_SERVICE_3 = new TkmCardService().setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.Allow);
-    public final TkmCardService CARD_SERVICE_4 = new TkmCardService().setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ConsentEntityEnum.Allow);
-    public final TkmCardService CARD_SERVICE_5 = new TkmCardService().setService(SERVICE_EXAMPLE_3).setCard(PARTIAL_USER_VALID_CARD_2).setConsentType(ConsentEntityEnum.Allow);
 
     public final List<TkmCardService> CARD_1_SERVICES = Arrays.asList(CARD_SERVICE_1, CARD_SERVICE_2);
-    public final List<TkmCardService> CARD_1_SERVICES_SUB = Arrays.asList(CARD_SERVICE_1);
-    public final List<TkmCardService> CARD_2_SERVICES = Arrays.asList(CARD_SERVICE_4, CARD_SERVICE_5);
 
-    public final List<ServiceEnum> SERVICES_SUB_ARRAY = Arrays.asList(new ServiceEnum[]{ServiceEnum.BPD, ServiceEnum.FA});
-    public final String[] SERVICES_INVALID_SINGLE_ARRAY = {"INVALID"};
-
-
+    public final Set<ServiceEnum> SERVICES_SUB_ARRAY = new HashSet<>(Arrays.asList(ServiceEnum.BPD, ServiceEnum.FA));
 
 }

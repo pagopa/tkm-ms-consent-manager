@@ -25,6 +25,6 @@ public class TkmCardService {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_TYPE", nullable = false)
-    private ConsentEntityEnum consentType;
+    private ConsentRequestEnum consentType;
 
 }

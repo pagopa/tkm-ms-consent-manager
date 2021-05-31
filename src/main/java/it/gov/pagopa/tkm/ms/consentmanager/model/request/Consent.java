@@ -5,6 +5,7 @@ import it.gov.pagopa.tkm.jsondeserializer.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
 import lombok.experimental.*;
+import org.apache.commons.lang3.*;
 
 import javax.validation.constraints.*;
 import java.util.*;
@@ -24,7 +25,7 @@ public class Consent {
     private Set<ServiceEnum> services;
 
     public boolean isPartial() {
-        return hpan != null;
+        return StringUtils.isNotBlank(hpan);
     }
 
 }

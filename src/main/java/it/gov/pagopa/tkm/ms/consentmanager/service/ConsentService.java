@@ -5,12 +5,12 @@ import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public interface ConsentService {
 
     ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException;
-    GetConsentResponse getConsentV3(String taxCode, String hpan, List<ServiceEnum> services);
+
+    ConsentResponse getConsent(String taxCode, String hpan, Set<ServiceEnum> services);
 
 }

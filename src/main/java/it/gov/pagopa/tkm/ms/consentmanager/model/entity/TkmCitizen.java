@@ -3,8 +3,11 @@ package it.gov.pagopa.tkm.ms.consentmanager.model.entity;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
 import lombok.experimental.*;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.*;
 import java.util.*;
 
@@ -44,6 +47,7 @@ public class TkmCitizen {
     private boolean deleted;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "citizen")
+    @Where(clause = "deleted = false")
     private Set<TkmCard> cards = new HashSet<>();
 
 }
