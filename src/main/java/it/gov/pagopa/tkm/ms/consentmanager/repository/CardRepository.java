@@ -7,6 +7,4 @@ public interface CardRepository extends JpaRepository<TkmCard, Long> {
 
     TkmCard findByHpanAndCitizenAndDeletedFalse(String hpan, TkmCitizen citizen);
 
-    TkmCard findByHpanAndDeletedFalse(String hpan);
-
 }

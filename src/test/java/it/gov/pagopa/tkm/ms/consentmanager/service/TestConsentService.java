@@ -140,7 +140,7 @@ public class TestConsentService {
     @Test
     public void get_givenTaxCodeAndHpan_returnValidConsent() {
         TkmCitizen citizenTableWithPartial = testBeans.getCitizenTableWithPartial();
-        TkmCard next = citizenTableWithPartial.getCards().stream().filter(c->c.getHpan().equals(testBeans.HPAN)).findAny().get();
+        TkmCard next = citizenTableWithPartial.getCards().stream().filter(c -> c.getHpan().equals(testBeans.HPAN)).findAny().get();
         citizenTableWithPartial.setCards(new HashSet<>(Collections.singleton(next)));
 
         ConsentResponse expectedResponse = testBeans.getConsentResponsePartial();
@@ -148,7 +148,7 @@ public class TestConsentService {
         expectedResponse.setDetails(new HashSet<>(Collections.singleton(nextExpected)));
 
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(citizenTableWithPartial);
-        when(cardRepository.findByHpanAndDeletedFalse(testBeans.HPAN)).thenReturn(next);
+        when(cardRepository.findByHpanAndCitizenAndDeletedFalse(any(), any())).thenReturn(next);
 
         ConsentResponse response = consentService.getConsent(testBeans.TAX_CODE, testBeans.HPAN, null);
         assertEquals(expectedResponse, response);
@@ -157,7 +157,7 @@ public class TestConsentService {
     @Test
     public void get_givenTaxCodeAndHpanAndServices_returnValidConsent() {
         TkmCitizen citizenTableWithPartial = testBeans.getCitizenTableWithPartial();
-        TkmCard next = citizenTableWithPartial.getCards().stream().filter(c->c.getHpan().equals(testBeans.HPAN)).findAny().get();
+        TkmCard next = citizenTableWithPartial.getCards().stream().filter(c -> c.getHpan().equals(testBeans.HPAN)).findAny().get();
         citizenTableWithPartial.setCards(new HashSet<>(Collections.singleton(next)));
 
         ConsentResponse expectedResponse = testBeans.getConsentResponsePartial();
@@ -167,7 +167,7 @@ public class TestConsentService {
         expectedResponse.setDetails(new HashSet<>(Collections.singleton(nextExpected)));
 
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(citizenTableWithPartial);
-        when(cardRepository.findByHpanAndDeletedFalse(testBeans.HPAN)).thenReturn(next);
+        when(cardRepository.findByHpanAndCitizenAndDeletedFalse(any(), any())).thenReturn(next);
 
         ConsentResponse response = consentService.getConsent(testBeans.TAX_CODE, testBeans.HPAN, testBeans.SERVICES_SUB_ARRAY);
         assertEquals(response, expectedResponse);
@@ -182,7 +182,7 @@ public class TestConsentService {
     @Test
     public void get_givenNotExistentHpan_expectNotFound() {
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
-        when(cardRepository.findByHpanAndDeletedFalse(testBeans.HPAN)).thenReturn(null);
+        when(cardRepository.findByHpanAndCitizenAndDeletedFalse(any(), any())).thenReturn(null);
         assertThrows(ConsentDataNotFoundException.class, () -> consentService.getConsent(testBeans.TAX_CODE, testBeans.HPAN, null));
     }
 
