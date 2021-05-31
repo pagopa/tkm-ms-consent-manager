@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management"
-  version: '1.0.6'
+  version: '1.0.7'
 servers:
   - url: http://localhost:2000/tkm-ms-consent-manager
   - url: http://tkm-sit/tkm-ms-consent-manager
@@ -51,6 +51,10 @@ paths:
                 maxLength: 16
                 example: 937aee55bbabd29b
               required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentResponse'
         '400':
           description: Bad Request
           headers:
@@ -122,7 +126,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetConsentResponse'
+                $ref: '#/components/schemas/ConsentResponse'
         '400':
           description: Bad Request
           headers:
@@ -179,10 +183,46 @@ components:
 
     ConsentResponse:
       required:
+        - consent
+        - lastUpdateDate
+      type: object
+      properties:
+        consent:
+          $ref: '#/components/schemas/ConsentResponseEnum'
+        lastUpdateDate:
+          type: string
+          format: date-time
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardServiceConsent'
+          description: List of services with assigned consent type, divided by card. Only present if consent type is Partial
+            
+    CardServiceConsent:
+      required:
         - hpan
-      allOf:
-        - $ref: '#/components/schemas/Consent'
-
+        - serviceConsents
+      type: object
+      properties:
+        hpan:
+          type: string
+        serviceConsents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceConsent'
+          description: List of services with assigned consent type for the given card
+    
+    ServiceConsent:
+      required:
+        - consent
+        - service
+      type: object
+      properties:
+        consent:
+          $ref: '#/components/schemas/ConsentRequestEnum'
+        service:
+          type: string
+    
     ConsentError:
       required:
         - errorCode
@@ -196,18 +236,6 @@ components:
           type: string
           description: Error description
           example: [taxCode required, The new consent status is inconsistent with the current one]
-    GetConsentResponse:
-      required:
-        - consent
-      type: object
-      properties:
-        consent:
-          $ref: '#/components/schemas/ConsentResponseEnum'
-        details:
-          type: array
-          description: Details of hash pan. Blank if consent is Allow or Deny
-          items:
-            $ref: '#/components/schemas/ConsentResponse'
     ConsentRequestEnum:
       description: Type of consent
       type: string

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.*;
 import it.gov.pagopa.tkm.ms.consentmanager.config.ErrorHandler;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.controller.impl.*;
+import it.gov.pagopa.tkm.ms.consentmanager.model.entity.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
 import it.gov.pagopa.tkm.ms.consentmanager.service.impl.*;
