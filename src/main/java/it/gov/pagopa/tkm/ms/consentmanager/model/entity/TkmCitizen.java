@@ -1,15 +1,17 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.entity;
 
-import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
-import lombok.*;
-import lombok.experimental.*;
-import org.hibernate.annotations.*;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.apache.commons.lang3.ObjectUtils;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.time.*;
-import java.util.*;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "CITIZEN")
@@ -49,5 +51,10 @@ public class TkmCitizen {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "citizen")
     @Where(clause = "deleted = false")
     private Set<TkmCard> cards = new HashSet<>();
+
+    public Instant getLastConsentUpdatetDate() {
+        return ObjectUtils.firstNonNull(consentUpdateDate, consentDate);
+
+    }
 
 }

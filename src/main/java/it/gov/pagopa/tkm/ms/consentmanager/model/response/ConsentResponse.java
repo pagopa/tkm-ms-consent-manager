@@ -1,24 +1,27 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.response;
 
-import com.fasterxml.jackson.annotation.*;
-import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.*;
+import lombok.experimental.Accessors;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConsentResponse {
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private ConsentEntityEnum consent;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Set<CardServiceConsent> cardServiceConsents;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Europe/Rome")
+    private Instant lastUpdateDate;
+
+    private Set<CardServiceConsent> details;
 
 }

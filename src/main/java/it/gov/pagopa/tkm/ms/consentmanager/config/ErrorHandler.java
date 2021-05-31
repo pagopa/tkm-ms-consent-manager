@@ -1,18 +1,19 @@
 package it.gov.pagopa.tkm.ms.consentmanager.config;
 
-import com.fasterxml.jackson.databind.exc.*;
-import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
-import it.gov.pagopa.tkm.ms.consentmanager.exception.*;
-import lombok.extern.log4j.*;
-import org.springframework.http.*;
-import org.springframework.http.converter.*;
-import org.springframework.web.bind.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.method.annotation.*;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentDataNotFoundException;
+import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.*;
-import java.util.List;
+import javax.validation.ValidationException;
 
 @RestControllerAdvice
 @Log4j2
@@ -48,10 +49,4 @@ public class ErrorHandler {
         log.error(e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public void handleConstraint(ConstraintViolationException ex) {
-        System.out.println("Error");
-    }
-
 }

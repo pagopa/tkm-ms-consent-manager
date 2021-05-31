@@ -67,7 +67,7 @@ public class ConsentServiceImpl implements ConsentService {
                     cardServices.stream().map(ServiceConsent::new).collect(Collectors.toSet())
             );
             consentResponse.setConsent(Partial);
-            consentResponse.setCardServiceConsents(new HashSet<>(Collections.singletonList(cardServiceConsents)));
+            consentResponse.setDetails(new HashSet<>(Collections.singletonList(cardServiceConsents)));
         } else {
             List<TkmService> allServices = serviceRepository.findAll();
             citizen.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
@@ -132,10 +132,11 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponse getConsent(String taxCode, String hpan, Set<ServiceEnum> services) {
-        checkHpanAndServicesBothPresentOrBothAbsent(hpan, services);
+        checkServicesAllowed(hpan, services);
         TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         checkLookingForNotNull(tkmCitizen == null, USER_NOT_FOUND);
         ConsentResponse consentResponse = new ConsentResponse();
+        consentResponse.setLastUpdateDate(tkmCitizen.getLastConsentUpdatetDate());
         switch (tkmCitizen.getConsentType()) {
             case Deny:
                 consentResponse.setConsent(Deny);
@@ -170,7 +171,7 @@ public class ConsentServiceImpl implements ConsentService {
                 cardServiceConsents.add(createServiceConsents(tkmCard, services));
             }
         }
-        consentResponse.setCardServiceConsents(new HashSet<>(cardServiceConsents));
+        consentResponse.setDetails(new HashSet<>(cardServiceConsents));
     }
 
     private CardServiceConsent createServiceConsents(TkmCard tkmCard, Set<ServiceEnum> servicesToSearch) {
@@ -186,9 +187,11 @@ public class ConsentServiceImpl implements ConsentService {
         return cardServiceConsent;
     }
 
-    private void checkHpanAndServicesBothPresentOrBothAbsent(String hpan, Set<ServiceEnum> services) {
-        if ((StringUtils.isNotBlank(hpan) && CollectionUtils.isEmpty(services)) || (StringUtils.isBlank(hpan) && CollectionUtils.isNotEmpty(services))) {
+    private void checkServicesAllowed(String hpan, Set<ServiceEnum> services) {
+        if (StringUtils.isBlank(hpan) && services != null) {
             throw new ConsentException(ErrorCodeEnum.HPAN_AND_SERVICES_PARAMS_NOT_COHERENT);
+        } else if (services != null && services.isEmpty()) {
+            throw new ConsentException(ErrorCodeEnum.EMPTY_CONSENT_SERVICE);
         }
     }
 
