@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management"
-  version: '1.0.7'
+  version: '1.1.0'
 servers:
   - url: http://localhost:2000/tkm-ms-consent-manager
   - url: http://tkm-sit/tkm-ms-consent-manager
@@ -109,7 +109,7 @@ paths:
         - in: query
           name: services
           schema:
-            type: string
+            $ref: '#/components/schemas/ServiceEnum'
           required: false
           description: List of the service involved by the modified. If blank the changes is referred to all services
           example: Service1,Service2,Service3
@@ -192,12 +192,13 @@ components:
         lastUpdateDate:
           type: string
           format: date-time
+          pattern: "dd/MM/yyyy HH:mm:ss"
         details:
           type: array
           items:
             $ref: '#/components/schemas/CardServiceConsent'
           description: List of services with assigned consent type, divided by card. Only present if consent type is Partial
-            
+
     CardServiceConsent:
       required:
         - hpan
@@ -206,12 +207,15 @@ components:
       properties:
         hpan:
           type: string
+          minLength: 64
+          maxLength: 64
+          description: Pan hash to specify a single card. If blank the changes is referred to all cards linked to tax code
         serviceConsents:
           type: array
           items:
             $ref: '#/components/schemas/ServiceConsent'
           description: List of services with assigned consent type for the given card
-    
+
     ServiceConsent:
       required:
         - consent
@@ -221,8 +225,8 @@ components:
         consent:
           $ref: '#/components/schemas/ConsentRequestEnum'
         service:
-          type: string
-    
+          $ref: '#/components/schemas/ServiceEnum'
+
     ConsentError:
       required:
         - errorCode
@@ -249,3 +253,8 @@ components:
         - Allow
         - Deny
         - Partial
+    ServiceEnum:
+      type: string
+      enum:
+        - FA
+        - BPD
