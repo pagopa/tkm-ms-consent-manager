@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management exposed to the issuers"
-  version: '1.0.6'
+  version: '1.1.0'
 servers:
   - url: https://test.cstar.pagopa.it/tkm/uat/consentm
   - url: https://prod.cstar.pagopa.it/tkm/consentm
