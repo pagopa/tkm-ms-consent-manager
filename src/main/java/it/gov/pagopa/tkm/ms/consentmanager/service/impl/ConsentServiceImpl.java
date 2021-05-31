@@ -47,20 +47,28 @@ public class ConsentServiceImpl implements ConsentService {
     public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
         checkHpanAndServicesBothPresentOrBothAbsent(consent.getHpan(), consent.getServices());
         TkmCitizen citizen = updateOrCreateCitizen(taxCode, clientId, consent);
+        ConsentResponse consentResponse = new ConsentResponse();
         if (consent.isPartial()) {
             TkmCard card = getOrCreateCard(citizen, consent.getHpan());
             List<TkmService> services = CollectionUtils.isEmpty(consent.getServices()) ?
                     serviceRepository.findAll() :
                     serviceRepository.findByNameIn(consent.getServices());
-            updateOrCreateCardServices(services, card, consent.getConsent());
+            Set<TkmCardService> cardServices = updateOrCreateCardServices(services, card, consent.getConsent());
+            CardServiceConsent cardServiceConsents = new CardServiceConsent(
+                    card.getHpan(),
+                    cardServices.stream().map(ServiceConsent::new).collect(Collectors.toSet())
+            );
+            consentResponse.setConsent(Partial);
+            consentResponse.setCardServiceConsents(new HashSet<>(Collections.singletonList(cardServiceConsents)));
         } else {
             List<TkmService> allServices = serviceRepository.findAll();
             citizen.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
+            consentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
         }
-        return new ConsentResponse(consent);
+        return consentResponse;
     }
 
-    private void updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {
+    private Set<TkmCardService> updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {
         List<TkmCardService> cardServices = services.stream().map(
                 s -> new TkmCardService()
                         .setCard(card)
@@ -68,6 +76,7 @@ public class ConsentServiceImpl implements ConsentService {
                         .setConsentType(consent)
         ).collect(Collectors.toList());
         cardServiceRepository.saveAll(cardServices);
+        return cardServiceRepository.findByCard(card);
     }
 
     private TkmCitizen updateOrCreateCitizen(String taxCode, String clientId, Consent consent) {

@@ -9,4 +9,6 @@ public interface CardServiceRepository extends JpaRepository<TkmCardService, Lon
 
     Set<TkmCardService> findByCardAndServiceIn(TkmCard tkmCard, List<TkmService> tkmService);
 
+    Set<TkmCardService> findByCard(TkmCard tkmCard);
+
 }

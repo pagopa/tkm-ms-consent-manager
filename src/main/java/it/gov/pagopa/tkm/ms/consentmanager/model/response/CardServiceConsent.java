@@ -11,6 +11,6 @@ public class CardServiceConsent {
 
     private String hpan;
 
-    private List<ServiceConsent> serviceConsents;
+    private Set<ServiceConsent> serviceConsents;
 
 }
