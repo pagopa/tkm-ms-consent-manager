@@ -1,0 +1,23 @@
+{
+  "consent": "Partial",
+  "lastUpdateDate": "01/03/2020 00:00:00",
+  "details": [
+    {
+      "hpan": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "serviceConsents": [
+        {
+          "consent": "Allow",
+          "service": "BPD"
+        },
+        {
+          "consent": "Deny",
+          "service": "FA"
+        }
+      ]
+    },
+    {
+      "hpan": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+      "serviceConsents": []
+    }
+  ]
+}
