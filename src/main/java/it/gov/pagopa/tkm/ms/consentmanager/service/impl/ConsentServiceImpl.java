@@ -164,7 +164,7 @@ public class ConsentServiceImpl implements ConsentService {
     private void handlePartialConsent(TkmCitizen tkmCitizen, String hpan, Set<ServiceEnum> services, ConsentResponse consentResponse) {
         List<CardServiceConsent> cardServiceConsents = new ArrayList<>();
         if (hpan != null) {
-            TkmCard tkmCard = cardRepository.findByHpanAndDeletedFalse(hpan);
+            TkmCard tkmCard = cardRepository.findByHpanAndCitizenAndDeletedFalse(hpan, tkmCitizen);
             checkLookingForNotNull(tkmCard == null, HPAN_NOT_FOUND);
             cardServiceConsents.add(createServiceConsents(tkmCard, services));
         } else {
