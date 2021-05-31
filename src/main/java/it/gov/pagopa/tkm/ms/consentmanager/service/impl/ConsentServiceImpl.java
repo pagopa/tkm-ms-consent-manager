@@ -1,25 +1,33 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service.impl;
 
-import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
-import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCitizen;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentRequestEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ServiceEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentDataNotFoundException;
+import it.gov.pagopa.tkm.ms.consentmanager.exception.ConsentException;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCard;
-import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmService;
 import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCardService;
-
-import it.gov.pagopa.tkm.ms.consentmanager.exception.*;
-import it.gov.pagopa.tkm.ms.consentmanager.model.request.*;
-import it.gov.pagopa.tkm.ms.consentmanager.model.response.*;
-import it.gov.pagopa.tkm.ms.consentmanager.repository.*;
-import it.gov.pagopa.tkm.ms.consentmanager.service.*;
+import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmCitizen;
+import it.gov.pagopa.tkm.ms.consentmanager.model.entity.TkmService;
+import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
+import it.gov.pagopa.tkm.ms.consentmanager.model.response.CardServiceConsent;
+import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
+import it.gov.pagopa.tkm.ms.consentmanager.model.response.ServiceConsent;
+import it.gov.pagopa.tkm.ms.consentmanager.repository.CardRepository;
+import it.gov.pagopa.tkm.ms.consentmanager.repository.CardServiceRepository;
+import it.gov.pagopa.tkm.ms.consentmanager.repository.CitizenRepository;
+import it.gov.pagopa.tkm.ms.consentmanager.repository.ServiceRepository;
+import it.gov.pagopa.tkm.ms.consentmanager.service.ConsentService;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.*;
-import org.springframework.beans.factory.annotation.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import java.time.*;
+import java.time.Instant;
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum.*;
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum.*;
@@ -126,9 +134,7 @@ public class ConsentServiceImpl implements ConsentService {
     public ConsentResponse getConsent(String taxCode, String hpan, Set<ServiceEnum> services) {
         checkHpanAndServicesBothPresentOrBothAbsent(hpan, services);
         TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
-        if (tkmCitizen == null) {
-            throw new ConsentDataNotFoundException(USER_NOT_FOUND);
-        }
+        checkLookingForNotNull(tkmCitizen == null, USER_NOT_FOUND);
         ConsentResponse consentResponse = new ConsentResponse();
         switch (tkmCitizen.getConsentType()) {
             case Deny:
@@ -138,6 +144,7 @@ public class ConsentServiceImpl implements ConsentService {
                 consentResponse.setConsent(Allow);
                 break;
             case Partial:
+                consentResponse.setConsent(Partial);
                 handlePartialConsent(tkmCitizen, hpan, services, consentResponse);
                 break;
             default:
@@ -146,33 +153,37 @@ public class ConsentServiceImpl implements ConsentService {
         return consentResponse;
     }
 
-    private void handlePartialConsent(TkmCitizen tkmCitizen, String hpan, Set<ServiceEnum> services, ConsentResponse consentResponse) {
-        consentResponse.setConsent(Partial);
-        List<ServiceConsent> serviceConsents = new ArrayList<>();
-        if (hpan != null) {
-            TkmCard tkmCard = cardRepository.findByHpanAndDeletedFalse(hpan);
-            if (tkmCard == null) {
-                throw new ConsentDataNotFoundException(HPAN_NOT_FOUND);
-            }
-            consentResponse.setHpan(hpan);
-            serviceConsents = createServiceConsents(tkmCard, services);
-        } else {
-            for (TkmCard tkmCard : tkmCitizen.getCards()) {
-                serviceConsents.addAll(createServiceConsents(tkmCard, services));
-            }
+    private void checkLookingForNotNull(boolean b, ErrorCodeEnum userNotFound) {
+        if (b) {
+            throw new ConsentDataNotFoundException(userNotFound);
         }
-        consentResponse.setServiceConsents(serviceConsents);
     }
 
-    private List<ServiceConsent> createServiceConsents(TkmCard tkmCard, Set<ServiceEnum> services) {
-        List<TkmService> tkmServices = serviceRepository.findByNameIn(services);
-        Set<TkmCardService> tkmCardServices = cardServiceRepository.findByCardAndServiceIn(tkmCard, tkmServices);
-        return tkmCardServices.stream().map(cs ->
-                new ServiceConsent(
-                        cs.getConsentType(),
-                        cs.getService().getName()
-                )
-        ).collect(Collectors.toList());
+    private void handlePartialConsent(TkmCitizen tkmCitizen, String hpan, Set<ServiceEnum> services, ConsentResponse consentResponse) {
+        List<CardServiceConsent> cardServiceConsents = new ArrayList<>();
+        if (hpan != null) {
+            TkmCard tkmCard = cardRepository.findByHpanAndDeletedFalse(hpan);
+            checkLookingForNotNull(tkmCard == null, HPAN_NOT_FOUND);
+            cardServiceConsents.add(createServiceConsents(tkmCard, services));
+        } else {
+            for (TkmCard tkmCard : tkmCitizen.getCards()) {
+                cardServiceConsents.add(createServiceConsents(tkmCard, services));
+            }
+        }
+        consentResponse.setCardServiceConsents(new HashSet<>(cardServiceConsents));
+    }
+
+    private CardServiceConsent createServiceConsents(TkmCard tkmCard, Set<ServiceEnum> servicesToSearch) {
+        List<TkmCardService> tkmCardServices = tkmCard.getTkmCardServices();
+        if (servicesToSearch != null) {
+            tkmCardServices = tkmCardServices.stream().filter(s -> servicesToSearch.contains(s.getService().getName())).collect(Collectors.toList());
+        }
+        List<ServiceConsent> serviceConsentList = tkmCardServices.stream().map(s -> new ServiceConsent(s.getConsentType(), s.getService().getName())).collect(Collectors.toList());
+
+        CardServiceConsent cardServiceConsent = new CardServiceConsent();
+        cardServiceConsent.setHpan(tkmCard.getHpan());
+        cardServiceConsent.setServiceConsents(new HashSet<>(serviceConsentList));
+        return cardServiceConsent;
     }
 
     private void checkHpanAndServicesBothPresentOrBothAbsent(String hpan, Set<ServiceEnum> services) {
