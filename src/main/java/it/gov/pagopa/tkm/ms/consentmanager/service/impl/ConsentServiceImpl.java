@@ -56,7 +56,6 @@ public class ConsentServiceImpl implements ConsentService {
         TkmCitizen citizen = updateOrCreateCitizen(taxCode, clientId, consent);
         ConsentResponse consentResponse = new ConsentResponse();
         if (consent.isPartial()) {
-            checkServicesNotPresentWithGlobalConsent(consent.getServices());
             TkmCard card = getOrCreateCard(citizen, consent.getHpan());
             List<TkmService> services = CollectionUtils.isEmpty(consent.getServices()) ?
                     serviceRepository.findAll() :
@@ -69,6 +68,7 @@ public class ConsentServiceImpl implements ConsentService {
             consentResponse.setConsent(Partial);
             consentResponse.setDetails(new HashSet<>(Collections.singletonList(cardServiceConsents)));
         } else {
+            checkServicesNotPresentWithGlobalConsent(consent.getServices());
             List<TkmService> allServices = serviceRepository.findAll();
             citizen.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
             consentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
