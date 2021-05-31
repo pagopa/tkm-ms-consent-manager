@@ -17,6 +17,7 @@ import java.util.Set;
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConsentResponse {
+
     private ConsentEntityEnum consent;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Europe/Rome")

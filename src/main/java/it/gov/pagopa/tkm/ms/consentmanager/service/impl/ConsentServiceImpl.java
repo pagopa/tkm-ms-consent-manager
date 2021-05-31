@@ -136,7 +136,7 @@ public class ConsentServiceImpl implements ConsentService {
         TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         checkLookingForNotNull(tkmCitizen == null, USER_NOT_FOUND);
         ConsentResponse consentResponse = new ConsentResponse();
-        consentResponse.setLastUpdateDate(tkmCitizen.getLastConsentUpdatetDate());
+        consentResponse.setLastUpdateDate(tkmCitizen.getLastConsentUpdateDate());
         switch (tkmCitizen.getConsentType()) {
             case Deny:
                 consentResponse.setConsent(Deny);

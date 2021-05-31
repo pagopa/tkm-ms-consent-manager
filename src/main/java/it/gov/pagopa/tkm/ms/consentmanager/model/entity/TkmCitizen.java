@@ -52,9 +52,8 @@ public class TkmCitizen {
     @Where(clause = "deleted = false")
     private Set<TkmCard> cards = new HashSet<>();
 
-    public Instant getLastConsentUpdatetDate() {
+    public Instant getLastConsentUpdateDate() {
         return ObjectUtils.firstNonNull(consentUpdateDate, consentDate);
-
     }
 
 }

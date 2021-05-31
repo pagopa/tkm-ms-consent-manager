@@ -67,27 +67,28 @@ public class TestConsentService {
 
     @Test
     public void givenValidConsentRequest_returnValidConsentResponse() {
+        when(serviceRepository.findAll()).thenReturn(testBeans.ALL_TKM_SERVICES_LIST);
+        when(serviceRepository.findByNameIn(testBeans.ONE_SERVICE_SET)).thenReturn(testBeans.ONE_SERVICE_LIST);
+        when(serviceRepository.findByNameIn(testBeans.ALL_SERVICES_SET)).thenReturn(testBeans.ALL_TKM_SERVICES_LIST);
+        when(cardServiceRepository.findByCard(testBeans.CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT)).thenReturn(testBeans.CARD_SERVICES_FOR_ALL_SERVICES_SET);
         for (Consent consent : testBeans.VALID_CONSENT_REQUESTS) {
-            Set<ServiceConsent> serviceConsents = null;
-            Set<CardServiceConsent> cardServiceConsents = null;
+            ConsentResponse expectedConsentResponse = new ConsentResponse();
             if (consent.isPartial()) {
-                 serviceConsents = (CollectionUtils.isEmpty(consent.getServices()) ?
+                Set<ServiceConsent> serviceConsents = (CollectionUtils.isEmpty(consent.getServices()) ?
                         testBeans.CARD_SERVICES_FOR_ALL_SERVICES_SET
                         : testBeans.CARD_1_SERVICES
                 ).stream().map(ServiceConsent::new).collect(Collectors.toSet());
-                 cardServiceConsents = serviceConsents.stream().map(cs ->
-                        new CardServiceConsent(
-                                consent.getHpan(),
-                                serviceConsents
-                        )
-                ).collect(Collectors.toSet());
+                Set<CardServiceConsent> cardServiceConsents = new HashSet<>(Collections.singletonList(new CardServiceConsent(consent.getHpan(), serviceConsents)));
+                expectedConsentResponse.setConsent(ConsentEntityEnum.Partial);
+                expectedConsentResponse.setLastUpdateDate(null);
+                expectedConsentResponse.setDetails(cardServiceConsents);
+            } else {
+                expectedConsentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
+                expectedConsentResponse.setLastUpdateDate(null);
+                expectedConsentResponse.setDetails(null);
             }
-            ConsentResponse expectedConsentResponse = new ConsentResponse(
-                    consent.isPartial() ? ConsentEntityEnum.Partial : ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()),
-                    consent.isPartial() ? cardServiceConsents : null
-            );
             ConsentResponse consentResponse = consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, consent);
-            assertEquals(consentResponse, expectedConsentResponse);
+            assertEquals(expectedConsentResponse, consentResponse);
         }
     }
 
@@ -146,7 +147,7 @@ public class TestConsentService {
         assertThat(cardServiceListCaptor.getValue()).containsExactlyInAnyOrderElementsOf(testBeans.CARD_SERVICES_FOR_ONE_SERVICE_LIST);
     }
 
-    @Test
+    /*@Test
     public void get_givenTaxCodeWithGlobalDenyAndNoHpan_returnValidConsent(){
         ConsentResponse expectedResponse= new ConsentResponse();
         expectedResponse.setConsent(ConsentEntityEnum.Deny);
@@ -165,7 +166,7 @@ public class TestConsentService {
 
     }
 
-    /*@Test
+    @Test
     public void get_givenTaxCode_returnValidConsent() {
         ConsentResponse expectedResponse= new ConsentResponse();
         expectedResponse.setConsent(ConsentEntityEnum.Partial);
