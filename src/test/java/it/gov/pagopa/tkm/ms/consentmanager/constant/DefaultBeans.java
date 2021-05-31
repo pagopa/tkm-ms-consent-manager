@@ -88,7 +88,7 @@ public class DefaultBeans {
                 .setCitizen(CITIZEN_WITH_PARTIAL_CONSENT)
                 .setDeleted(false);
 
-    public final List<TkmService> ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s -> new TkmService().setName(s)).collect(Collectors.toList());
+    public final List<TkmService> ALL_TKM_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s -> new TkmService().setName(s)).collect(Collectors.toList());
 
     public final TkmService ONE_SERVICE = new TkmService().setName(ServiceEnum.BPD);
 
@@ -97,13 +97,20 @@ public class DefaultBeans {
     public final List<TkmCardService> CARD_SERVICES_FOR_ONE_SERVICE_LIST = Collections.singletonList(
             new TkmCardService()
                     .setCard(CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT)
-                    .setConsentType(ConsentEntityEnum.Allow)
+                    .setConsentType(ConsentRequestEnum.Allow)
                     .setService(ONE_SERVICE));
 
     public final List<TkmCardService> CARD_SERVICES_FOR_ALL_SERVICES_LIST = ALL_SERVICES_SET.stream().map(s ->
                     new TkmCardService()
                     .setCard(CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT)
-                    .setConsentType(ConsentEntityEnum.Allow)
+                    .setConsentType(ConsentRequestEnum.Allow)
+                    .setService(new TkmService().setName(s)))
+            .collect(Collectors.toList());
+
+    public final List<TkmCardService> CARD_SERVICES_FOR_ALL_SERVICES_SET = ALL_SERVICES_SET.stream().map(s ->
+            new TkmCardService()
+                    .setCard(CARD_FROM_CITIZEN_WITH_PARTIAL_CONSENT)
+                    .setConsentType(ConsentRequestEnum.Allow)
                     .setService(new TkmService().setName(s)))
             .collect(Collectors.toList());
 
@@ -116,8 +123,8 @@ public class DefaultBeans {
 
     public final TkmCard PARTIAL_USER_VALID_CARD = new TkmCard().setId(1L).setHpan(HPAN).setCitizen(CITIZEN_WITH_PARTIAL_CONSENT).setDeleted(false);
 
-    public final TkmCardService CARD_SERVICE_1 = new TkmCardService().setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.Allow);
-    public final TkmCardService CARD_SERVICE_2 = new TkmCardService().setService(SERVICE_EXAMPLE_2).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentEntityEnum.Allow);
+    public final TkmCardService CARD_SERVICE_1 = new TkmCardService().setService(SERVICE_EXAMPLE).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentRequestEnum.Allow);
+    public final TkmCardService CARD_SERVICE_2 = new TkmCardService().setService(SERVICE_EXAMPLE_2).setCard(PARTIAL_USER_VALID_CARD).setConsentType(ConsentRequestEnum.Allow);
 
     public final List<TkmCardService> CARD_1_SERVICES = Arrays.asList(CARD_SERVICE_1, CARD_SERVICE_2);
 
