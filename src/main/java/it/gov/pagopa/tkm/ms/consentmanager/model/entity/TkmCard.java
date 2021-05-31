@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "CARD")
@@ -25,5 +27,9 @@ public class TkmCard {
 
     @Column(name = "DELETED")
     private boolean deleted;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")
+    private List<TkmCardService> tkmCardServices = new ArrayList<>();
+
 
 }

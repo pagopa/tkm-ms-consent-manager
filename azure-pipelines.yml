@@ -62,7 +62,7 @@ stages:
             inputs:
               mavenPomFile: 'pom.xml'
               goals: 'package'
-              options: '-B -s $(settingsxml.secureFilePath) -DskipTests=false'
+              options: '-B -s $(settingsxml.secureFilePath) -T1C -DskipTests=false'
               javaHomeOption: 'JDKVersion'
               jdkVersionOption: '1.8'
               mavenVersionOption: 'Default'

@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.*;
 
 public interface CardRepository extends JpaRepository<TkmCard, Long> {
 
-    TkmCard findByHpanAndCitizen(String hpan, TkmCitizen citizen);
+    TkmCard findByHpanAndCitizenAndDeletedFalse(String hpan, TkmCitizen citizen);
+
+    TkmCard findByHpanAndDeletedFalse(String hpan);
 
 }
