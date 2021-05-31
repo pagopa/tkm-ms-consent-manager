@@ -73,6 +73,7 @@ public class ConsentServiceImpl implements ConsentService {
             citizen.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
             consentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
         }
+        consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate());
         return consentResponse;
     }
 
