@@ -148,8 +148,6 @@ public class ConsentServiceImpl implements ConsentService {
                 consentResponse.setConsent(Partial);
                 handlePartialConsent(tkmCitizen, hpan, services, consentResponse);
                 break;
-            default:
-                throw new ConsentException(INVALID_CONSENT_TYPE);
         }
         return consentResponse;
     }

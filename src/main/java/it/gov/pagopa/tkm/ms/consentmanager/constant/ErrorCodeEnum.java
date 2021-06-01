@@ -14,7 +14,6 @@ public enum ErrorCodeEnum {
     USER_NOT_FOUND("C1004", "No User found with the requested tax code "),
     CONSENT_TYPE_ALREADY_SET("C1005", "Citizen already holds this consent type"),
     HPAN_AND_SERVICES_PARAMS_NOT_COHERENT ("C1006", "services params allowed only with hpan param"),
-    INVALID_CONSENT_TYPE("C1007", "Invalid consent type"),
     EMPTY_CONSENT_SERVICE("C1008", "services params cannot be empty. Please remove or fill it");
 
     @Getter
