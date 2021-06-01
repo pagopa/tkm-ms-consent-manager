@@ -78,7 +78,7 @@ class TestConsentService {
                         testBeans.CARD_SERVICES_FOR_ALL_SERVICES_SET
                         : testBeans.CARD_1_SERVICES
                 ).stream().map(ServiceConsent::new).collect(Collectors.toSet());
-                Set<CardServiceConsent> cardServiceConsents = new HashSet<>(Collections.singletonList(new CardServiceConsent(consent.getHpan(), serviceConsents)));
+                Set<CardServiceConsent> cardServiceConsents = Collections.singleton(new CardServiceConsent(consent.getHpan(), serviceConsents));
                 expectedConsentResponse.setConsent(ConsentEntityEnum.Partial);
                 expectedConsentResponse.setLastUpdateDate(null);
                 expectedConsentResponse.setDetails(cardServiceConsents);
