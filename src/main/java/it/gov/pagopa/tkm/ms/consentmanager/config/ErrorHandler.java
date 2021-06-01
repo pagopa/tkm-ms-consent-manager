@@ -31,7 +31,6 @@ public class ErrorHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ce.getErrorCode());
     }
 
-
     @ExceptionHandler({MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class, ValidationException.class, HttpMessageNotReadableException.class})
     public ResponseEntity<ErrorCodeEnum> handleValidationException(Exception ve) {
         log.error(ve.getMessage());
