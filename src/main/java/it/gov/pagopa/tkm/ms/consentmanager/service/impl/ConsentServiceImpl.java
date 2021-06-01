@@ -84,8 +84,7 @@ public class ConsentServiceImpl implements ConsentService {
                         .setService(s)
                         .setConsentType(consent)
         ).collect(Collectors.toList());
-        cardServiceRepository.saveAll(cardServices);
-        return cardServiceRepository.findByCard(card);
+        return new HashSet<>(cardServiceRepository.saveAll(cardServices));
     }
 
     private TkmCitizen updateOrCreateCitizen(String taxCode, String clientId, Consent consent) {
