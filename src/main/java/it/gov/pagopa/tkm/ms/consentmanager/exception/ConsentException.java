@@ -10,7 +10,7 @@ public class ConsentException extends RuntimeException {
     private ErrorCodeEnum errorCode;
 
     public ConsentException(ErrorCodeEnum ec) {
-        super(ec.getErrorCode() + " - " + ec.getDescription());
+        super(ec.getStatusCode() + " - " + ec.getMessage());
         errorCode = ec;
     }
 

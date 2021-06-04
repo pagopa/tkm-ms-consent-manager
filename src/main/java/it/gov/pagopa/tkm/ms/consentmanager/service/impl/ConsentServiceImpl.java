@@ -66,7 +66,7 @@ public class ConsentServiceImpl implements ConsentService {
                     cardServices.stream().map(ServiceConsent::new).collect(Collectors.toSet())
             );
             consentResponse.setConsent(Partial);
-            consentResponse.setDetails(new HashSet<>(Collections.singletonList(cardServiceConsents)));
+            consentResponse.setDetails(Collections.singleton(cardServiceConsents));
         } else {
             checkServicesNotPresentWithGlobalConsent(consent.getServices());
             List<TkmService> allServices = serviceRepository.findAll();
