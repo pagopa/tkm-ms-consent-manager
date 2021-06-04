@@ -1,8 +1,8 @@
 openapi: 3.0.1
 info:
-  title: tkm-ms-consent-manager
+  title: tkm-ms-consent-manager-issuer
   description: "RESTful APIs provided for consent management exposed to the issuers"
-  version: '1.1.0'
+  version: '1.2.0'
 servers:
   - url: https://test.cstar.pagopa.it/tkm/uat/consentm
   - url: https://prod.cstar.pagopa.it/tkm/consentm
@@ -11,12 +11,6 @@ paths:
     post:
       summary: Create or change consent
       parameters:
-        - in: header
-          name: Ocp-Apim-Subscription-Key
-          description: Azure API key
-          schema:
-            type: string
-          required: true
         - in: header
           name: Tax-Code
           schema:
@@ -59,6 +53,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConsentError'
+        '401':
+          description: Access Denied
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentError'
         '500':
           description: Internal Server Error
           headers:
@@ -73,12 +81,6 @@ paths:
       summary: Get consent
       operationId: getConsent
       parameters:
-        - in: header
-          name: Ocp-Apim-Subscription-Key
-          description: Azure API key
-          schema:
-            type: string
-          required: true
         - in: header
           name: Tax-Code
           schema:
@@ -132,6 +134,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConsentError'
+        '401':
+          description: Access Denied
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentError'
         '404':
           description: Tax Code or Hpan not found
           headers:
@@ -152,7 +168,6 @@ paths:
                 maxLength: 16
                 example: 937aee55bbabd29b
               required: true
-
 components:
   schemas:
     Consent:
@@ -198,15 +213,15 @@ components:
 
     ConsentError:
       required:
-        - errorCode
-        - description
+        - statusCode
+        - message
       type: object
       properties:
-        errorCode:
-          type: string
+        statusCode:
+          type: integer
           description: The code identifies the error
-          example: C1002
-        description:
+          example: 1002
+        message:
           type: string
           description: Error description
           example: Cannot give a partial consent after a global consent
@@ -245,3 +260,10 @@ components:
       enum:
         - FA
         - BPD
+  securitySchemes:
+    azureApiKey:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+security:
+  - azureApiKey: []
