@@ -77,9 +77,8 @@ public class ConsentServiceImpl implements ConsentService {
             citizen.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
             consentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
         }
-        consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate());
         cardManagerClient.updateConsent(consentResponse.setTaxCode(taxCode));
-        return consentResponse.setTaxCode(null);
+        return consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate()).setTaxCode(null);
     }
 
     private Set<TkmCardService> updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {
