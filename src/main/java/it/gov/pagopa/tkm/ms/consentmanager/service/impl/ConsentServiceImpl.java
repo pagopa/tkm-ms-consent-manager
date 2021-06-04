@@ -1,5 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service.impl;
 
+import it.gov.pagopa.tkm.ms.consentmanager.client.cardmanager.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentRequestEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum;
@@ -51,6 +52,9 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private CardManagerClient cardManagerClient;
+
     @Override
     public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
         TkmCitizen citizen = updateOrCreateCitizen(taxCode, clientId, consent);
@@ -74,7 +78,8 @@ public class ConsentServiceImpl implements ConsentService {
             consentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
         }
         consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate());
-        return consentResponse;
+        cardManagerClient.updateConsent(consentResponse.setTaxCode(taxCode));
+        return consentResponse.setTaxCode(null);
     }
 
     private Set<TkmCardService> updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {

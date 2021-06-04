@@ -43,3 +43,6 @@ management:
     web:
       exposure:
         include: "info,health,prometheus"
+
+client-urls:
+  card-manager: ${CARD_MANAGER_URL}
