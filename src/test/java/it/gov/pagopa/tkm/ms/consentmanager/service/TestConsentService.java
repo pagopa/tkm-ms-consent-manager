@@ -16,9 +16,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.repository.CardServiceRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.CitizenRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.ServiceRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.service.impl.ConsentServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -65,6 +63,11 @@ class TestConsentService {
         instantMockedStatic.when(Instant::now).thenReturn(testBeans.INSTANT);
     }
 
+    @AfterAll
+    public void close(){
+        instantMockedStatic.close();
+    }
+
     @Test
     void givenValidConsentRequest_returnValidConsentResponse() {
         when(serviceRepository.findAll()).thenReturn(testBeans.ALL_TKM_SERVICES_LIST);
@@ -78,7 +81,7 @@ class TestConsentService {
                         testBeans.CARD_SERVICES_FOR_ALL_SERVICES_SET
                         : testBeans.CARD_1_SERVICES
                 ).stream().map(ServiceConsent::new).collect(Collectors.toSet());
-                Set<CardServiceConsent> cardServiceConsents = new HashSet<>(Collections.singletonList(new CardServiceConsent(consent.getHpan(), serviceConsents)));
+                Set<CardServiceConsent> cardServiceConsents = Collections.singleton(new CardServiceConsent(consent.getHpan(), serviceConsents));
                 expectedConsentResponse.setConsent(ConsentEntityEnum.Partial);
                 expectedConsentResponse.setLastUpdateDate(null);
                 expectedConsentResponse.setDetails(cardServiceConsents);

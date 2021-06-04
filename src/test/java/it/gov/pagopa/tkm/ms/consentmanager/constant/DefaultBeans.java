@@ -25,7 +25,7 @@ public class DefaultBeans {
     public final String TAX_CODE = "PCCRLE04M24L219D";
     public final String CLIENT_ID = "TEST_CLIENT";
     public final String HPAN = "92fc472e8709cf61aa2b6f8bb9cf61aa2b6f8bd8267f9c14f58f59cf61aa2b6f";
-    public final Set<ServiceEnum> ONE_SERVICE_SET = new HashSet<>(Collections.singletonList(ServiceEnum.BPD));
+    public final Set<ServiceEnum> ONE_SERVICE_SET = Collections.singleton(ServiceEnum.BPD);
 
     public final Set<ServiceEnum> ALL_SERVICES_SET = new HashSet<>(Arrays.asList(ServiceEnum.values()));
 
@@ -42,7 +42,7 @@ public class DefaultBeans {
 
     private final Consent MISSING_CONSENT_REQUEST = new Consent();
     private final Consent ALLOW_CONSENT_INVALID_HPAN_REQUEST = new Consent().setConsent(Allow).setHpan(HPAN + "a");
-    public final Consent ALLOW_CONSENT_INVALID_GLOBAL_SERVICE_REQUEST = new Consent().setConsent(Allow).setServices(new HashSet<>(Collections.singletonList(ServiceEnum.BPD)));
+    public final Consent ALLOW_CONSENT_INVALID_GLOBAL_SERVICE_REQUEST = new Consent().setConsent(Allow).setServices(Collections.singleton(ServiceEnum.BPD));
 
     public final List<Consent> VALID_CONSENT_REQUESTS = Arrays.asList(
             GLOBAL_ALLOW_CONSENT_REQUEST,
@@ -122,7 +122,7 @@ public class DefaultBeans {
 
     public final List<TkmCardService> CARD_1_SERVICES = Arrays.asList(CARD_SERVICE_1, CARD_SERVICE_2);
 
-    public final Set<ServiceEnum> SERVICES_SUB_ARRAY = new HashSet<>(Collections.singletonList(ServiceEnum.BPD));
+    public final Set<ServiceEnum> SERVICES_SUB_ARRAY = Collections.singleton(ServiceEnum.BPD);
 
     public ConsentResponse getConsentResponseGlobal(ConsentEntityEnum consentEntityEnum) {
         return new ConsentResponse()
