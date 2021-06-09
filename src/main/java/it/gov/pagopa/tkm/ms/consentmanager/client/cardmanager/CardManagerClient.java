@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(value = "card-manager", url = "${client-urls.card-manager}")
+@FeignClient(value = "card-manager-consent", url = "${client-urls.card-manager}")
 public interface CardManagerClient {
 
     @PutMapping("/consent-update")
