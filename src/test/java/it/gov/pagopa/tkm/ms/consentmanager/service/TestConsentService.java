@@ -1,5 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service;
 
+import it.gov.pagopa.tkm.ms.consentmanager.client.cardmanager.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.DefaultBeans;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ServiceEnum;
@@ -54,13 +55,16 @@ class TestConsentService {
     @Mock
     private CitizenRepository citizenRepository;
 
+    @Mock
+    private CardManagerClient cardManagerClient;
+
     private DefaultBeans testBeans;
     private final MockedStatic<Instant> instantMockedStatic = mockStatic(Instant.class);
 
     @BeforeEach
     void init() {
         testBeans = new DefaultBeans();
-        instantMockedStatic.when(Instant::now).thenReturn(testBeans.INSTANT);
+        instantMockedStatic.when(Instant::now).thenReturn(DefaultBeans.INSTANT);
     }
 
     @AfterAll
@@ -83,11 +87,11 @@ class TestConsentService {
                 ).stream().map(ServiceConsent::new).collect(Collectors.toSet());
                 Set<CardServiceConsent> cardServiceConsents = Collections.singleton(new CardServiceConsent(consent.getHpan(), serviceConsents));
                 expectedConsentResponse.setConsent(ConsentEntityEnum.Partial);
-                expectedConsentResponse.setLastUpdateDate(null);
+                expectedConsentResponse.setLastUpdateDate(DefaultBeans.INSTANT);
                 expectedConsentResponse.setDetails(cardServiceConsents);
             } else {
                 expectedConsentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
-                expectedConsentResponse.setLastUpdateDate(null);
+                expectedConsentResponse.setLastUpdateDate(DefaultBeans.INSTANT);
                 expectedConsentResponse.setDetails(null);
             }
             ConsentResponse consentResponse = consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, consent);

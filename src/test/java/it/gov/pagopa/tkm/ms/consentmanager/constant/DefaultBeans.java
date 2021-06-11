@@ -29,7 +29,7 @@ public class DefaultBeans {
 
     public final Set<ServiceEnum> ALL_SERVICES_SET = new HashSet<>(Arrays.asList(ServiceEnum.values()));
 
-    public final Instant INSTANT = Instant.parse("2018-08-19T16:45:42.00Z");
+    public final static Instant INSTANT = Instant.MAX;
 
     public final Consent GLOBAL_ALLOW_CONSENT_REQUEST = new Consent().setConsent(Allow);
     private final Consent GLOBAL_DENY_CONSENT_REQUEST = new Consent().setConsent(Deny);
@@ -134,10 +134,10 @@ public class DefaultBeans {
         return new ConsentResponse()
                 .setConsent(Partial)
                 .setLastUpdateDate(INSTANT)
-                .setDetails(getCardServiceContentSet());
+                .setDetails(getCardServiceConsentSet());
     }
 
-    private Set<CardServiceConsent> getCardServiceContentSet() {
+    private Set<CardServiceConsent> getCardServiceConsentSet() {
         Set<CardServiceConsent> cardServiceConsentSet = Sets.newHashSet();
         cardServiceConsentSet.add(createCardServiceConsent());
         cardServiceConsentSet.add(createCardServiceConsentOnlyBpd());
@@ -147,24 +147,24 @@ public class DefaultBeans {
     private CardServiceConsent createCardServiceConsentOnlyBpd() {
         CardServiceConsent cardServiceConsent = new CardServiceConsent();
         cardServiceConsent.setHpan(HPAN2);
-        cardServiceConsent.setServiceConsents(createServiceContentOnlyBpd());
+        cardServiceConsent.setServiceConsents(createServiceConsentOnlyBpd());
         return cardServiceConsent;
     }
 
     private CardServiceConsent createCardServiceConsent() {
         CardServiceConsent cardServiceConsent = new CardServiceConsent();
         cardServiceConsent.setHpan(HPAN);
-        cardServiceConsent.setServiceConsents(createServiceContent());
+        cardServiceConsent.setServiceConsents(createServiceConsent());
         return cardServiceConsent;
     }
 
-    private Set<ServiceConsent> createServiceContentOnlyBpd() {
+    private Set<ServiceConsent> createServiceConsentOnlyBpd() {
         Set<ServiceConsent> serviceConsentSet = Sets.newHashSet();
         serviceConsentSet.add(new ServiceConsent(Allow, ServiceEnum.BPD));
         return serviceConsentSet;
     }
 
-    private Set<ServiceConsent> createServiceContent() {
+    private Set<ServiceConsent> createServiceConsent() {
         Set<ServiceConsent> serviceConsentSet = Sets.newHashSet();
         serviceConsentSet.add(new ServiceConsent(Allow, ServiceEnum.BPD));
         serviceConsentSet.add(new ServiceConsent(Deny, ServiceEnum.FA));
@@ -238,12 +238,4 @@ public class DefaultBeans {
         return tkmCardService;
     }
 
-//    public <T> T getJson(String fileName, Class<T> aClass) {
-//        try (Reader reader = new InputStreamReader(new ClassPathResource(fileName).getInputStream())) {
-//            return new Gson().fromJson(reader, aClass);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 }

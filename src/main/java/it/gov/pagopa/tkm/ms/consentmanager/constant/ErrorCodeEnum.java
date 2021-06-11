@@ -14,7 +14,8 @@ public enum ErrorCodeEnum {
     USER_NOT_FOUND(1004, "No User found with the requested tax code "),
     CONSENT_TYPE_ALREADY_SET(1005, "Citizen already holds this consent type"),
     HPAN_AND_SERVICES_PARAMS_NOT_COHERENT (1006, "Services params only allowed in pair with hpan param"),
-    EMPTY_CONSENT_SERVICE(1007, "Services param cannot be empty. Please remove it or populate it");
+    EMPTY_CONSENT_SERVICE(1007, "Services param cannot be empty. Please remove it or populate it"),
+    CALL_TO_CARD_MANAGER_FAILED(1008, "Could not execute call to Card Manager");
 
     @Getter
     private final Integer statusCode;
