@@ -20,6 +20,8 @@ public class ConsentResponse {
 
     private ConsentEntityEnum consent;
 
+    private String taxCode;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Europe/Rome")
     private Instant lastUpdateDate;
 

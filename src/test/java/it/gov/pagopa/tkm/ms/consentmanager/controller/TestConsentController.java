@@ -124,6 +124,7 @@ class TestConsentController {
             ConsentResponse consentResponse = new ConsentResponse(
                     c.isPartial() ? ConsentEntityEnum.Partial : ConsentEntityEnum.toConsentEntityEnum(c.getConsent()),
                     null,
+                    null,
                     c.isPartial() ? cardServiceConsents : null
             );
             when(consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, c)).thenReturn(consentResponse);
