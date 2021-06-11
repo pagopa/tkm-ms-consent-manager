@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tkmmsconsentmanager
+  name: tkmmsconsentmanagersit
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tkmmsconsentmanager
+      app: tkmmsconsentmanagersit
   template:
     metadata:
       labels:
-        app: tkmmsconsentmanager
+        app: tkmmsconsentmanagersit
       annotations:
         prometheus.io/path: /actuator/prometheus
         prometheus.io/port: '8080'
         prometheus.io/scrape: 'true'
     spec:
       containers:
-        - name: tkmmsconsentmanager
+        - name: tkmmsconsentmanagersit
           image: cstaruatregistry.azurecr.io/tkmmsconsentmanager
           ports:
             - containerPort: 8080
