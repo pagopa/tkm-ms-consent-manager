@@ -1,6 +1,6 @@
 package it.gov.pagopa.tkm.ms.consentmanager.service.impl;
 
-import it.gov.pagopa.tkm.ms.consentmanager.client.cardmanager.*;
+import it.gov.pagopa.tkm.ms.consentmanager.client.cardmanager.CardManagerClient;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentRequestEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum;
@@ -20,13 +20,12 @@ import it.gov.pagopa.tkm.ms.consentmanager.repository.CardServiceRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.CitizenRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.ServiceRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.service.ConsentService;
-import lombok.extern.log4j.*;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,7 +36,6 @@ import static it.gov.pagopa.tkm.ms.consentmanager.constant.ErrorCodeEnum.*;
 @Service
 @Log4j2
 public class ConsentServiceImpl implements ConsentService {
-
 
     @Autowired
     private CitizenRepository citizenRepository;
@@ -50,9 +48,6 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Autowired
     private CardServiceRepository cardServiceRepository;
-
-    @Autowired
-    private EntityManager entityManager;
 
     @Autowired
     private CardManagerClient cardManagerClient;
