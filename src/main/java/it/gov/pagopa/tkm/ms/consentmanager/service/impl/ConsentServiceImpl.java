@@ -179,7 +179,8 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     private void handlePartialConsent(TkmCitizen tkmCitizen, String hpan, Set<ServiceEnum> services, ConsentResponse consentResponse) {
-        log.info("Handling partial consent for services " + services.stream().map(Enum::name).collect(Collectors.joining(", ")) + (StringUtils.isNotBlank(hpan) ? " and hpan " + hpan : ""));
+        String servicesLog = services != null ? services.stream().map(Enum::name).collect(Collectors.joining(", ")) : null;
+        log.info("Handling partial consent for services " + servicesLog + (StringUtils.isNotBlank(hpan) ? " and hpan " + hpan : ""));
         List<CardServiceConsent> cardServiceConsents = new ArrayList<>();
         if (StringUtils.isNotBlank(hpan)) {
             TkmCard tkmCard = cardRepository.findByHpanAndCitizenAndDeletedFalse(hpan, tkmCitizen);
