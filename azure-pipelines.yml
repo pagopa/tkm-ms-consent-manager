@@ -29,16 +29,19 @@ variables:
     dockerRegistryServiceConnection: 'tkm-cstaruatregistry-connector'
     containerRegistry: 'cstaruatregistry.azurecr.io'
     deployment: deployment-sit
+    enviroment: sit
     imagePullSecret: 'tkmsitregistry-auth'
   ${{ if or(eq(variables['Build.SourceBranch'], 'refs/heads/release/uat'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix')) }}:
     containerRegistry: 'cstaruatregistry.azurecr.io'
     deployment: deployment-uat
     imagePullSecret: ''
+    enviroment: uat
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     dockerRegistryServiceConnection: 'tkm-cstaruatregistry-connector'
     containerRegistry: ''
     deployment: ''
     imagePullSecret: ''
+    enviroment: prod
   ${{ if and(not(startsWith(variables['Build.SourceBranch'], 'refs/heads/release')), ne(variables['Build.SourceBranch'], 'refs/heads/master'), not(startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix'))) }}:
     dockerRegistryServiceConnection: ''
 
@@ -174,7 +177,7 @@ stages:
                     kubernetesServiceConnection: 'ddsakstest-self-connection-tkm-sit'
                     manifests: |
                       $(Pipeline.Workspace)/manifests/$(deployment).yml
-                      $(Pipeline.Workspace)/manifests/service.yml
+                      $(Pipeline.Workspace)/manifests/service-$(enviroment).yml
                     imagePullSecrets: |
                       $(imagePullSecret)
                     containers: |
@@ -257,7 +260,7 @@ stages:
   #                   namespace: ''
   #                   manifests: |
   #                     $(Pipeline.Workspace)/manifests/$(deployment).yml
-  #                     $(Pipeline.Workspace)/manifests/service.yml
+#                                  $(Pipeline.Workspace)/manifests/service-$(enviroment).yml
   #                   containers: '$(containerRegistry)/$(imageRepository):$(pomversion)'
   #                   imagePullSecrets: '$(imagePullSecret)'
 
@@ -336,6 +339,6 @@ stages:
   #                   namespace: ''
   #                   manifests: |
   #                     $(Pipeline.Workspace)/manifests/$(deployment).yml
-  #                     $(Pipeline.Workspace)/manifests/service.yml
+#                                  $(Pipeline.Workspace)/manifests/service-$(enviroment).yml
   #                   containers: '$(containerRegistry)/$(imageRepository):$(pomversion)'
   #                   imagePullSecrets: '$(imagePullSecret)'

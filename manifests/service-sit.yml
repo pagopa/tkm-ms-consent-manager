@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: tkmmsconsentmanager
+  name: tkmmsconsentmanagersit
 spec:
   type: ClusterIP
   ports:
     - port: 8080
   selector:
-    app: tkmmsconsentmanager
+    app: tkmmsconsentmanagersit
