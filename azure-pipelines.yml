@@ -235,7 +235,6 @@ stages:
 #              publishLocation: 'pipeline'
       - deployment: Deploy
         displayName: Deploy
-        dependsOn: Build
         pool:
           name: uat_agent_pool
         environment: 'uat'
