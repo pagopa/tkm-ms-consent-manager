@@ -2,7 +2,7 @@ package it.gov.pagopa.tkm.ms.consentmanager.model.entity;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
-import lombok.experimental.*;
+import lombok.Builder;
 
 import javax.persistence.*;
 
@@ -10,7 +10,9 @@ import javax.persistence.*;
 @Table(name = "CARD_SERVICE")
 @IdClass(CardServiceId.class)
 @Data
-@Accessors(chain = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TkmCardService {
 
     @Id

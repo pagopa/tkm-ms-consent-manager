@@ -1,7 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.entity;
 
 import lombok.*;
-import lombok.experimental.*;
+import lombok.Builder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,7 +10,9 @@ import java.util.List;
 @Entity
 @Table(name = "CARD")
 @Data
-@Accessors(chain = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TkmCard {
 
     @Id

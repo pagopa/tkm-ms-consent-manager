@@ -1,10 +1,7 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.entity;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import lombok.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Where;
 
@@ -18,7 +15,9 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(exclude = "cards")
 @ToString(exclude = "cards")
-@Accessors(chain = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TkmCitizen {
 
     @Id
