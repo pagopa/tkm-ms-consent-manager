@@ -30,6 +30,7 @@ public class TkmCard {
     @Column(name = "DELETED")
     private boolean deleted;
 
+    @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")
     private List<TkmCardService> tkmCardServices = new ArrayList<>();
 
