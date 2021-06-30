@@ -29,6 +29,7 @@ azure:
     client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
     tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
     uri: ${AZURE_KEYVAULT_URI}
+    refresh-interval: 86400000 #24H
 
 keyvault:
   eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:null}
