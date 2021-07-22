@@ -19,6 +19,7 @@ import it.gov.pagopa.tkm.ms.consentmanager.repository.CardRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.CardServiceRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.CitizenRepository;
 import it.gov.pagopa.tkm.ms.consentmanager.repository.ServiceRepository;
+import it.gov.pagopa.tkm.ms.consentmanager.service.CircuitBreakerManager;
 import it.gov.pagopa.tkm.ms.consentmanager.service.ConsentService;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
@@ -52,6 +53,9 @@ public class ConsentServiceImpl implements ConsentService {
     @Autowired
     private CardManagerClient cardManagerClient;
 
+    @Autowired
+    private CircuitBreakerManager circuitBreakerManager;
+
     @Override
     public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
         log.info("Post consent for taxCode " + taxCode + " with value " + consent.getConsent() + (consent.isPartial() ? " for hpan " + consent.getHpan() : ""));
@@ -78,7 +82,7 @@ public class ConsentServiceImpl implements ConsentService {
         }
         try {
             log.info("Notifying Card Manager of this consent update");
-            cardManagerClient.updateConsent(consentResponse.setTaxCode(taxCode));
+            circuitBreakerManager.cardManagerClientUpdateConsent(consentResponse, taxCode);
         } catch (Exception e) {
             log.error(e);
             throw new ConsentException(CALL_TO_CARD_MANAGER_FAILED);
