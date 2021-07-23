@@ -19,7 +19,7 @@ public class CircuitBreakerManagerImpl implements CircuitBreakerManager {
     private CardManagerClient cardManagerClient;
 
     @CircuitBreaker(name = "cardManagerClientCircuitBreaker", fallbackMethod = "cardManagerClientUpdateConsentFallback")
-    @Retry(name ="cardManagerClientRetry", fallbackMethod = "cardManagerClientUpdateConsentFallback")
+    //@Retry(name ="cardManagerClientRetry", fallbackMethod = "cardManagerClientUpdateConsentFallback")
     public void cardManagerClientUpdateConsent(ConsentResponse consentResponse, String taxCode){
             cardManagerClient.updateConsent(consentResponse.setTaxCode(taxCode));
     }
