@@ -58,6 +58,9 @@ class TestConsentService {
     @Mock
     private CardManagerClient cardManagerClient;
 
+    @Mock
+    private CircuitBreakerManager circuitBreakerManager;
+
     private DefaultBeans testBeans;
     private final MockedStatic<Instant> instantMockedStatic = mockStatic(Instant.class);
 
