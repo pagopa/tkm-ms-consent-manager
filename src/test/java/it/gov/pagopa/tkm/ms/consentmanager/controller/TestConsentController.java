@@ -171,8 +171,7 @@ class TestConsentController {
     @Test
     void delete_givenTaxCode_returnOk() throws Exception {
         mockMvc.perform(delete(ApiEndpoints.BASE_PATH_CONSENT)
-                        .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE)
-                        .header(ApiParams.CLIENT_ID_HEADER, testBeans.CLIENT_ID))
+                        .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE))
                 .andExpect(status().isOk());
     }
 

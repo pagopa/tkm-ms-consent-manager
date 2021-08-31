@@ -40,7 +40,6 @@ public interface ConsentController {
     @DeleteMapping
     @Transactional
     void deleteCitizen(
-            @RequestHeader(TAX_CODE_HEADER) @Valid @Pattern(regexp = Constants.FISCAL_CODE_REGEX) @StringFormat(StringFormatEnum.UPPERCASE) String taxCode,
-            @RequestHeader(CLIENT_ID_HEADER) String clientId);
+            @RequestHeader(TAX_CODE_HEADER) @Valid @Pattern(regexp = Constants.FISCAL_CODE_REGEX) @StringFormat(StringFormatEnum.UPPERCASE) String taxCode);
 
 }

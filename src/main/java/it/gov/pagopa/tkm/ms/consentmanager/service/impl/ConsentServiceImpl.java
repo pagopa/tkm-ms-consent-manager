@@ -233,14 +233,13 @@ public class ConsentServiceImpl implements ConsentService {
     }
     
     @Override
-    public void deleteUser(String taxCode, String clientId) throws ConsentException {
+    public void deleteUser(String taxCode) throws ConsentException {
         TkmCitizen citizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (citizen == null) {
             throw new ConsentDataNotFoundException(CITIZEN_NOT_FOUND);
         }
         ConsentResponse consentResponse = new ConsentResponse(Deny, taxCode, citizen.getLastConsentUpdateDate(), null);
         notifyCardManager(consentResponse);
-        citizen.setConsentUpdateClient(clientId);
         citizen.setDeleted(true);
         citizen.getCards().forEach(c -> c.setDeleted(true));
         citizenRepository.save(citizen);

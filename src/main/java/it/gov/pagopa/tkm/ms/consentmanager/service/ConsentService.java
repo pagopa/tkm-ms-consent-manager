@@ -13,6 +13,6 @@ public interface ConsentService {
 
     ConsentResponse getConsent(String taxCode, String hpan, Set<ServiceEnum> services);
     
-    void deleteUser(String taxCode, String clientId) throws ConsentException;
+    void deleteUser(String taxCode) throws ConsentException;
 
 }

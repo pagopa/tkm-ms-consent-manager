@@ -234,8 +234,7 @@ class TestConsentService {
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(citizen);
         citizen.setDeleted(true);
         citizen.getCards().forEach(c -> c.setDeleted(true));
-        citizen.setConsentUpdateClient(testBeans.CLIENT_ID);
-        consentService.deleteUser(testBeans.TAX_CODE, testBeans.CLIENT_ID);
+        consentService.deleteUser(testBeans.TAX_CODE);
         verify(citizenRepository).save(citizen);
     }
 

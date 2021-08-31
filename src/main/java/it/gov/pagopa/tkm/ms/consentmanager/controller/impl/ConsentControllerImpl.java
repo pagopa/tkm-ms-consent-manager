@@ -24,8 +24,8 @@ public class ConsentControllerImpl implements ConsentController {
     }
 
     @Override
-    public void deleteCitizen(String taxCode, String clientId) {
-        consentManagerService.deleteUser(taxCode, clientId);
+    public void deleteCitizen(String taxCode) {
+        consentManagerService.deleteUser(taxCode);
     }
     
     @Override
