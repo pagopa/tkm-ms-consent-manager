@@ -25,7 +25,6 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -83,8 +82,9 @@ public class ConsentServiceImpl implements ConsentService {
         }
         consentResponse.setTaxCode(taxCode);
         notifyCardManager(consentResponse);
-        consentResponse = consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate()).setTaxCode(null);
-        log.debug("Consent response: " + consentResponse.toString());
+        consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate());
+        consentResponse.setTaxCode(null);
+        log.debug("Consent response: " + consentResponse);
         return consentResponse;
     }
 
@@ -240,6 +240,7 @@ public class ConsentServiceImpl implements ConsentService {
         }
         ConsentResponse consentResponse = new ConsentResponse(Deny, taxCode, citizen.getLastConsentUpdateDate(), null);
         notifyCardManager(consentResponse);
+        citizen.setConsentUpdateClient(clientId);
         citizen.setDeleted(true);
         citizen.getCards().forEach(c -> c.setDeleted(true));
         citizenRepository.save(citizen);
