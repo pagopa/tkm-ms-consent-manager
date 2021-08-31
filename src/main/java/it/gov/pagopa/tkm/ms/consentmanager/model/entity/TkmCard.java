@@ -4,9 +4,11 @@ import lombok.*;
 import lombok.experimental.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "TKM_CARD")
+@Table(name = "CARD")
 @Data
 @Accessors(chain = true)
 public class TkmCard {
@@ -17,13 +19,17 @@ public class TkmCard {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
-    private TkmUser user;
+    @JoinColumn(name = "CITIZEN_ID", nullable = false)
+    private TkmCitizen citizen;
 
     @Column(name = "HPAN", nullable = false, length = 64)
     private String hpan;
 
     @Column(name = "DELETED")
     private boolean deleted;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")
+    private List<TkmCardService> tkmCardServices = new ArrayList<>();
+
 
 }

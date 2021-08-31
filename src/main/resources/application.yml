@@ -1,21 +1,63 @@
 spring:
   datasource:
-    url: ${dbUrl}
-    username: ${dbUsername}
-    password: ${dbPassword}
+    url: jdbc:postgresql://${DB_SERVER}
+    username: ${keyvault.consentMDbUsername}
+    password: ${keyvault.consentMDbPassword}
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   application:
-    name: Tkm Consent Manager ${instanceNumber}
+    name: Tkm Consent Manager ${HOSTNAME:0}
 
 server:
-  port: ${serverPort}
+  port: ${SERVER_PORT:8080}
   servlet:
-    context-path: /tkm-ms-consent-manager
+    context-path: ${CONTEXT_PATH:/}
 
 logging:
+  level:
+    root: ${LOGGING_LEVEL:INFO}
   pattern:
-    level: "[${spring.application.name}][%X{traceId}]"
+    level: "${LOGGING_PATTERN:%p [${spring.application.name}][%X{traceId}]}"
+
+azure:
+  keyvault:
+    enabled: true
+    client-id: ${AZURE_KEYVAULT_CLIENT_ID}
+    client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
+    tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
+    uri: ${AZURE_KEYVAULT_URI}
+
+keyvault:
+  eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:null}
+  consentMDbUsername: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername}
+  consentMDbPassword: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword}
+
+management:
+  health:
+    db:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "info,health,prometheus"
+
+client-urls:
+  card-manager: ${CARD_MANAGER_URL}
+
+resilience4j.circuitbreaker:
+  instances:
+    cardManagerClientCircuitBreaker:
+        minimumNumberOfCalls: ${MINUMUM_NUMBER_OF_CALLS:20}
+        slidingWindowSize: ${SLIDING_WINDOW_SIZE:40}
+        ringBufferSizeInClosedState: ${RING_BUFFER_SIZE_IN_CLOSED_STATE:20}
+        ringBufferSizeInHalfOpenState: ${RING_BUFFER_SIZE_IN_HALFOPEN_STATE:20}
+        failureRateThreshold: ${FAILURE_RATE_THRESHOLD:50}
+        waitDurationInOpenState: ${WAIT_DURATION_IN_OPENSTATE:20s}
+resilience4j.retry:
+  instances:
+    cardManagerClientRetry:
+      maxAttempts: ${RETRY_MAX_ATTEMPTS:3}
+      waitDuration: ${RETRY_WAIT_DURATION:1000}

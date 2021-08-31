@@ -7,26 +7,24 @@ import lombok.experimental.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "TKM_CARD_SERVICE")
+@Table(name = "CARD_SERVICE")
+@IdClass(CardServiceId.class)
 @Data
 @Accessors(chain = true)
 public class TkmCardService {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CARD_ID", nullable = false)
     private TkmCard card;
 
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SERVICE_ID", nullable = false)
     private TkmService service;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "CONSENT_TYPE", nullable = false)
-    private ConsentEntityEnum consentType;
+    private ConsentRequestEnum consentType;
 
 }

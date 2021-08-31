@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tkmmsconsentmanagersit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tkmmsconsentmanagersit
+  template:
+    metadata:
+      labels:
+        app: tkmmsconsentmanagersit
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: '8080'
+        prometheus.io/scrape: 'true'
+    spec:
+      containers:
+        - name: tkmmsconsentmanagersit
+          image: cstaruatregistry.azurecr.io/tkmmsconsentmanager
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: keyvault-connection-informations
+            - configMapRef:
+                name: kafka-log-configuration
+            - configMapRef:
+                name: tkmmsconsentmanager
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 30
+          imagePullPolicy: Always
