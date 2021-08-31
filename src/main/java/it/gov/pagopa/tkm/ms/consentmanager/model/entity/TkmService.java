@@ -2,14 +2,16 @@ package it.gov.pagopa.tkm.ms.consentmanager.model.entity;
 
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
-import lombok.experimental.*;
+import lombok.Builder;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "SERVICE")
 @Data
-@Accessors(chain = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TkmService {
 
     @Id

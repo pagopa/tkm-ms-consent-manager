@@ -101,10 +101,11 @@ public class ConsentServiceImpl implements ConsentService {
     private Set<TkmCardService> updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {
         log.info("Updating services for card with hpan " + card.getHpan());
         List<TkmCardService> cardServices = services.stream().map(
-                s -> new TkmCardService()
-                        .setCard(card)
-                        .setService(s)
-                        .setConsentType(consent)
+                s -> TkmCardService.builder()
+                        .card(card)
+                        .service(s)
+                        .consentType(consent)
+                .build()
         ).collect(Collectors.toList());
         return new HashSet<>(cardServiceRepository.saveAll(cardServices));
     }
@@ -113,19 +114,19 @@ public class ConsentServiceImpl implements ConsentService {
         TkmCitizen citizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (citizen == null) {
             log.info("No citizen found for taxCode " + taxCode + ", creating new one");
-            citizen = new TkmCitizen()
-                    .setTaxCode(taxCode)
-                    .setConsentDate(Instant.now())
-                    .setConsentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()))
-                    .setConsentClient(clientId);
+            citizen = TkmCitizen.builder()
+                    .taxCode(taxCode)
+                    .consentDate(Instant.now())
+                    .consentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()))
+                    .consentClient(clientId)
+            .build();
         } else {
             log.info("Citizen with taxCode " + taxCode + " found, updating consent");
             checkNotFromAllowToPartial(citizen.getConsentType(), consent);
             checkNotSameConsentType(citizen.getConsentType(), consent);
-            citizen
-                    .setConsentUpdateDate(Instant.now())
-                    .setConsentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()))
-                    .setConsentUpdateClient(clientId);
+            citizen.setConsentUpdateDate(Instant.now());
+            citizen.setConsentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()));
+            citizen.setConsentUpdateClient(clientId);
         }
         citizenRepository.save(citizen);
         return citizen;
@@ -148,9 +149,10 @@ public class ConsentServiceImpl implements ConsentService {
         TkmCard card = cardRepository.findByHpanAndCitizenAndDeletedFalse(hpan, citizen);
         if (card == null) {
             log.info("Card not found, creating new one");
-            card = new TkmCard()
-                    .setHpan(hpan)
-                    .setCitizen(citizen);
+            card = TkmCard.builder()
+                    .hpan(hpan)
+                    .citizen(citizen)
+            .build();
             cardRepository.save(card);
         }
         return card;
