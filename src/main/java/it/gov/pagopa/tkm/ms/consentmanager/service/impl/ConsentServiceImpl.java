@@ -81,16 +81,21 @@ public class ConsentServiceImpl implements ConsentService {
             citizen.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
             consentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
         }
+        consentResponse.setTaxCode(taxCode);
+        notifyCardManager(consentResponse);
+        consentResponse = consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate()).setTaxCode(null);
+        log.debug("Consent response: " + consentResponse.toString());
+        return consentResponse;
+    }
+
+    private void notifyCardManager(ConsentResponse consentResponse) {
         try {
             log.info("Notifying Card Manager of this consent update");
-            circuitBreakerManager.cardManagerClientUpdateConsent(consentResponse, taxCode);
+            circuitBreakerManager.cardManagerClientUpdateConsent(consentResponse);
         } catch (Exception e) {
             log.error(e);
             throw new ConsentException(CALL_TO_CARD_MANAGER_FAILED);
         }
-        consentResponse = consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate()).setTaxCode(null);
-        log.debug("Consent response: " + consentResponse.toString());
-        return consentResponse;
     }
 
     private Set<TkmCardService> updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {
@@ -157,7 +162,7 @@ public class ConsentServiceImpl implements ConsentService {
         checkServicesAllowed(hpan, services);
         TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (tkmCitizen == null) {
-            throw new ConsentDataNotFoundException(USER_NOT_FOUND);
+            throw new ConsentDataNotFoundException(CITIZEN_NOT_FOUND);
         }
         log.info("Citizen found for taxCode " + taxCode + " with consent type " + tkmCitizen.getConsentType());
         ConsentResponse consentResponse = new ConsentResponse();
@@ -225,15 +230,17 @@ public class ConsentServiceImpl implements ConsentService {
         }
     }
     
-        @Override
-    public HttpStatus deleteUser(String taxCode, String clientId) throws ConsentException {
-        TkmUser user = userRepository.findByTaxCodeAndDeletedFalse(taxCode);
-        if (Objects.isNull(user)) {
-            throw new ConsentException(MISSING_USER);
+    @Override
+    public void deleteUser(String taxCode, String clientId) throws ConsentException {
+        TkmCitizen citizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
+        if (citizen == null) {
+            throw new ConsentDataNotFoundException(CITIZEN_NOT_FOUND);
         }
-        user.setDeleted(true);
-        userRepository.save(user);
-        return HttpStatus.OK;
+        ConsentResponse consentResponse = new ConsentResponse(Deny, taxCode, citizen.getLastConsentUpdateDate(), null);
+        notifyCardManager(consentResponse);
+        citizen.setDeleted(true);
+        citizen.getCards().forEach(c -> c.setDeleted(true));
+        citizenRepository.save(citizen);
     }
 
 }

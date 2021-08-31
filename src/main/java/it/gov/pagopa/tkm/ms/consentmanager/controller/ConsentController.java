@@ -5,7 +5,6 @@ import it.gov.pagopa.tkm.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +39,8 @@ public interface ConsentController {
 
     @DeleteMapping
     @Transactional
-    HttpStatus deleteUser(
-            @RequestHeader(TAX_CODE_HEADER) @Valid @Size(min = 16, max = 16) String taxCode,
+    void deleteCitizen(
+            @RequestHeader(TAX_CODE_HEADER) @Valid @Pattern(regexp = Constants.FISCAL_CODE_REGEX) @StringFormat(StringFormatEnum.UPPERCASE) String taxCode,
             @RequestHeader(CLIENT_ID_HEADER) String clientId);
 
 }
