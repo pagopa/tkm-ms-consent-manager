@@ -75,8 +75,9 @@ class TestConsentService {
         instantMockedStatic.close();
     }
 
+    //POST
     @Test
-    void givenValidConsentRequest_returnValidConsentResponse() {
+    void post_givenValidConsentRequest_returnValidConsentResponse() {
         when(serviceRepository.findAll()).thenReturn(testBeans.ALL_TKM_SERVICES_LIST);
         when(serviceRepository.findByNameIn(testBeans.ONE_SERVICE_SET)).thenReturn(testBeans.ONE_SERVICE_LIST);
         when(serviceRepository.findByNameIn(testBeans.ALL_SERVICES_SET)).thenReturn(testBeans.ALL_TKM_SERVICES_LIST);
@@ -103,39 +104,39 @@ class TestConsentService {
     }
 
     @Test
-    void givenPartialConsentRequestFromCitizenWithGlobalConsent_expectException() {
+    void post_givenPartialConsentRequestFromCitizenWithGlobalConsent_expectException() {
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_GLOBAL_ALLOW_CONSENT);
         assertThrows(ConsentException.class, () -> consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_ALL_SERVICES_REQUEST));
     }
 
     @Test
-    void givenRequestOfSameConsentAsCitizen_expectException() {
+    void post_givenRequestOfSameConsentAsCitizen_expectException() {
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_GLOBAL_ALLOW_CONSENT);
         assertThrows(ConsentException.class, () -> consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.GLOBAL_ALLOW_CONSENT_REQUEST));
     }
 
     @Test
-    void givenRequestOfGlobalWithServices_expectException() {
+    void post_givenRequestOfGlobalWithServices_expectException() {
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_GLOBAL_DENY_CONSENT);
         assertThrows(ConsentException.class, () -> consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_INVALID_GLOBAL_SERVICE_REQUEST));
     }
 
     @Test
-    void givenNewTaxCode_createNewCitizen() {
+    void post_givenNewTaxCode_createNewCitizen() {
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(null);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.GLOBAL_ALLOW_CONSENT_REQUEST);
         verify(citizenRepository).save(testBeans.CITIZEN_WITH_GLOBAL_ALLOW_CONSENT);
     }
 
     @Test
-    void givenExistingTaxCode_updateCitizen() {
+    void post_givenExistingTaxCode_updateCitizen() {
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.GLOBAL_ALLOW_CONSENT_REQUEST);
         verify(citizenRepository).save(testBeans.CITIZEN_WITH_GLOBAL_ALLOW_CONSENT_UPDATED);
     }
 
     @Test
-    void givenNewHpan_createNewCard() {
+    void post_givenNewHpan_createNewCard() {
         when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(testBeans.CITIZEN_WITH_PARTIAL_CONSENT);
         when(cardRepository.findByHpanAndCitizenAndDeletedFalse(testBeans.HPAN, testBeans.CITIZEN_WITH_PARTIAL_CONSENT)).thenReturn(null);
         consentService.postConsent(testBeans.TAX_CODE, testBeans.CLIENT_ID, testBeans.ALLOW_CONSENT_ALL_SERVICES_REQUEST);
@@ -225,4 +226,16 @@ class TestConsentService {
         HashSet<ServiceEnum> services = new HashSet<>();
         assertThrows(ConsentException.class, () -> consentService.getConsent(testBeans.TAX_CODE, testBeans.HPAN, services));
     }
+
+    //DELETE
+    @Test
+    void delete_givenTaxCode_deleteCitizen() {
+        TkmCitizen citizen = testBeans.getCitizenTableWithPartial();
+        when(citizenRepository.findByTaxCodeAndDeletedFalse(testBeans.TAX_CODE)).thenReturn(citizen);
+        citizen.setDeleted(true);
+        citizen.getCards().forEach(c -> c.setDeleted(true));
+        consentService.deleteUser(testBeans.TAX_CODE);
+        verify(citizenRepository).save(citizen);
+    }
+
 }

@@ -5,7 +5,6 @@ import it.gov.pagopa.tkm.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
-import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,4 +36,10 @@ public interface ConsentController {
             @RequestHeader(TAX_CODE_HEADER) @Valid @Pattern(regexp = Constants.FISCAL_CODE_REGEX) @StringFormat(StringFormatEnum.UPPERCASE) String taxCode,
             @RequestParam(value = HPAN_QUERY_PARAM, required = false) @Valid @Size(min = 64, max = 64) String hpan,
             @RequestParam(value = SERVICES_QUERY_PARAM, required = false) Set<ServiceEnum> services);
+
+    @DeleteMapping
+    @Transactional
+    void deleteCitizen(
+            @RequestHeader(TAX_CODE_HEADER) @Valid @Pattern(regexp = Constants.FISCAL_CODE_REGEX) @StringFormat(StringFormatEnum.UPPERCASE) String taxCode);
+
 }

@@ -4,7 +4,6 @@ import it.gov.pagopa.tkm.ms.consentmanager.constant.ServiceEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.controller.ConsentController;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
-import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
 import it.gov.pagopa.tkm.ms.consentmanager.service.ConsentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,11 @@ public class ConsentControllerImpl implements ConsentController {
         return consentManagerService.postConsent(taxCode, clientId, consent);
     }
 
+    @Override
+    public void deleteCitizen(String taxCode) {
+        consentManagerService.deleteUser(taxCode);
+    }
+    
     @Override
     public ConsentResponse getConsent(String taxCode, String hpan, Set<ServiceEnum> services) {
         return consentManagerService.getConsent(taxCode, hpan, services);
