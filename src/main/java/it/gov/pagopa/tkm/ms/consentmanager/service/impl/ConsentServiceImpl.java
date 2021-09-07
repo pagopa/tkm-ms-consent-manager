@@ -80,25 +80,32 @@ public class ConsentServiceImpl implements ConsentService {
             citizen.getCards().forEach(c -> updateOrCreateCardServices(allServices, c, consent.getConsent()));
             consentResponse.setConsent(ConsentEntityEnum.toConsentEntityEnum(consent.getConsent()));
         }
+        consentResponse.setTaxCode(taxCode);
+        notifyCardManager(consentResponse);
+        consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate());
+        consentResponse.setTaxCode(null);
+        log.debug("Consent response: " + consentResponse);
+        return consentResponse;
+    }
+
+    private void notifyCardManager(ConsentResponse consentResponse) {
         try {
             log.info("Notifying Card Manager of this consent update");
-            circuitBreakerManager.cardManagerClientUpdateConsent(consentResponse, taxCode);
+            circuitBreakerManager.cardManagerClientUpdateConsent(consentResponse);
         } catch (Exception e) {
             log.error(e);
             throw new ConsentException(CALL_TO_CARD_MANAGER_FAILED);
         }
-        consentResponse = consentResponse.setLastUpdateDate(citizen.getLastConsentUpdateDate()).setTaxCode(null);
-        log.debug("Consent response: " + consentResponse.toString());
-        return consentResponse;
     }
 
     private Set<TkmCardService> updateOrCreateCardServices(List<TkmService> services, TkmCard card, ConsentRequestEnum consent) {
         log.info("Updating services for card with hpan " + card.getHpan());
         List<TkmCardService> cardServices = services.stream().map(
-                s -> new TkmCardService()
-                        .setCard(card)
-                        .setService(s)
-                        .setConsentType(consent)
+                s -> TkmCardService.builder()
+                        .card(card)
+                        .service(s)
+                        .consentType(consent)
+                .build()
         ).collect(Collectors.toList());
         return new HashSet<>(cardServiceRepository.saveAll(cardServices));
     }
@@ -107,19 +114,19 @@ public class ConsentServiceImpl implements ConsentService {
         TkmCitizen citizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (citizen == null) {
             log.info("No citizen found for taxCode " + taxCode + ", creating new one");
-            citizen = new TkmCitizen()
-                    .setTaxCode(taxCode)
-                    .setConsentDate(Instant.now())
-                    .setConsentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()))
-                    .setConsentClient(clientId);
+            citizen = TkmCitizen.builder()
+                    .taxCode(taxCode)
+                    .consentDate(Instant.now())
+                    .consentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()))
+                    .consentClient(clientId)
+            .build();
         } else {
             log.info("Citizen with taxCode " + taxCode + " found, updating consent");
             checkNotFromAllowToPartial(citizen.getConsentType(), consent);
             checkNotSameConsentType(citizen.getConsentType(), consent);
-            citizen
-                    .setConsentUpdateDate(Instant.now())
-                    .setConsentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()))
-                    .setConsentUpdateClient(clientId);
+            citizen.setConsentUpdateDate(Instant.now());
+            citizen.setConsentType(consent.isPartial() ? Partial : toConsentEntityEnum(consent.getConsent()));
+            citizen.setConsentUpdateClient(clientId);
         }
         citizenRepository.save(citizen);
         return citizen;
@@ -142,9 +149,10 @@ public class ConsentServiceImpl implements ConsentService {
         TkmCard card = cardRepository.findByHpanAndCitizenAndDeletedFalse(hpan, citizen);
         if (card == null) {
             log.info("Card not found, creating new one");
-            card = new TkmCard()
-                    .setHpan(hpan)
-                    .setCitizen(citizen);
+            card = TkmCard.builder()
+                    .hpan(hpan)
+                    .citizen(citizen)
+            .build();
             cardRepository.save(card);
         }
         return card;
@@ -156,7 +164,7 @@ public class ConsentServiceImpl implements ConsentService {
         checkServicesAllowed(hpan, services);
         TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (tkmCitizen == null) {
-            throw new ConsentDataNotFoundException(USER_NOT_FOUND);
+            throw new ConsentDataNotFoundException(CITIZEN_NOT_FOUND);
         }
         log.info("Citizen found for taxCode " + taxCode + " with consent type " + tkmCitizen.getConsentType());
         ConsentResponse consentResponse = new ConsentResponse();
@@ -222,6 +230,19 @@ public class ConsentServiceImpl implements ConsentService {
         if (CollectionUtils.isNotEmpty(services)) {
             throw new ConsentException(ErrorCodeEnum.HPAN_AND_SERVICES_PARAMS_NOT_COHERENT);
         }
+    }
+    
+    @Override
+    public void deleteUser(String taxCode) throws ConsentException {
+        TkmCitizen citizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
+        if (citizen == null) {
+            throw new ConsentDataNotFoundException(CITIZEN_NOT_FOUND);
+        }
+        ConsentResponse consentResponse = new ConsentResponse(Deny, taxCode, citizen.getLastConsentUpdateDate(), null);
+        notifyCardManager(consentResponse);
+        citizen.setDeleted(true);
+        citizen.getCards().forEach(c -> c.setDeleted(true));
+        citizenRepository.save(citizen);
     }
 
 }

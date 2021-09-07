@@ -33,8 +33,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -109,7 +108,7 @@ class TestConsentController {
 
     //POST
     @Test
-    void givenValidConsentRequest_returnValidConsentResponse() throws Exception {
+    void post_givenValidConsentRequest_returnValidConsentResponse() throws Exception {
         for (Consent c : testBeans.VALID_CONSENT_REQUESTS) {
             Set<ServiceConsent> serviceConsents = (CollectionUtils.isEmpty(c.getServices()) ?
                     testBeans.CARD_SERVICES_FOR_ALL_SERVICES_SET
@@ -140,7 +139,7 @@ class TestConsentController {
     }
 
     @Test
-    void givenInvalidConsentRequest_returnBadRequest() throws Exception {
+    void post_givenInvalidConsentRequest_returnBadRequest() throws Exception {
         for (Consent c : testBeans.INVALID_CONSENT_REQUESTS) {
             mockMvc.perform(
                     post(ApiEndpoints.BASE_PATH_CONSENT)
@@ -153,7 +152,7 @@ class TestConsentController {
     }
 
     @Test
-    void givenMissingHeaders_returnBadRequest() throws Exception {
+    void post_givenMissingHeaders_returnBadRequest() throws Exception {
         mockMvc.perform(
                 post(ApiEndpoints.BASE_PATH_CONSENT)
                         .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE)
@@ -166,6 +165,19 @@ class TestConsentController {
                         .content(mapper.writeValueAsString(testBeans.GLOBAL_ALLOW_CONSENT_REQUEST))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    //DELETE
+    @Test
+    void delete_givenTaxCode_returnOk() throws Exception {
+        mockMvc.perform(delete(ApiEndpoints.BASE_PATH_CONSENT)
+                        .header(ApiParams.TAX_CODE_HEADER, testBeans.TAX_CODE))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void delete_missingTaxCodeHeader_returnBadRequest() throws Exception {
+        mockMvc.perform(delete(ApiEndpoints.BASE_PATH_CONSENT)).andExpect(status().isBadRequest());
     }
 
 }

@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: tkm-ms-consent-manager
   description: "RESTful APIs provided for consent management"
-  version: '1.2.0'
+  version: '1.2.1'
 servers:
   - url: http://localhost:2000/tkm-ms-consent-manager
 tags:
@@ -148,6 +148,54 @@ paths:
                 maxLength: 16
                 example: 937aee55bbabd29b
               required: true
+        '500':
+          description: Internal Server Error
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
+              required: true
+    delete:
+      tags:
+        - authenticated
+      summary: Delete user logically
+      operationId: deleteUser
+      parameters:
+        - in: header
+          name: Tax-Code
+          schema:
+            type: string
+            minLength: 16
+            maxLength: 16
+          required: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
+              required: true
+        '400':
+          description: Bad Request
+          headers:
+            Request-Id:
+              schema:
+                type: string
+                minLength: 16
+                maxLength: 16
+                example: 937aee55bbabd29b
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentError'
         '500':
           description: Internal Server Error
           headers:

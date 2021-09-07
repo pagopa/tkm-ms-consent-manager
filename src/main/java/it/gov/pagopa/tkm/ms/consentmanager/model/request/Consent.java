@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.*;
 import it.gov.pagopa.tkm.jsondeserializer.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
 import lombok.*;
-import lombok.experimental.*;
+import lombok.Builder;
 import org.apache.commons.lang3.*;
 
 import javax.validation.constraints.*;
@@ -12,7 +12,8 @@ import java.util.*;
 
 @Data
 @NoArgsConstructor
-@Accessors(chain = true)
+@AllArgsConstructor
+@Builder
 public class Consent {
 
     @NotNull
