@@ -2,11 +2,12 @@ package it.gov.pagopa.tkm.ms.consentmanager.model.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import it.gov.pagopa.tkm.constant.*;
 import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentEntityEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.Builder;
 
 import java.time.Instant;
 import java.util.Set;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Accessors(chain = true)
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConsentResponse {
 
@@ -22,7 +23,7 @@ public class ConsentResponse {
 
     private String taxCode;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Europe/Rome")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TkmDatetimeConstant.DATE_TIME_PATTERN, timezone = TkmDatetimeConstant.DATE_TIME_TIMEZONE)
     private Instant lastUpdateDate;
 
     private Set<CardServiceConsent> details;
