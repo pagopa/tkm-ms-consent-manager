@@ -2,13 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tkmmsconsentmanagersit
-resources:
-  requests:
-    memory: 2Gi
-    cpu: 500m
-  limits:
-    memory: 4Gi
-    cpu: 700m
 spec:
   replicas: 1
   selector:
@@ -35,6 +28,13 @@ spec:
                 name: kafka-log-configuration
             - configMapRef:
                 name: tkmmsconsentmanager
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 500m
+            limits:
+              memory: 4Gi
+              cpu: 700m
           livenessProbe:
             httpGet:
               path: /actuator/health
