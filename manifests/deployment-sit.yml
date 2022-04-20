@@ -37,7 +37,7 @@ spec:
               cpu: 700m
           livenessProbe:
             httpGet:
-              path: /actuator/health
+              path: /consent/ok
               port: 8080
               scheme: HTTP
             timeoutSeconds: 30
@@ -46,7 +46,7 @@ spec:
             failureThreshold: 5
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /consent/ok
               port: 8080
               scheme: HTTP
             timeoutSeconds: 30
@@ -55,7 +55,7 @@ spec:
             failureThreshold: 3
           startupProbe:
             httpGet:
-              path: /actuator/health
+              path: /consent/ok
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 20
