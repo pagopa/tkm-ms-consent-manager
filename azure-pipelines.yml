@@ -230,6 +230,7 @@ stages:
                     manifests: |
                       $(Pipeline.Workspace)/manifests/$(deployment).yml
                       $(Pipeline.Workspace)/manifests/service-$(enviroment).yml
+                      $(Pipeline.Workspace)/manifests/ingress-$(enviroment).yml
                     imagePullSecrets: |
                       $(imagePullSecret)
                     containers: |
