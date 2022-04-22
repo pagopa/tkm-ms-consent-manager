@@ -14,7 +14,11 @@ import org.springframework.context.annotation.Import;
 public class ConsentManagerApplication {
 
     public static void main(String[] args) {
+        System.out.println("before run");
+
         SpringApplication.run(ConsentManagerApplication.class, args);
+
+        System.out.println("after run");
     }
 
 }
