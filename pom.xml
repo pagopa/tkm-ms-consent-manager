@@ -33,12 +33,7 @@
         <dependency>
             <groupId>com.azure.spring</groupId>
             <artifactId>azure-spring-boot-starter-keyvault-secrets</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>msal4j</artifactId>
-            <version>1.11.3</version>
+            <version>3.14.0</version>
         </dependency>
         <dependency>
             <groupId>io.github.resilience4j</groupId>
