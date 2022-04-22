@@ -35,7 +35,7 @@ keyvault:
 # eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:}
 # consentMDbUsername: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername}
 # consentMDbPassword: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword}
-  eventhubLogSaslJaasConfig: ${EVENT_HUB_LOG_SASLJAASCONFIG}
+  eventhubLogSaslJaasConfig: ${EVENT_HUB_LOG_SASLJAASCONFIG:}
   consentMDbUsername: ${DB_USER}
   consentMDbPassword: ${DB_PWD}
 
