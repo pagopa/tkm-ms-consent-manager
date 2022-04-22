@@ -32,9 +32,12 @@ azure:
     refresh-interval: 86400000 #24H
 
 keyvault:
-  eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:EVENT_HUB_LOG_SASLJAASCONFIG}
-  consentMDbUsername: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername:DB_USER}
-  consentMDbPassword: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword:DB_PWD}
+# eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:}
+# consentMDbUsername: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername}
+# consentMDbPassword: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword}
+  eventhubLogSaslJaasConfig: ${EVENT_HUB_LOG_SASLJAASCONFIG}
+  consentMDbUsername: ${DB_USER}
+  consentMDbPassword: ${DB_PWD}
 
 management:
   health:
