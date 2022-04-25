@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 public class ConsentManagerApplication {
 
     public static void main(String[] args) {
-        System.out.println("Starting ConsentManagerApplication");
+        System.out.println("Starting ConsentManagerApplication version 2");
         SpringApplication.run(ConsentManagerApplication.class, args);
     }
 }
