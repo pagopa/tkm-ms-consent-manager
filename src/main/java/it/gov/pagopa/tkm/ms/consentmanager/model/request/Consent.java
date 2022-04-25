@@ -1,14 +1,15 @@
 package it.gov.pagopa.tkm.ms.consentmanager.model.request;
 
-import com.fasterxml.jackson.databind.annotation.*;
-import it.gov.pagopa.tkm.jsondeserializer.*;
-import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
-import lombok.*;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ConsentRequestEnum;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ServiceEnum;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import org.apache.commons.lang3.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.*;
-import java.util.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -20,13 +21,12 @@ public class Consent {
     private ConsentRequestEnum consent;
 
     @Size(min = 64, max = 64)
-    @JsonDeserialize(using = ToLowerCaseDeserializer.class)
     private String hpan;
 
     private Set<ServiceEnum> services;
 
     public boolean isPartial() {
-        return StringUtils.isNotBlank(hpan);
+        return false;
     }
 
 }

@@ -20,31 +20,16 @@ variables:
   # Image Repository Name
   imageRepository: 'tkmmsconsentmanager'
 
-  isToDeploy: $[ne(variables['Build.Reason'], 'PullRequest')]
-  isSIT: $[eq(variables['Build.SourceBranch'], 'refs/heads/release/sit')]
+  isToDeploy: true
+  isSIT: true
   isUAT: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/release/uat'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix'))]
   isPROD: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
 
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/release/sit') }}:
-    dockerRegistryServiceConnection: 'tkm-cstaruatregistry-connector'
-    containerRegistry: 'cstaruatregistry.azurecr.io'
-    deployment: deployment-sit
-    enviroment: sit
-    imagePullSecret: 'tkmsitregistry-auth'
-  ${{ if or(eq(variables['Build.SourceBranch'], 'refs/heads/release/uat'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix')) }}:
-    containerRegistry: 'cstaruatregistry.azurecr.io'
-    deployment: deployment-uat
-    imagePullSecret: 'tkmuatregistry-auth'
-    enviroment: uat
-    dockerRegistryServiceConnection: 'tkm-cstaruatregistry-connector'
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
-    dockerRegistryServiceConnection: 'tkm-cstaruatregistry-connector'
-    containerRegistry: ''
-    deployment: ''
-    imagePullSecret: ''
-    enviroment: prod
-  ${{ if and(not(startsWith(variables['Build.SourceBranch'], 'refs/heads/release')), ne(variables['Build.SourceBranch'], 'refs/heads/master'), not(startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix'))) }}:
-    dockerRegistryServiceConnection: ''
+  dockerRegistryServiceConnection: 'tkm-cstaruatregistry-connector'
+  containerRegistry: 'cstaruatregistry.azurecr.io'
+  deployment: deployment-sit
+  enviroment: sit
+  imagePullSecret: 'tkmsitregistry-auth'
 
   maven_cache_folder: $(Pipeline.Workspace)/.m2/repository
 
