@@ -36,6 +36,7 @@ azure:
     refresh-interval: 86400000 #24H
     secret:
       keys: iothubconn
+    token-acquire-timeout-seconds: 60
 
 keyvault:
 # eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:}
