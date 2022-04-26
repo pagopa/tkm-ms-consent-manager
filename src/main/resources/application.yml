@@ -37,6 +37,7 @@ azure:
     refresh-interval: 0
     secret-keys: ${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername,${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword,${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig
     token-acquire-timeout-seconds: 60
+    allow-telemetry: false
 
 keyvault:
 # eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:}
