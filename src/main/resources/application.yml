@@ -21,8 +21,8 @@ logging:
     root: TRACE
     com.azure: TRACE
     com.azure.spring: TRACE
-#    org.springframework: INFO
-#    org.apache: INFO
+    org.springframework: INFO
+    org.apache: INFO
   pattern:
     level: "${LOGGING_PATTERN:%p [${spring.application.name}][%X{traceId}]}"
 
@@ -35,7 +35,7 @@ azure:
     uri: ${AZURE_KEYVAULT_URI}
     #24H
     refresh-interval: 0
-    secret.keys: sit-consentMDbUsername
+    secret-keys: ${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername,${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword,${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig
     token-acquire-timeout-seconds: 60
 
 keyvault:
