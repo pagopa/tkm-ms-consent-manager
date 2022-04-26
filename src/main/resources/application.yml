@@ -28,7 +28,7 @@ logging:
 
 azure:
   keyvault:
-    enabled: ${AZURE_KEYVAULT_ENABLED:false}
+    enabled: ${AZURE_KEYVAULT_ENABLED:true}
     client-id: ${AZURE_KEYVAULT_CLIENT_ID}
     client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
     tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
