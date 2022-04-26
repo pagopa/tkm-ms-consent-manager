@@ -28,16 +28,19 @@ logging:
 
 azure:
   keyvault:
-    enabled: ${AZURE_KEYVAULT_ENABLED:true}
-    client-id: ${AZURE_KEYVAULT_CLIENT_ID}
-    client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
-    tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
-    uri: ${AZURE_KEYVAULT_URI}
-    #24H
-    refresh-interval: 0
-    secret-keys: ${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername,${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword,${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig
-    token-acquire-timeout-seconds: 60
-    allow-telemetry: false
+    order: tkmkv
+    tkmkv:
+      enabled: ${AZURE_KEYVAULT_ENABLED:true}
+      client-id: ${AZURE_KEYVAULT_CLIENT_ID}
+      client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
+      tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
+      uri: ${AZURE_KEYVAULT_URI}
+      #24H
+      refresh-interval: 0
+      secret-keys: ${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername,${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword,${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig
+      token-acquire-timeout-seconds: 60
+      allow-telemetry: false
+
 
 keyvault:
 # eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:}
