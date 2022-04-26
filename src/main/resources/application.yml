@@ -21,8 +21,8 @@ logging:
     root: TRACE
     com.azure: TRACE
     com.azure.spring: TRACE
-    org.springframework: INFO
-    org.apache: INFO
+#    org.springframework: INFO
+#    org.apache: INFO
   pattern:
     level: "${LOGGING_PATTERN:%p [${spring.application.name}][%X{traceId}]}"
 
