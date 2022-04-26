@@ -28,7 +28,7 @@ logging:
 
 azure:
   keyvault:
-    enabled: true
+    enabled: ${AZURE_KEYVAULT_ENABLED:false}
     client-id: ${AZURE_KEYVAULT_CLIENT_ID}
     client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
     tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
@@ -42,7 +42,7 @@ keyvault:
   eventhubLogSaslJaasConfig: ${EVENT_HUB_LOG_SASLJAASCONFIG:}
   consentMDbUsername: ${DB_USER}
   consentMDbPassword: ${DB_PWD}
-  consentMDbUsernameAzure: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername}
+  consentMDbUsernameAzure: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername:}
 
 management:
   health:
