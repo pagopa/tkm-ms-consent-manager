@@ -33,9 +33,9 @@ azure:
     client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
     tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
     uri: ${AZURE_KEYVAULT_URI}
-    refresh-interval: 86400000 #24H
-    secret:
-      keys: iothubconn
+    #24H
+    refresh-interval: 0
+    secret.keys: sit-consentMDbUsername
     token-acquire-timeout-seconds: 60
 
 keyvault:
