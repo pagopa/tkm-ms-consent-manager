@@ -35,9 +35,6 @@ public interface ConsentController {
             @RequestParam(value = HPAN_QUERY_PARAM, required = false) @Valid @Size(min = 64, max = 64) String hpan,
             @RequestParam(value = SERVICES_QUERY_PARAM, required = false) Set<ServiceEnum> services);
 
-    @GetMapping(path = "/ok")
-    String getConsentOk();
-
     @DeleteMapping
     @Transactional
     void deleteCitizen(
