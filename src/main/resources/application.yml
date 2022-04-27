@@ -24,7 +24,7 @@ logging:
 
 azure:
   keyvault:
-    enabled: false
+    enabled: true
     client-id: ${AZURE_KEYVAULT_CLIENT_ID}
     client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
     tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
@@ -32,12 +32,9 @@ azure:
     refresh-interval: 86400000 #24H
 
 keyvault:
-# eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:}
-# consentMDbUsername: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername}
-# consentMDbPassword: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword}
-  eventhubLogSaslJaasConfig: ${EVENT_HUB_LOG_SASLJAASCONFIG:}
-  consentMDbUsername: ${DB_USER}
-  consentMDbPassword: ${DB_PWD}
+  eventhubLogSaslJaasConfig: ${${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig:}
+  consentMDbUsername: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername}
+  consentMDbPassword: ${${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword}
 
 management:
   health:
