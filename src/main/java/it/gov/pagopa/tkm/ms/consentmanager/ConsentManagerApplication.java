@@ -12,6 +12,7 @@ import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.identity.implementation.IdentityClientOptions;
 import com.azure.security.keyvault.secrets.*;
 import com.azure.security.keyvault.secrets.implementation.KeyVaultCredentialPolicy;
+import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import com.azure.spring.utils.ApplicationId;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,6 +27,17 @@ import java.util.List;
 public class ConsentManagerApplication {
 
     public static void main(String[] args) {
+        retrieveSecret("sit-consentMDbUsername");
+        retrieveSecret("sit-consentMDbPassword");
+        retrieveSecret("sit-eventhubLogSaslJaasConfig");
+
+        System.out.println("Starting ConsentManagerApplication");
+
+        SpringApplication.run(ConsentManagerApplication.class, args);
+    }
+
+    private static void retrieveSecret(String name)
+    {
         System.out.println("Creating client");
 
         String defaultAuthority = (new IdentityClientOptions()).getAuthorityHost();
@@ -46,38 +58,11 @@ public class ConsentManagerApplication {
 
         System.out.println("Get secret");
 
-        System.out.println(secretClient.getSecret("sit-consentMDbUsername"));
+        KeyVaultSecret secret = secretClient.getSecret(name);
 
-        System.out.println("Starting ConsentManagerApplication");
-
-        SpringApplication.run(ConsentManagerApplication.class, args);
+        System.out.println(secret);
+        if (secret != null) {
+            System.out.println(secret.getValue());
+        }
     }
-
-//    public static void buildAsyncClient() {
-//        URL buildEndpoint = new URL("https://kmn-tkm-pagopa-test.vault.azure.net");
-//        SecretServiceVersion serviceVersion = SecretServiceVersion.getLatest();
-//        List<HttpPipelinePolicy> policies = new ArrayList();
-//        String clientName = (String)this.properties.getOrDefault("name", "UnknownName");
-//        String clientVersion = (String)this.properties.getOrDefault("version", "UnknownVersion");
-//        HttpLogOptions httpLogOptions = new HttpLogOptions();
-//
-//        policies.add(new UserAgentPolicy(CoreUtils.getApplicationId(this.clientOptions, this.httpLogOptions), clientName, clientVersion, buildConfiguration));
-//        if (this.clientOptions != null) {
-//            List<HttpHeader> httpHeaderList = new ArrayList();
-//            this.clientOptions.getHeaders().forEach((header) -> {
-//                httpHeaderList.add(new HttpHeader(header.getName(), header.getValue()));
-//            });
-//            policies.add(new AddHeadersPolicy(new HttpHeaders(httpHeaderList)));
-//        }
-//
-//        policies.addAll(this.perCallPolicies);
-//        HttpPolicyProviders.addBeforeRetryPolicies(policies);
-//        policies.add(this.retryPolicy == null ? new RetryPolicy() : this.retryPolicy);
-//        policies.add(new KeyVaultCredentialPolicy(this.credential));
-//        policies.addAll(this.perRetryPolicies);
-//        HttpPolicyProviders.addAfterRetryPolicies(policies);
-//        policies.add(new HttpLoggingPolicy(this.httpLogOptions));
-//        HttpPipeline pipeline = (new HttpPipelineBuilder()).policies((HttpPipelinePolicy[])policies.toArray(new HttpPipelinePolicy[0])).httpClient(this.httpClient).build();
-//        new SecretAsyncClient(this.vaultUrl, pipeline, serviceVersion);
-//    }
 }
