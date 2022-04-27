@@ -30,11 +30,11 @@ azure:
   keyvault:
     order: tkmkv
     tkmkv:
-      enabled: ${AZURE_KEYVAULT_ENABLED:true}
-      client-id: ${AZURE_KEYVAULT_CLIENT_ID}
-      client-key: ${AZURE_KEYVAULT_CLIENT_KEY}
-      tenant-id: ${AZURE_KEYVAULT_TENANT_ID}
-      uri: ${AZURE_KEYVAULT_URI}
+      enabled: ${AZURE_KEYVAULT_ENABLED:false}
+      client-id: ${AZURE_KEYVAULT_CLIENT_ID_V2:}
+      client-key: ${AZURE_KEYVAULT_CLIENT_KEY_V2:}
+      tenant-id: ${AZURE_KEYVAULT_TENANT_ID_V2:}
+      uri: ${AZURE_KEYVAULT_URI_V2:}
       #24H
       refresh-interval: 0
       secret-keys: ${AZURE_KEYVAULT_PROFILE:prod}-consentMDbUsername,${AZURE_KEYVAULT_PROFILE:prod}-consentMDbPassword,${AZURE_KEYVAULT_PROFILE:prod}-eventhubLogSaslJaasConfig
