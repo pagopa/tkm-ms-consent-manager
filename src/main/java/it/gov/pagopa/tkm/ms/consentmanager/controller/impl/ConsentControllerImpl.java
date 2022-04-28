@@ -33,9 +33,4 @@ public class ConsentControllerImpl implements ConsentController {
         return consentManagerService.getConsent(taxCode, hpan, services);
     }
 
-    @Override
-    public String getConsentOk() {
-        return "ok";
-    }
-
 }
