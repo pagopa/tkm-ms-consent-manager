@@ -35,6 +35,8 @@ spec:
                 name: kafka-log-configuration
             - configMapRef:
                 name: tkmmsconsentmanager
+            - configMapRef:
+                name: jvm
           resources:
             requests:
               memory: 4Gi
