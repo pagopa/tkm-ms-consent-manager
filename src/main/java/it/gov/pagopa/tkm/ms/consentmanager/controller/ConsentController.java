@@ -1,8 +1,9 @@
 package it.gov.pagopa.tkm.ms.consentmanager.controller;
 
-import it.gov.pagopa.tkm.annotation.*;
-import it.gov.pagopa.tkm.constant.*;
-import it.gov.pagopa.tkm.ms.consentmanager.constant.*;
+import it.gov.pagopa.tkm.annotation.StringFormat;
+import it.gov.pagopa.tkm.annotation.StringFormatEnum;
+import it.gov.pagopa.tkm.constant.Constants;
+import it.gov.pagopa.tkm.ms.consentmanager.constant.ServiceEnum;
 import it.gov.pagopa.tkm.ms.consentmanager.model.request.Consent;
 import it.gov.pagopa.tkm.ms.consentmanager.model.response.ConsentResponse;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,15 +11,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-
-import java.util.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiEndpoints.BASE_PATH_CONSENT;
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.CLIENT_ID_HEADER;
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.TAX_CODE_HEADER;
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.HPAN_QUERY_PARAM;
-import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.SERVICES_QUERY_PARAM;
+import static it.gov.pagopa.tkm.ms.consentmanager.constant.ApiParams.*;
 
 @RequestMapping(BASE_PATH_CONSENT)
 @Validated
