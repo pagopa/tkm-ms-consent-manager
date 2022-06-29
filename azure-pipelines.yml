@@ -149,19 +149,6 @@ stages:
               mavenAuthenticateFeed: false
               effectivePomSkip: true
               sonarQubeRunAnalysis: false
-          - task: Docker@2
-            displayName: Build and push an image to container registry
-            condition: succeeded()
-            inputs:
-              containerRegistry: '$(dockerRegistryServiceConnection)'
-              repository: '$(imageRepository)'
-              command: 'buildAndPush'
-              Dockerfile: '$(Build.Repository.LocalPath)/$(dockerfileRelativePath)'
-              buildContext: '$(Build.Repository.LocalPath)'
-              tags: |
-                $(Build.BuildId)
-                latest
-                $(pomversion)
           - task: PublishPipelineArtifact@1
             displayName: 'Publish Atrifact manifests'
             condition: and(succeeded(), eq(variables.isToDeploy, true))
@@ -169,10 +156,56 @@ stages:
               targetPath: '$(Build.Repository.LocalPath)/manifests'
               artifact: 'manifests'
               publishLocation: 'pipeline'
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Atrifact target'
+            condition: and(succeeded(), eq(variables.isToDeploy, true))
+            inputs:
+              targetPath: '$(Build.Repository.LocalPath)/target'
+              artifact: 'target'
+              publishLocation: 'pipeline'
+
+      - job: Push
+        displayName: Push
+        dependsOn: Build
+        condition: succeeded()
+        pool:
+          vmImage: $(vmImageNameDefault)
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'manifests'
+              targetPath: '$(Pipeline.Workspace)/manifests'
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'target'
+              targetPath: '$(Pipeline.Workspace)/target'
+          - task: Bash@3
+            displayName: PrintInfo
+            name: PrintInfo
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo "$(dockerRegistryServiceConnection)"
+                echo "$(imageRepository)"
+              failOnStderr: true
+          - task: Docker@2
+            displayName: Build and push an image to container registry
+            inputs:
+              containerRegistry: '$(dockerRegistryServiceConnection)'
+              repository: '$(imageRepository)'
+              command: 'buildAndPush'
+              Dockerfile: '$(Build.Repository.LocalPath)/$(dockerfileRelativePath)'
+              buildContext: '$(Pipeline.Workspace)'
+              tags: |
+                $(Build.BuildId)
+                latest
+                $(pomversion)
 
       - deployment: Deploy
         displayName: Deploy
-        dependsOn: Build
+        dependsOn: Push
         condition: and(succeeded(), eq(variables.isToDeploy, true), eq(variables.isSIT, true))
         pool:
           name: uat_agent_pool
@@ -195,70 +228,14 @@ stages:
                     kubernetesServiceConnection: 'ddsakstest-self-connection-tkm-sit'
                     manifests: |
                       $(Pipeline.Workspace)/manifests/namespace-$(enviroment).yml
-                - task: DownloadSecureFile@1
-                  displayName: 'download keyvault-connection-informations.yaml'
-                  name: keyvaultconnectioninformations
-                  inputs:
-                    secureFile: keyvault-connection-informations-$(enviroment).yaml
-                    retryCount: '2'
-                - task: DownloadSecureFile@1
-                  displayName: 'download jvm.yaml'
-                  name: jvm
-                  inputs:
-                    secureFile: jvm-$(enviroment).yaml
-                    retryCount: '2'
-                - task: DownloadSecureFile@1
-                  displayName: 'download kafka-log-configuration.yaml'
-                  name: kafkalogconfiguration
-                  inputs:
-                    secureFile: kafka-log-configuration-$(enviroment).yaml
-                    retryCount: '2'
-                - task: DownloadSecureFile@1
-                  displayName: 'download tkmmsconsentmanager.yaml'
-                  name: tkmmsconsentmanager
-                  inputs:
-                    secureFile: tkmmsconsentmanager-$(enviroment).yaml
-                    retryCount: '2'
-                - task: Kubernetes@1
-                  displayName: 'apply keyvault-connection-informations.yaml'
-                  inputs:
-                    connectionType: Azure Resource Manager
-                    azureSubscriptionEndpoint: 'PM-subscription-sit'
-                    azureResourceGroup: 'DDS-Kubernetes'
-                    kubernetesCluster: 'ddsakstest'
-                    command: apply
-                    useConfigurationFile: true
-                    configuration: $(keyvaultconnectioninformations.secureFilePath)
-                - task: Kubernetes@1
-                  displayName: 'apply jvm.yaml'
-                  inputs:
-                    connectionType: Azure Resource Manager
-                    azureSubscriptionEndpoint: 'PM-subscription-sit'
-                    azureResourceGroup: 'DDS-Kubernetes'
-                    kubernetesCluster: 'ddsakstest'
-                    command: apply
-                    useConfigurationFile: true
-                    configuration: $(jvm.secureFilePath)
-                - task: Kubernetes@1
-                  displayName: 'apply kafka-log-configuration.yaml'
-                  inputs:
-                    connectionType: Azure Resource Manager
-                    azureSubscriptionEndpoint: 'PM-subscription-sit'
-                    azureResourceGroup: 'DDS-Kubernetes'
-                    kubernetesCluster: 'ddsakstest'
-                    command: apply
-                    useConfigurationFile: true
-                    configuration: $(kafkalogconfiguration.secureFilePath)
-                - task: Kubernetes@1
-                  displayName: 'apply tkmmsconsentmanager.yaml'
-                  inputs:
-                    connectionType: Azure Resource Manager
-                    azureSubscriptionEndpoint: 'PM-subscription-sit'
-                    azureResourceGroup: 'DDS-Kubernetes'
-                    kubernetesCluster: 'ddsakstest'
-                    command: apply
-                    useConfigurationFile: true
-                    configuration: $(tkmmsconsentmanager.secureFilePath)
+                - template: 'templates/env-configurations-consent-manager.yml'
+                  parameters:
+                    azureSubscription: 'TKM-Subscription-sit'
+                    KeyVaultName: 'kmn-tkm-pagopa-test'
+                    secretName: 'tkm-consent-manager-kv-store-creds-sit'
+                    spcClassName: 'tkm-consent-manager-spc-sit'
+                    env: 'sit'
+                    kubernetesServiceConnection: 'ddsakstest-self-connection-tkm-sit'
                 - task: KubernetesManifest@0
                   displayName: Deploy to Kubernetes cluster
                   inputs:
@@ -319,70 +296,14 @@ stages:
                     kubernetesServiceConnection: 'u87-aks-pci-uat-self-connection-tkm'
                     manifests: |
                       $(Pipeline.Workspace)/manifests/namespace-$(enviroment).yml
-                - task: DownloadSecureFile@1
-                  displayName: 'download keyvault-connection-informations.yaml'
-                  name: keyvaultconnectioninformations
-                  inputs:
-                    secureFile: keyvault-connection-informations-$(enviroment).yaml
-                    retryCount: '2'
-                - task: DownloadSecureFile@1
-                  displayName: 'download jvm.yaml'
-                  name: jvm
-                  inputs:
-                    secureFile: jvm-$(enviroment).yaml
-                    retryCount: '2'
-                - task: DownloadSecureFile@1
-                  displayName: 'download kafka-log-configuration.yaml'
-                  name: kafkalogconfiguration
-                  inputs:
-                    secureFile: kafka-log-configuration-$(enviroment).yaml
-                    retryCount: '2'
-                - task: DownloadSecureFile@1
-                  displayName: 'download tkmmsconsentmanager.yaml'
-                  name: tkmmsconsentmanager
-                  inputs:
-                    secureFile: tkmmsconsentmanager-$(enviroment).yaml
-                    retryCount: '2'
-                - task: Kubernetes@1
-                  displayName: 'apply keyvault-connection-informations.yaml'
-                  inputs:
-                    connectionType: Azure Resource Manager
-                    azureSubscriptionEndpoint: 'U87-PagoPa-PCI-uat(e7feb90c-fcc2-40a2-ba56-d68ec301c6c0)'
-                    azureResourceGroup: 'U87-AKS-pci-uat'
-                    kubernetesCluster: 'U87-AKS-pci-uat'
-                    command: apply
-                    useConfigurationFile: true
-                    configuration: $(keyvaultconnectioninformations.secureFilePath)
-                - task: Kubernetes@1
-                  displayName: 'apply jvm.yaml'
-                  inputs:
-                    connectionType: Azure Resource Manager
-                    azureSubscriptionEndpoint: 'U87-PagoPa-PCI-uat(e7feb90c-fcc2-40a2-ba56-d68ec301c6c0)'
-                    azureResourceGroup: 'U87-AKS-pci-uat'
-                    kubernetesCluster: 'U87-AKS-pci-uat'
-                    command: apply
-                    useConfigurationFile: true
-                    configuration: $(jvm.secureFilePath)
-                - task: Kubernetes@1
-                  displayName: 'apply kafka-log-configuration.yaml'
-                  inputs:
-                    connectionType: Azure Resource Manager
-                    azureSubscriptionEndpoint: 'U87-PagoPa-PCI-uat(e7feb90c-fcc2-40a2-ba56-d68ec301c6c0)'
-                    azureResourceGroup: 'U87-AKS-pci-uat'
-                    kubernetesCluster: 'U87-AKS-pci-uat'
-                    command: apply
-                    useConfigurationFile: true
-                    configuration: $(kafkalogconfiguration.secureFilePath)
-                - task: Kubernetes@1
-                  displayName: 'apply tkmmsconsentmanager.yaml'
-                  inputs:
-                    connectionType: Azure Resource Manager
-                    azureSubscriptionEndpoint: 'U87-PagoPa-PCI-uat(e7feb90c-fcc2-40a2-ba56-d68ec301c6c0)'
-                    azureResourceGroup: 'U87-AKS-pci-uat'
-                    kubernetesCluster: 'U87-AKS-pci-uat'
-                    command: apply
-                    useConfigurationFile: true
-                    configuration: $(tkmmsconsentmanager.secureFilePath)
+                - template: 'templates/env-configurations-consent-manager.yml'
+                  parameters:
+                    azureSubscription: 'TKM-Subscription-sit'
+                    KeyVaultName: 'u87-kmn-tkm-pci-uat'
+                    secretName: 'tkm-consent-manager-kv-store-creds-uat'
+                    spcClassName: 'tkm-consent-manager-spc-uat'
+                    env: 'uat'
+                    kubernetesServiceConnection: 'u87-aks-pci-uat-self-connection-tkm'
                 - task: KubernetesManifest@0
                   displayName: Deploy to Kubernetes cluster
                   inputs:
