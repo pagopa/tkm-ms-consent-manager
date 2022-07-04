@@ -17,12 +17,15 @@ spec:
         prometheus.io/scrape: 'true'
     spec:
       hostAliases:
-      - ip: "10.70.67.9"
-        hostnames:
-        - "tkmpgsqlt01.postgres.database.azure.com"
-      - ip: "10.70.67.8"
-        hostnames:
-        - "ddstkmhub.servicebus.windows.net"
+        - ip: "10.70.67.9"
+          hostnames:
+            - "tkmpgsqlt01.postgres.database.azure.com"
+        - ip: "10.70.67.8"
+          hostnames:
+            - "ddstkmhub.servicebus.windows.net"
+        - ip: "10.230.11.68"
+          hostnames:
+            - "cstar-d-evh-ns.servicebus.windows.net"
       volumes:
         - name: secrets-store-inline-consent-manager
           csi:
