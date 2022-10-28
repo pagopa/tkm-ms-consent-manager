@@ -123,6 +123,13 @@ spec:
                 secretKeyRef:
                   key: DB_SERVER
                   name: tkmmsconsentmanager
+            - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  key: APPLICATIONINSIGHTS_CONNECTION_STRING
+                  name: applicationinsights
+            - name: APPLICATIONINSIGHTS_ROLE_NAME
+              value: tkmmsconsentmanagersit
           livenessProbe:
             httpGet:
               path: /actuator/health
