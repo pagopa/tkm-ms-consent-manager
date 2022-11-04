@@ -59,7 +59,7 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponse postConsent(String taxCode, String clientId, Consent consent) throws ConsentException {
-        log.info("Post consent for taxCode " + ObfuscationUtils.obfuscateTaxCode(taxCode) + " with value " + consent.getConsent() + (consent.isPartial() ? " for hpan " + ObfuscationUtils.obfuscateHpan(consent.getHpan()) : ""));
+        log.info("Post consent with value " + consent.getConsent() + (consent.isPartial() ? " for hpan " + ObfuscationUtils.obfuscateHpan(consent.getHpan()) : ""));
         TkmCitizen citizen = updateOrCreateCitizen(taxCode, clientId, consent);
         ConsentResponse consentResponse = new ConsentResponse();
         if (consent.isPartial()) {
@@ -113,7 +113,7 @@ public class ConsentServiceImpl implements ConsentService {
     private TkmCitizen updateOrCreateCitizen(String taxCode, String clientId, Consent consent) {
         TkmCitizen citizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (citizen == null) {
-            log.info("No citizen found for taxCode " + ObfuscationUtils.obfuscateTaxCode(taxCode) + ", creating new one");
+            log.info("No citizen found with given taxCode, creating new one");
             citizen = TkmCitizen.builder()
                     .taxCode(taxCode)
                     .consentDate(Instant.now())
@@ -121,7 +121,7 @@ public class ConsentServiceImpl implements ConsentService {
                     .consentClient(clientId)
             .build();
         } else {
-            log.info("Citizen with taxCode " + ObfuscationUtils.obfuscateTaxCode(taxCode) + " found, updating consent");
+            log.info("Citizen with given taxCode found, updating consent");
             checkNotFromAllowToPartial(citizen.getConsentType(), consent);
             checkNotSameConsentType(citizen.getConsentType(), consent);
             citizen.setConsentUpdateDate(Instant.now());
@@ -145,7 +145,7 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     private TkmCard getOrCreateCard(TkmCitizen citizen, String hpan) {
-        log.info("Searching for card with taxCode " + ObfuscationUtils.obfuscateTaxCode(citizen.getTaxCode()) + " and hpan " + ObfuscationUtils.obfuscateHpan(hpan));
+        log.info("Searching for card with taxCode and hpan " + ObfuscationUtils.obfuscateHpan(hpan));
         TkmCard card = cardRepository.findByHpanAndCitizenAndDeletedFalse(hpan, citizen);
         if (card == null) {
             log.info("Card not found, creating new one");
@@ -160,13 +160,13 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponse getConsent(String taxCode, String hpan, Set<ServiceEnum> services) {
-        log.info("Get consent for taxCode " + ObfuscationUtils.obfuscateTaxCode(taxCode) + (StringUtils.isNotBlank(hpan) ? " and hpan " + ObfuscationUtils.obfuscateHpan(hpan) : ""));
+        log.info("Get consent for given taxCode" + (StringUtils.isNotBlank(hpan) ? " and hpan " + ObfuscationUtils.obfuscateHpan(hpan) : ""));
         checkServicesAllowed(hpan, services);
         TkmCitizen tkmCitizen = citizenRepository.findByTaxCodeAndDeletedFalse(taxCode);
         if (tkmCitizen == null) {
             throw new ConsentDataNotFoundException(CITIZEN_NOT_FOUND);
         }
-        log.info("Citizen found for taxCode " + ObfuscationUtils.obfuscateTaxCode(taxCode) + " with consent type " + tkmCitizen.getConsentType());
+        log.info("Citizen found for given taxCode with consent type " + tkmCitizen.getConsentType());
         ConsentResponse consentResponse = new ConsentResponse();
         consentResponse.setLastUpdateDate(tkmCitizen.getLastConsentUpdateDate());
         switch (tkmCitizen.getConsentType()) {
@@ -196,7 +196,7 @@ public class ConsentServiceImpl implements ConsentService {
             log.info("Returning card with hpan " + ObfuscationUtils.obfuscateHpan(hpan));
             cardServiceConsents.add(createServiceConsents(tkmCard, services));
         } else {
-            log.info("Returning all cards for taxCode " + ObfuscationUtils.obfuscateTaxCode(tkmCitizen.getTaxCode()));
+            log.info("Returning all cards for given taxCode");
             for (TkmCard tkmCard : tkmCitizen.getCards()) {
                 cardServiceConsents.add(createServiceConsents(tkmCard, services));
             }
