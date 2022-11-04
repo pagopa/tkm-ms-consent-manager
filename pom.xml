@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>consent-manager</artifactId>
-    <version>1.2.25</version>
+    <version>1.2.26</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>it.gov.pagopa.tkm.ms</groupId>
         <artifactId>starter-parent</artifactId>
-		<version>4.2.1</version>
+		<version>4.2.2</version>
     </parent>
 
     <properties>
@@ -154,6 +154,6 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/pagopa/tkm-ms-consent-manager.git</developerConnection>
-        <tag>consent-manager-1.2.25</tag>
+        <tag>consent-manager-1.2.26</tag>
     </scm>
 </project>
