@@ -118,6 +118,46 @@ steps:
                   objectName: ${{ parameters.env }}-applicationinsights-connection-string
                   objectType: secret
                   objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-logging-level
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-logging-pattern
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-minimum-number-of-calls
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-sliding-window-size
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-buffer-size-in-closed-state
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-buffer-size-in-halfopen-state
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-failure-rate-threshold
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-wait-duration-in-openstate
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-retry-max-attempts
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-retry-wait-duration
+                  objectType: secret
+                  objectVersion: ""
           secretObjects:
             - secretName: tkmmsconsentmanager
               type: Opaque
@@ -154,3 +194,24 @@ steps:
 
                 - key: APPLICATIONINSIGHTS_CONNECTION_STRING
                   objectName: ${{ parameters.env }}-applicationinsights-connection-string
+
+                - key: LOGGING_LEVEL
+                  objectName: ${{ parameters.env }}-consent-manager-logging-level
+                - key: LOGGING_PATTERN
+                  objectName: ${{ parameters.env }}-consent-manager-logging-pattern
+                - key: MINIMUM_NUMBER_OF_CALLS
+                  objectName: ${{ parameters.env }}-consent-manager-minimum-number-of-calls
+                - key: SLIDING_WINDOW_SIZE
+                  objectName: ${{ parameters.env }}-consent-manager-sliding-window-size
+                - key: RING_BUFFER_SIZE_IN_CLOSED_STATE
+                  objectName: ${{ parameters.env }}-consent-manager-buffer-size-in-closed-state
+                - key: RING_BUFFER_SIZE_IN_HALFOPEN_STATE
+                  objectName: ${{ parameters.env }}-consent-manager-buffer-size-in-halfopen-state
+                - key: FAILURE_RATE_THRESHOLD
+                  objectName: ${{ parameters.env }}-consent-manager-failure-rate-threshold
+                - key: WAIT_DURATION_IN_OPENSTATE
+                  objectName: ${{ parameters.env }}-consent-manager-wait-duration-in-openstate
+                - key: RETRY_MAX_ATTEMPTS
+                  objectName: ${{ parameters.env }}-consent-manager-retry-max-attempts
+                - key: RETRY_WAIT_DURATION
+                  objectName: ${{ parameters.env }}-consent-manager-retry-wait-duration

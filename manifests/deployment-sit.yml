@@ -130,6 +130,56 @@ spec:
                   name: tkmmsconsentmanager
             - name: APPLICATIONINSIGHTS_ROLE_NAME
               value: tkmmsconsentmanagersit
+            - name: LOGGING_LEVEL
+              valueFrom:
+                secretKeyRef:
+                  key: LOGGING_LEVEL
+                  name: tkmmsconsentmanager
+            - name: LOGGING_PATTERN
+              valueFrom:
+                secretKeyRef:
+                  key: LOGGING_PATTERN
+                  name: tkmmsconsentmanager
+            - name: MINIMUM_NUMBER_OF_CALLS
+              valueFrom:
+                secretKeyRef:
+                  key: MINIMUM_NUMBER_OF_CALLS
+                  name: tkmmsconsentmanager
+            - name: SLIDING_WINDOW_SIZE
+              valueFrom:
+                secretKeyRef:
+                  key: SLIDING_WINDOW_SIZE
+                  name: tkmmsconsentmanager
+            - name: RING_BUFFER_SIZE_IN_CLOSED_STATE
+              valueFrom:
+                secretKeyRef:
+                  key: RING_BUFFER_SIZE_IN_CLOSED_STATE
+                  name: tkmmsconsentmanager
+            - name: RING_BUFFER_SIZE_IN_HALFOPEN_STATE
+              valueFrom:
+                secretKeyRef:
+                  key: RING_BUFFER_SIZE_IN_HALFOPEN_STATE
+                  name: tkmmsconsentmanager
+            - name: FAILURE_RATE_THRESHOLD
+              valueFrom:
+                secretKeyRef:
+                  key: FAILURE_RATE_THRESHOLD
+                  name: tkmmsconsentmanager
+            - name: WAIT_DURATION_IN_OPENSTATE
+              valueFrom:
+                secretKeyRef:
+                  key: WAIT_DURATION_IN_OPENSTATE
+                  name: tkmmsconsentmanager
+            - name: RETRY_MAX_ATTEMPTS
+              valueFrom:
+                secretKeyRef:
+                  key: RETRY_MAX_ATTEMPTS
+                  name: tkmmsconsentmanager
+            - name: RETRY_WAIT_DURATION
+              valueFrom:
+                secretKeyRef:
+                  key: RETRY_WAIT_DURATION
+                  name: tkmmsconsentmanager
           livenessProbe:
             httpGet:
               path: /actuator/health
