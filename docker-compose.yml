@@ -1,0 +1,23 @@
+version: '3'
+services:
+    db-consent-manager:
+        image: "postgres:alpine"
+        container_name: postgress-consent-manager
+        volumes:
+            - './postgresinit:/docker-entrypoint-initdb.d/'
+        ports:
+            - "5002:5432"
+        environment:
+            POSTGRES_PASSWORD: tkm_consent_manager
+            POSTGRES_DB: tkm_consent_manager
+            POSTGRES_USER: tkm_consent_manager
+        networks:
+            - tkmnet
+
+    liquibase-consent-manager:
+        build: ./devops/db/liquibase
+        container_name: liquibase-consent-manager
+
+networks:
+    tkmnet:
+        name: consent_manager_network
