@@ -135,6 +135,8 @@ spec:
                   name: applicationinsights
             - name: APPLICATIONINSIGHTS_ROLE_NAME
               value: tkmmsconsentmanageruat
+            - name: APPLICATIONINSIGHTS_SAMPLING_PERCENTAGE
+              value: 100
           livenessProbe:
             httpGet:
               path: /actuator/health
