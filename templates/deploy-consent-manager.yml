@@ -16,7 +16,7 @@ steps:
       kubernetesServiceEndpoint: ${{ parameters.kubernetesServiceConnection }}
       namespace: tkm-${{ parameters.env }}
       command: delete
-      arguments: "secrets tkmmsconsentmanager"
+      arguments: "--ignore-not-found=true secrets tkmmsconsentmanager"
   - task: KubernetesManifest@0
     displayName: Deploy to Kubernetes cluster
     inputs:
