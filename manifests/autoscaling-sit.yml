@@ -8,17 +8,4 @@ spec:
     kind: Deployment
     name: tkmmsconsentmanagersit
   minReplicas: 1
-  maxReplicas: 3
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 20
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: AverageValue
-        averageValue: 30Mi
+  maxReplicas: 1
