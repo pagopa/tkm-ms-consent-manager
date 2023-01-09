@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>consent-manager</artifactId>
-    <version>1.2.24</version>
+    <version>1.2.35</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>it.gov.pagopa.tkm.ms</groupId>
         <artifactId>starter-parent</artifactId>
-		<version>4.2.0</version>
+		<version>4.2.3</version>
     </parent>
 
     <properties>
@@ -44,6 +44,10 @@
             <groupId>io.github.resilience4j</groupId>
             <artifactId>resilience4j-metrics</artifactId>
             <version>${resilience4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>applicationinsights-agent</artifactId>
         </dependency>
     </dependencies>
 
@@ -150,6 +154,6 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/pagopa/tkm-ms-consent-manager.git</developerConnection>
-        <tag>consent-manager-1.2.24</tag>
+        <tag>consent-manager-1.2.35</tag>
     </scm>
 </project>

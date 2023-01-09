@@ -22,15 +22,18 @@ spec:
         - ip: "10.70.73.228"
           hostnames:
             - "tkm-pgsql-pci-uat.postgres.database.azure.com"
-        - ip: "10.70.73.37"
-          hostnames:
-            - "u87-evh-pci-uat.servicebus.windows.net"
         - ip: "10.70.73.38"
           hostnames:
             - "tkmstorageblobuatpci.blob.core.windows.net"
         - ip: "10.230.9.5"
           hostnames:
             - "api.uat.platform.pagopa.it"
+        - ip: "10.70.73.39"
+          hostnames:
+            - "u87-evhn-pci-uat.servicebus.windows.net"
+        - ip: "10.230.7.68"
+          hostnames:
+            - "cstar-u-evh-ns.servicebus.windows.net"
       volumes:
         - name: secrets-store-inline-consent-manager
           csi:
@@ -67,57 +70,57 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: TZ
-                  name: jvm
+                  name: tkmmsconsentmanager
             - name: KAFKA_APPENDER_BOOTSTRAP_SERVERS
               valueFrom:
                 secretKeyRef:
                   key: KAFKA_APPENDER_BOOTSTRAP_SERVERS
-                  name: kafka-log-configuration
+                  name: tkmmsconsentmanager
             - name: ENABLE_FILE_APPENDER
               valueFrom:
                 secretKeyRef:
                   key: ENABLE_FILE_APPENDER
-                  name: kafka-log-configuration
+                  name: tkmmsconsentmanager
             - name: ENABLE_KAFKA_APPENDER
               valueFrom:
                 secretKeyRef:
                   key: ENABLE_KAFKA_APPENDER
-                  name: kafka-log-configuration
+                  name: tkmmsconsentmanager
             - name: LOG_FILE
               valueFrom:
                 secretKeyRef:
                   key: LOG_FILE
-                  name: kafka-log-configuration
+                  name: tkmmsconsentmanager
             - name: KAFKA_APPENDER_TOPIC
               valueFrom:
                 secretKeyRef:
                   key: KAFKA_APPENDER_TOPIC
-                  name: kafka-log-configuration
+                  name: tkmmsconsentmanager
             - name: AZURE_KEYVAULT_PROFILE
               valueFrom:
                 secretKeyRef:
                   key: AZURE_KEYVAULT_PROFILE
-                  name: keyvault-connection-informations
+                  name: tkmmsconsentmanager
             - name: AZURE_KEYVAULT_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   key: AZURE_KEYVAULT_CLIENT_ID
-                  name: keyvault-connection-informations
+                  name: tkmmsconsentmanager
             - name: AZURE_KEYVAULT_CLIENT_KEY
               valueFrom:
                 secretKeyRef:
                   key: AZURE_KEYVAULT_CLIENT_KEY
-                  name: keyvault-connection-informations
+                  name: tkmmsconsentmanager
             - name: AZURE_KEYVAULT_TENANT_ID
               valueFrom:
                 secretKeyRef:
                   key: AZURE_KEYVAULT_TENANT_ID
-                  name: keyvault-connection-informations
+                  name: tkmmsconsentmanager
             - name: AZURE_KEYVAULT_URI
               valueFrom:
                 secretKeyRef:
                   key: AZURE_KEYVAULT_URI
-                  name: keyvault-connection-informations
+                  name: tkmmsconsentmanager
             - name: CARD_MANAGER_URL
               valueFrom:
                 secretKeyRef:
@@ -127,6 +130,65 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: DB_SERVER
+                  name: tkmmsconsentmanager
+            - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  key: APPLICATIONINSIGHTS_CONNECTION_STRING
+                  name: tkmmsconsentmanager
+            - name: APPLICATIONINSIGHTS_ROLE_NAME
+              value: tkmmsconsentmanageruat
+            - name: APPLICATIONINSIGHTS_SAMPLING_PERCENTAGE
+              value: "100"
+            - name: LOGGING_LEVEL
+              valueFrom:
+                secretKeyRef:
+                  key: LOGGING_LEVEL
+                  name: tkmmsconsentmanager
+            - name: LOGGING_PATTERN
+              valueFrom:
+                secretKeyRef:
+                  key: LOGGING_PATTERN
+                  name: tkmmsconsentmanager
+            - name: MINIMUM_NUMBER_OF_CALLS
+              valueFrom:
+                secretKeyRef:
+                  key: MINIMUM_NUMBER_OF_CALLS
+                  name: tkmmsconsentmanager
+            - name: SLIDING_WINDOW_SIZE
+              valueFrom:
+                secretKeyRef:
+                  key: SLIDING_WINDOW_SIZE
+                  name: tkmmsconsentmanager
+            - name: RING_BUFFER_SIZE_IN_CLOSED_STATE
+              valueFrom:
+                secretKeyRef:
+                  key: RING_BUFFER_SIZE_IN_CLOSED_STATE
+                  name: tkmmsconsentmanager
+            - name: RING_BUFFER_SIZE_IN_HALFOPEN_STATE
+              valueFrom:
+                secretKeyRef:
+                  key: RING_BUFFER_SIZE_IN_HALFOPEN_STATE
+                  name: tkmmsconsentmanager
+            - name: FAILURE_RATE_THRESHOLD
+              valueFrom:
+                secretKeyRef:
+                  key: FAILURE_RATE_THRESHOLD
+                  name: tkmmsconsentmanager
+            - name: WAIT_DURATION_IN_OPENSTATE
+              valueFrom:
+                secretKeyRef:
+                  key: WAIT_DURATION_IN_OPENSTATE
+                  name: tkmmsconsentmanager
+            - name: RETRY_MAX_ATTEMPTS
+              valueFrom:
+                secretKeyRef:
+                  key: RETRY_MAX_ATTEMPTS
+                  name: tkmmsconsentmanager
+            - name: RETRY_WAIT_DURATION
+              valueFrom:
+                secretKeyRef:
+                  key: RETRY_WAIT_DURATION
                   name: tkmmsconsentmanager
           livenessProbe:
             httpGet:
