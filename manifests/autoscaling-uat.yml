@@ -1,4 +1,4 @@
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: tkmmsconsentmanageruat
@@ -21,4 +21,4 @@ spec:
       name: memory
       target:
         type: AverageValue
-        averageValue: 500Mi
+        averageValue: 1000Mi
