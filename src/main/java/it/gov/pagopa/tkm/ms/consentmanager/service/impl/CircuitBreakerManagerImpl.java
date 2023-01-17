@@ -21,7 +21,7 @@ public class CircuitBreakerManagerImpl implements CircuitBreakerManager {
     }
 
     public void cardManagerClientUpdateConsentFallback(ConsentResponse consentResponse, Throwable t) throws Exception {
-        log.info("Card Manager Client Update Consent Fallback%s- cause {} "+  t.getMessage());
+        log.info("Card Manager Client Update Consent Fallback - cause: " + t.getMessage());
         throw new Exception();
     }
 

@@ -19,6 +19,7 @@ steps:
       KeyVaultName: ${{ parameters.KeyVaultName }}
       SecretsFilter: '*'
       RunAsPreJob: false
+
   - task: KubernetesManifest@0
     displayName: Create secret ${{ parameters.secretName }}
     inputs:
@@ -28,6 +29,16 @@ steps:
       secretArguments: --from-literal=clientid=$(${{ parameters.env }}-clientid) --from-literal=clientsecret=$(${{ parameters.env }}-clientsecret)
       kubernetesServiceConnection: ${{ parameters.kubernetesServiceConnection }}
       namespace: tkm-${{ parameters.env }}
+
+  - task: Kubernetes@1
+    displayName: Add label to secret map
+    inputs:
+      connectionType: Kubernetes Service Connection
+      kubernetesServiceEndpoint: ${{ parameters.kubernetesServiceConnection }}
+      namespace: tkm-${{ parameters.env }}
+      command: label
+      arguments: "secret ${{ parameters.secretName }} secrets-store.csi.k8s.io/used=true"
+
   - task: Kubernetes@1
     displayName: Create spc ${{ parameters.spcClassName }}
     inputs:
@@ -107,15 +118,53 @@ steps:
                   objectName: ${{ parameters.env }}-applicationinsights-connection-string
                   objectType: secret
                   objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-logging-level
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-logging-pattern
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-minimum-number-of-calls
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-sliding-window-size
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-buffer-size-in-closed-state
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-buffer-size-in-halfopen-state
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-failure-rate-threshold
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-wait-duration-in-openstate
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-retry-max-attempts
+                  objectType: secret
+                  objectVersion: ""
+                - |
+                  objectName: ${{ parameters.env }}-consent-manager-retry-wait-duration
+                  objectType: secret
+                  objectVersion: ""
           secretObjects:
-            - secretName: jvm
+            - secretName: tkmmsconsentmanager
               type: Opaque
               data:
                 - key: TZ
                   objectName: ${{ parameters.env }}-tz
-            - secretName: kafka-log-configuration
-              type: Opaque
-              data:
+
                 - key: KAFKA_APPENDER_BOOTSTRAP_SERVERS
                   objectName: ${{ parameters.env }}-kafka-appender-bootstrap-servers
                 - key: ENABLE_FILE_APPENDER
@@ -126,9 +175,7 @@ steps:
                   objectName: ${{ parameters.env }}-log-file
                 - key: KAFKA_APPENDER_TOPIC
                   objectName: ${{ parameters.env }}-kafka-appender-topic
-            - secretName: keyvault-connection-informations
-              type: Opaque
-              data:
+
                 - key: AZURE_KEYVAULT_PROFILE
                   objectName: ${{ parameters.env }}-azure-keyvault-profile
                 - key: AZURE_KEYVAULT_CLIENT_ID
@@ -139,15 +186,32 @@ steps:
                   objectName: ${{ parameters.env }}-azure-keyvault-tenant-id
                 - key: AZURE_KEYVAULT_URI
                   objectName: ${{ parameters.env }}-azure-keyvault-uri
-            - secretName: tkmmsconsentmanager
-              type: Opaque
-              data:
+
                 - key: CARD_MANAGER_URL
                   objectName: ${{ parameters.env }}-card-manager-url
                 - key: DB_SERVER
                   objectName: ${{ parameters.env }}-db-server
-            - secretName: applicationinsights
-              type: Opaque
-              data:
+
                 - key: APPLICATIONINSIGHTS_CONNECTION_STRING
                   objectName: ${{ parameters.env }}-applicationinsights-connection-string
+
+                - key: LOGGING_LEVEL
+                  objectName: ${{ parameters.env }}-consent-manager-logging-level
+                - key: LOGGING_PATTERN
+                  objectName: ${{ parameters.env }}-consent-manager-logging-pattern
+                - key: MINIMUM_NUMBER_OF_CALLS
+                  objectName: ${{ parameters.env }}-consent-manager-minimum-number-of-calls
+                - key: SLIDING_WINDOW_SIZE
+                  objectName: ${{ parameters.env }}-consent-manager-sliding-window-size
+                - key: RING_BUFFER_SIZE_IN_CLOSED_STATE
+                  objectName: ${{ parameters.env }}-consent-manager-buffer-size-in-closed-state
+                - key: RING_BUFFER_SIZE_IN_HALFOPEN_STATE
+                  objectName: ${{ parameters.env }}-consent-manager-buffer-size-in-halfopen-state
+                - key: FAILURE_RATE_THRESHOLD
+                  objectName: ${{ parameters.env }}-consent-manager-failure-rate-threshold
+                - key: WAIT_DURATION_IN_OPENSTATE
+                  objectName: ${{ parameters.env }}-consent-manager-wait-duration-in-openstate
+                - key: RETRY_MAX_ATTEMPTS
+                  objectName: ${{ parameters.env }}-consent-manager-retry-max-attempts
+                - key: RETRY_WAIT_DURATION
+                  objectName: ${{ parameters.env }}-consent-manager-retry-wait-duration
