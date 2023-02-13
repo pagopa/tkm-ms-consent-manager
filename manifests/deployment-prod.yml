@@ -1,0 +1,221 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tkmmsconsentmanagerprod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tkmmsconsentmanagerprod
+  template:
+    metadata:
+      labels:
+        app: tkmmsconsentmanagerprod
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: '8080'
+        prometheus.io/scrape: 'true'
+    spec:
+      nodeSelector:
+        tkm-prod: 'true'
+      hostAliases:
+#        - ip: "10.70.73.228"
+#          hostnames:
+#            - "tkm-pgsql-pci-uat.postgres.database.azure.com"
+#        - ip: "10.70.73.38"
+#          hostnames:
+#            - "tkmstorageblobuatpci.blob.core.windows.net"
+#        - ip: "10.230.9.5"
+#          hostnames:
+#            - "api.uat.platform.pagopa.it"
+#        - ip: "10.70.73.39"
+#          hostnames:
+#            - "u87-evhn-pci-uat.servicebus.windows.net"
+#        - ip: "10.230.7.68"
+#          hostnames:
+#            - "cstar-u-evh-ns.servicebus.windows.net"
+      volumes:
+        - name: secrets-store-inline-consent-manager
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: tkm-consent-manager-spc-prod
+            nodePublishSecretRef:
+              name: tkm-consent-manager-kv-store-creds-prod
+      containers:
+        - name: tkmmsconsentmanagerprod
+#          image: cstaruatregistry.azurecr.io/tkmmsconsentmanager
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 4Gi
+              cpu: 500m
+            limits:
+              memory: 4Gi
+              cpu: 1000m
+          volumeMounts:
+            - name: secrets-store-inline-consent-manager
+              mountPath: /mnt/secrets-store
+              readOnly: true
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+          env:
+            - name: TZ
+              valueFrom:
+                secretKeyRef:
+                  key: TZ
+                  name: tkmmsconsentmanager
+            - name: KAFKA_APPENDER_BOOTSTRAP_SERVERS
+              valueFrom:
+                secretKeyRef:
+                  key: KAFKA_APPENDER_BOOTSTRAP_SERVERS
+                  name: tkmmsconsentmanager
+            - name: ENABLE_FILE_APPENDER
+              valueFrom:
+                secretKeyRef:
+                  key: ENABLE_FILE_APPENDER
+                  name: tkmmsconsentmanager
+            - name: ENABLE_KAFKA_APPENDER
+              valueFrom:
+                secretKeyRef:
+                  key: ENABLE_KAFKA_APPENDER
+                  name: tkmmsconsentmanager
+            - name: LOG_FILE
+              valueFrom:
+                secretKeyRef:
+                  key: LOG_FILE
+                  name: tkmmsconsentmanager
+            - name: KAFKA_APPENDER_TOPIC
+              valueFrom:
+                secretKeyRef:
+                  key: KAFKA_APPENDER_TOPIC
+                  name: tkmmsconsentmanager
+            - name: AZURE_KEYVAULT_PROFILE
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_KEYVAULT_PROFILE
+                  name: tkmmsconsentmanager
+            - name: AZURE_KEYVAULT_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_KEYVAULT_CLIENT_ID
+                  name: tkmmsconsentmanager
+            - name: AZURE_KEYVAULT_CLIENT_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_KEYVAULT_CLIENT_KEY
+                  name: tkmmsconsentmanager
+            - name: AZURE_KEYVAULT_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_KEYVAULT_TENANT_ID
+                  name: tkmmsconsentmanager
+            - name: AZURE_KEYVAULT_URI
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_KEYVAULT_URI
+                  name: tkmmsconsentmanager
+            - name: CARD_MANAGER_URL
+              valueFrom:
+                secretKeyRef:
+                  key: CARD_MANAGER_URL
+                  name: tkmmsconsentmanager
+            - name: DB_SERVER
+              valueFrom:
+                secretKeyRef:
+                  key: DB_SERVER
+                  name: tkmmsconsentmanager
+            - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  key: APPLICATIONINSIGHTS_CONNECTION_STRING
+                  name: tkmmsconsentmanager
+            - name: APPLICATIONINSIGHTS_ROLE_NAME
+              value: tkmmsconsentmanagerprod
+            - name: APPLICATIONINSIGHTS_SAMPLING_PERCENTAGE
+              value: "100"
+            - name: LOGGING_LEVEL
+              valueFrom:
+                secretKeyRef:
+                  key: LOGGING_LEVEL
+                  name: tkmmsconsentmanager
+            - name: LOGGING_PATTERN
+              valueFrom:
+                secretKeyRef:
+                  key: LOGGING_PATTERN
+                  name: tkmmsconsentmanager
+            - name: MINIMUM_NUMBER_OF_CALLS
+              valueFrom:
+                secretKeyRef:
+                  key: MINIMUM_NUMBER_OF_CALLS
+                  name: tkmmsconsentmanager
+            - name: SLIDING_WINDOW_SIZE
+              valueFrom:
+                secretKeyRef:
+                  key: SLIDING_WINDOW_SIZE
+                  name: tkmmsconsentmanager
+            - name: RING_BUFFER_SIZE_IN_CLOSED_STATE
+              valueFrom:
+                secretKeyRef:
+                  key: RING_BUFFER_SIZE_IN_CLOSED_STATE
+                  name: tkmmsconsentmanager
+            - name: RING_BUFFER_SIZE_IN_HALFOPEN_STATE
+              valueFrom:
+                secretKeyRef:
+                  key: RING_BUFFER_SIZE_IN_HALFOPEN_STATE
+                  name: tkmmsconsentmanager
+            - name: FAILURE_RATE_THRESHOLD
+              valueFrom:
+                secretKeyRef:
+                  key: FAILURE_RATE_THRESHOLD
+                  name: tkmmsconsentmanager
+            - name: WAIT_DURATION_IN_OPENSTATE
+              valueFrom:
+                secretKeyRef:
+                  key: WAIT_DURATION_IN_OPENSTATE
+                  name: tkmmsconsentmanager
+            - name: RETRY_MAX_ATTEMPTS
+              valueFrom:
+                secretKeyRef:
+                  key: RETRY_MAX_ATTEMPTS
+                  name: tkmmsconsentmanager
+            - name: RETRY_WAIT_DURATION
+              valueFrom:
+                secretKeyRef:
+                  key: RETRY_WAIT_DURATION
+                  name: tkmmsconsentmanager
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 30
+          imagePullPolicy: Always
